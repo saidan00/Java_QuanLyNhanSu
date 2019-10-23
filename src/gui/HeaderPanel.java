@@ -17,30 +17,33 @@ public class HeaderPanel extends JPanel {
 	JButton btnMinimize;
 	JLabel lblTitle;
 	
-	public final int WIDTH = MyProperties.DEFAULT_WIDTH;
-	public final int HEIGHT = 50;
+	// default size
+	public static final int WIDTH = MyProperties.DEFAULT_WIDTH;
+	public static final int HEIGHT = 50;
 	
 	public HeaderPanel() {
 		this.setLayout(null);
-		this.setBackground(Color.decode("#004c40"));
+		this.setBackground(Color.decode(MyProperties.Color_Teal_Dark));
+		this.setBounds(0, 0, WIDTH, HEIGHT);
 		
 		this.setSize(WIDTH, HEIGHT);
 		
+		// init components
 		initBtnExit();
-		
 		initBtnMinimize();
-		
 		initLblTitle();
 	}
 	
 	private void initBtnExit() {
 		btnExit = new JButton("X");
-
+		
+		// set properties
 		btnExit.setBounds(WIDTH - HEIGHT, 0, HEIGHT, HEIGHT);
-		btnExit.setBackground(Color.decode("#004c40"));
+		btnExit.setBackground(Color.decode(MyProperties.Color_Teal_Dark));
 		btnExit.setForeground(Color.WHITE);
 		btnExit.setFont(MyProperties.DEFAULT_FONT);
 		
+		// flat style
 		btnExit.setBorderPainted(false);
 		btnExit.setFocusPainted(false);
 		
@@ -51,7 +54,7 @@ public class HeaderPanel extends JPanel {
 		    }
 
 		    public void mouseExited(java.awt.event.MouseEvent evt) {
-				btnExit.setBackground(Color.decode("#004c40"));
+				btnExit.setBackground(Color.decode(MyProperties.Color_Teal_Dark));
 		    }
 		    
 		    public void mouseClicked(MouseEvent e) {
@@ -76,21 +79,24 @@ public class HeaderPanel extends JPanel {
 	private void initBtnMinimize() {
 		btnMinimize = new JButton("-");
 		
+		// set properties
 		btnMinimize.setBounds(WIDTH - 2*HEIGHT, 0, HEIGHT, HEIGHT);
-		btnMinimize.setBackground(Color.decode("#004c40"));
+		btnMinimize.setBackground(Color.decode(MyProperties.Color_Teal_Dark));
 		btnMinimize.setForeground(Color.WHITE);
 		btnMinimize.setFont(MyProperties.DEFAULT_FONT);
 		
+		// flat style
 		btnMinimize.setBorderPainted(false);
 		btnMinimize.setFocusPainted(false);
 		
+		// hover effect
 		btnMinimize.addMouseListener(new MouseAdapter() {
 		    public void mouseEntered(MouseEvent evt) {
-		    	btnMinimize.setBackground(Color.GRAY);
+		    	btnMinimize.setBackground(Color.decode(MyProperties.Color_Teal));
 		    }
 
 		    public void mouseExited(java.awt.event.MouseEvent evt) {
-		    	btnMinimize.setBackground(Color.decode("#004c40"));
+		    	btnMinimize.setBackground(Color.decode(MyProperties.Color_Teal_Dark));
 		    }
 		});
 		
@@ -106,13 +112,11 @@ public class HeaderPanel extends JPanel {
         });
 	}
 	
-	public void initLblTitle() {
+	private void initLblTitle() {
 		lblTitle = new JLabel("HR Manager");
 		
 		lblTitle.setFont(new Font("Arial Rounded MT Bold", Font.ITALIC, 20));
-		
 		lblTitle.setBounds(10, 15, 500, 20);
-		
 		lblTitle.setForeground(Color.WHITE);
 		
 		this.add(lblTitle);

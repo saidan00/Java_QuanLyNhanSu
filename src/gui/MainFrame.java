@@ -28,17 +28,10 @@ public class MainFrame extends JFrame {
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.DARK_GRAY));
-		
-		initHeader();
+
 		centeredFrame();
-	}
-	
-	public void initHeader() {
-		header = new HeaderPanel();
-		this.add(header);
-		header.setBounds(0, 0, MyProperties.DEFAULT_WIDTH, header.HEIGHT);
-		
-		header.minimizeAction(this);
+		initHeader();
+		initNav();
 	}
 	
 	public void centeredFrame() {
@@ -51,5 +44,17 @@ public class MainFrame extends JFrame {
 		int xLocation = (screenWidth - MyProperties.DEFAULT_WIDTH) / 2;
 		int yLocation = ((screenHeight - MyProperties.DEFAULT_HEIGHT) / 2 - 25);
 		this.setLocation(xLocation,yLocation);
+	}
+	
+	public void initHeader() {
+		header = new HeaderPanel();
+		this.add(header);
+		
+		header.minimizeAction(this);
+	}
+	
+	public void initNav() {
+		nav = new NavPanel();
+		this.add(nav);
 	}
 }
