@@ -27,15 +27,15 @@ public class MySqlDataAccessHelper {
 		this.result = null;
 	}
 
-	protected void driverTest() throws Exception {
+	protected void driverTest() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			throw new Exception("MySQL JDBC Driver not found");
+			e.printStackTrace();
 		}
 	}
 
-	protected Connection getConnect() throws Exception {
+	protected Connection getConnect() {
 		// If connect != null -> return
 		if (this.connect == null) {
 			// Check for driver
@@ -50,35 +50,41 @@ public class MySqlDataAccessHelper {
 			try {
 				this.connect = DriverManager.getConnection(url);
 			} catch (SQLException e) {
-				throw new Exception("Can not connect to database");
+				displayError(e);
 			}
 		}
 		return this.connect;
 	}
 
 	// Create statement to execute query
-	protected Statement getStatement() throws Exception {
-		if (this.stmt == null || this.stmt.isClosed()) {
-			this.stmt = this.getConnect().createStatement();
+	protected Statement getStatement() {
+		if (this.stmt == null) {
+			try {
+				this.stmt = this.getConnect().createStatement();
+			} catch (SQLException e) {
+				displayError(e);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return stmt;
 	}
 
-	public ResultSet executeQuery(String Query) throws Exception {
-		try {
-			this.result = this.getStatement().executeQuery(Query);
-		} catch (Exception e) {
-			throw new Exception("Error: " + e.getMessage() + " - " + Query);
-		}
+	public ResultSet executeQuery(String Query) {
+			try {
+				this.result = this.getStatement().executeQuery(Query);
+			} catch (SQLException e) {
+				displayError(e);
+			}
 		return this.result;
 	}
 
-	public int executeUpdate(String Query) throws Exception {
+	public int executeUpdate(String Query) {
 		int res = Integer.MIN_VALUE;
 		try {
 			res = this.getStatement().executeUpdate(Query);
-		} catch (Exception e) {
-			throw new Exception("Error: " + e.getMessage() + " - " + Query);
+		} catch (SQLException e) {
+			displayError(e);
 		} finally {
 			this.Close();
 		}
@@ -86,20 +92,24 @@ public class MySqlDataAccessHelper {
 		return res;
 	}
 
-	public void Close() throws SQLException {
-		if (this.result != null || !this.result.isClosed()) {
-			this.result.close();
-			this.result = null;
-		}
-
-		if (this.stmt != null || !this.stmt.isClosed()) {
-			this.stmt.close();
-			this.stmt = null;
-		}
-
-		if (this.connect != null || !this.connect.isClosed()) {
-			this.connect.close();
-			this.connect = null;
+	public void Close() {
+		try {
+			if (this.result != null) {
+				this.result.close();
+				this.result = null;
+			}
+	
+			if (this.stmt != null) {
+				this.stmt.close();
+				this.stmt = null;
+			}
+	
+			if (this.connect != null) {
+				this.connect.close();
+				this.connect = null;
+			}
+		} catch (SQLException e) {
+			displayError(e);
 		}
 	}
 
