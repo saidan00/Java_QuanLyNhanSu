@@ -41,4 +41,19 @@ public class NhanVienDAO {
 		
 		return arr;
 	}
+	
+	// Thêm nhân viên
+	public static void NhanVienAdd(NhanVienDTO aNV) {
+		String sql = "INSERT INTO nhanvien "
+				+ "SET('manv', 'honv', 'tennv', 'socmnd', 'ngaysinh', 'gioitinh', 'sdt') "
+				+ "VALUES("
+				+ aNV.getMaNV() + ","
+				+ aNV.getHoNV() + ","
+				+ aNV.getTenNV() + ","
+				+ aNV.getSoCMND() + ","
+				+ aNV.getNgaySinh() + ","
+				+ aNV.getGioiTinh() + ","
+				+ aNV.getSDT() + ","
+				+ ")";
+	}
 }
