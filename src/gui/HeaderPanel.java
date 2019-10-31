@@ -16,6 +16,7 @@ public class HeaderPanel extends JPanel {
 	JButton btnExit;
 	JButton btnMinimize;
 	JLabel lblTitle;
+	final String TITLE = "HR Manager";
 	
 	// default size
 	public static final int WIDTH = MyProperties.DEFAULT_WIDTH;
@@ -113,7 +114,7 @@ public class HeaderPanel extends JPanel {
 	}
 	
 	private void initLblTitle() {
-		lblTitle = new JLabel("HR Manager");
+		lblTitle = new JLabel(TITLE);
 		
 		lblTitle.setFont(new Font("Arial Rounded MT Bold", Font.ITALIC, 20));
 		lblTitle.setBounds(10, 15, 500, 20);

@@ -20,7 +20,7 @@ public class MySqlDataAccessHelper {
 		this.Host = "localhost";
 		this.UserName = "root";
 		this.Password = "passne";
-		this.DataBase = "4eles";
+		this.DataBase = "quanlynhansu";
 
 		this.connect = null;
 		this.stmt = null;
