@@ -12,13 +12,13 @@ import javax.swing.JPanel;
 public class NavPanel extends JPanel {
 	ArrayList<JButton> navLink;
 	
-	public static final int WIDTH = MyProperties.DEFAULT_WIDTH * 20 / 100;
-	public static final int HEIGHT = MyProperties.DEFAULT_HEIGHT - HeaderPanel.HEIGHT;
+	public static final int WIDTH = MyProps.DEFAULT_WIDTH * 20 / 100;
+	public static final int HEIGHT = MyProps.DEFAULT_HEIGHT - HeaderPanel.HEIGHT;
 	
 	public NavPanel() {
 		this.setLayout(null);
 		this.setBounds(0, HeaderPanel.HEIGHT, WIDTH, HEIGHT);
-		this.setBackground(Color.decode(MyProperties.Color_Teal));
+		this.setBackground(Color.decode(MyProps.Color_Teal));
 		
 		initNavLink();
 	}
@@ -45,21 +45,21 @@ public class NavPanel extends JPanel {
 	// Khởi tạo các button
 	private void initBtn(JButton btn, String lbl, int index) {
 		btn.setText(lbl);
-		btn.setBackground(Color.decode(MyProperties.Color_Teal));
+		btn.setBackground(Color.decode(MyProps.Color_Teal));
 		btn.setForeground(Color.WHITE);
 		btn.setFont(new Font("Verdana", Font.BOLD, 20));
 
-		int marginTop = MyProperties.DEFAULT_HEIGHT - HEIGHT + 10 + index * 75;
+		int marginTop = MyProps.DEFAULT_HEIGHT - HEIGHT + 10 + index * 75;
 		Rectangle rec = new Rectangle(0, marginTop, WIDTH, 75);
 		btn.setBounds(rec);
 		
-		btn.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode(MyProperties.Color_Teal_Light)));
+		btn.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode(MyProps.Color_Teal_Light)));
 		
-		MyProperties.BtnFlat(btn);
+		MyProps.BtnFlat(btn);
 		
 		btn.setBorderPainted(true);
 		
-		MyProperties.BtnHover(btn, Color.decode(MyProperties.Color_Teal_Light));
+		MyProps.BtnHover(btn, Color.decode(MyProps.Color_Teal_Light));
 		
 		this.add(btn);
 	}

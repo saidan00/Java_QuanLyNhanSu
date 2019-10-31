@@ -8,6 +8,7 @@ public class NhanVienDTO {
 	private String NgaySinh;
 	private String GioiTinh;
 	private String SDT;
+	private String DiaChi;
 	
 	// GETTERs
 	public int getMaNV() {
@@ -53,5 +54,11 @@ public class NhanVienDTO {
 	}
 	public void setSDT(String sDT) {
 		SDT = sDT;
+	}
+	public String getDiaChi() {
+		return DiaChi;
+	}
+	public void setDiaChi(String diaChi) {
+		DiaChi = diaChi;
 	}
 }

@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 public class MainFrame extends JFrame {
 	HeaderPanel header;
-	JPanel content;
+	ContentPanel content;
 	JPanel nav;
 	JPanel navContainer;
 	ArrayList<JButton> navLinks;
@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
 	public void init() {
 		this.setLayout(null);
 		
-		this.setSize(MyProperties.DEFAULT_WIDTH, MyProperties.DEFAULT_HEIGHT);
+		this.setSize(MyProps.DEFAULT_WIDTH, MyProps.DEFAULT_HEIGHT);
 		this.setUndecorated(true);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -43,8 +43,8 @@ public class MainFrame extends JFrame {
 		int screenWidth = screenSize.width;
 		int screenHeight = screenSize.height;
 		
-		int xLocation = (screenWidth - MyProperties.DEFAULT_WIDTH) / 2;
-		int yLocation = ((screenHeight - MyProperties.DEFAULT_HEIGHT) / 2 - 25);
+		int xLocation = (screenWidth - MyProps.DEFAULT_WIDTH) / 2;
+		int yLocation = ((screenHeight - MyProps.DEFAULT_HEIGHT) / 2 - 25);
 		this.setLocation(xLocation,yLocation);
 	}
 	
@@ -62,6 +62,14 @@ public class MainFrame extends JFrame {
 	
 	public void initContent() {
 		content = new ContentPanel();
+		
+		initNhanVienGUI();
+		
 		this.add(content);
+	}
+	
+	public void initNhanVienGUI() {
+		NhanVienGUI nvGUI = new NhanVienGUI();
+		content.initMainContent((NhanVienGUI)nvGUI);
 	}
 }

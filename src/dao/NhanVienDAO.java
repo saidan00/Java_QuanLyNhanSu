@@ -15,10 +15,10 @@ public class NhanVienDAO {
 
 		ArrayList<NhanVienDTO> arr = new ArrayList<NhanVienDTO>();
 
-		String sql = "SELECT * FROM nhanvien";
+		String query = "SELECT * FROM nhanvien";
 
 		try {
-			ResultSet rs = conn.executeQuery(sql);
+			ResultSet rs = conn.executeQuery(query);
 			while (rs.next()) {
 				// khởi tạo
 				NhanVienDTO aNhanVien = new NhanVienDTO();
@@ -31,6 +31,7 @@ public class NhanVienDAO {
 				aNhanVien.setNgaySinh(rs.getString("ngaysinh"));
 				aNhanVien.setGioiTinh(rs.getString("gioitinh"));
 				aNhanVien.setSDT(rs.getString("sdt"));
+				aNhanVien.setDiaChi(rs.getString("diachi"));
 
 				// thêm vào array list
 				arr.add(aNhanVien);
