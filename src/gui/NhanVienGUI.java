@@ -56,26 +56,27 @@ public class NhanVienGUI extends JPanel {
         ArrayList<NhanVienDTO> lstNV = new ArrayList<NhanVienDTO>();
         lstNV = NhanVienBUS.NhanVienAll();
         
-        for (int i = 0; i< lstNV.size(); i++) {
-        	System.out.print(lstNV.get(i).getHoNV() + "\n");
+//        test
+//        for (int i = 0; i< lstNV.size(); i++) {
+//        	System.out.print(lstNV.get(i).getHoNV() + "\n");
+//        }
+        
+        NhanVienDTO aNV = new NhanVienDTO();
+        
+        for (int i = 0; i < lstNV.size(); i++) {
+        	aNV = lstNV.get(i);
+        	Object[] row = {
+        			aNV.getMaNV(),
+        			aNV.getHoNV(),
+        			aNV.getTenNV(),
+        			aNV.getSoCMND(),
+        			aNV.getNgaySinh(),
+        			aNV.getGioiTinh(),
+        			aNV.getSDT()
+        	};
+        	dtm.addRow(row);
         }
         
-//        NhanVienDTO aNV = new NhanVienDTO();
-//        
-//        for (int i = 0; i < lstNV.size(); i++) {
-//        	aNV = lstNV.get(i);
-//        	Object[] row = {
-//        			aNV.getMaNV(),
-//        			aNV.getHoNV(),
-//        			aNV.getTenNV(),
-//        			aNV.getSoCMND(),
-//        			aNV.getNgaySinh(),
-//        			aNV.getGioiTinh(),
-//        			aNV.getSDT()
-//        	};
-//        	dtm.addRow(row);
-//        }
-//        
-//        tblNV.setModel(dtm);
+        tblNV.setModel(dtm);
 	}
 }

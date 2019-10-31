@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 public class MainFrame extends JFrame {
 	HeaderPanel header;
-	NhanVienGUI nvGUI;
+	JPanel content;
 	JPanel nav;
 	JPanel navContainer;
 	ArrayList<JButton> navLinks;
@@ -32,11 +32,8 @@ public class MainFrame extends JFrame {
 
 		centeredFrame();
 		initHeader();
-		
-		nvGUI = new NhanVienGUI();
-		this.add(nvGUI);
-		
 		initNav();
+		initContent();
 	}
 	
 	public void centeredFrame() {
@@ -61,5 +58,10 @@ public class MainFrame extends JFrame {
 	public void initNav() {
 		nav = new NavPanel();
 		this.add(nav);
+	}
+	
+	public void initContent() {
+		content = new ContentPanel();
+		this.add(content);
 	}
 }

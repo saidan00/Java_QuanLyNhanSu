@@ -17,12 +17,13 @@ public class NavPanel extends JPanel {
 	
 	public NavPanel() {
 		this.setLayout(null);
-		this.setBounds(0, MyProperties.DEFAULT_HEIGHT - HEIGHT, WIDTH, HEIGHT);
+		this.setBounds(0, HeaderPanel.HEIGHT, WIDTH, HEIGHT);
 		this.setBackground(Color.decode(MyProperties.Color_Teal));
 		
 		initNavLink();
 	}
 	
+	// Khởi tạo các link của navigations
 	private void initNavLink() {
 		navLink = new ArrayList<JButton>();
 		
@@ -41,6 +42,7 @@ public class NavPanel extends JPanel {
 		}
 	}
 	
+	// Khởi tạo các button
 	private void initBtn(JButton btn, String lbl, int index) {
 		btn.setText(lbl);
 		btn.setBackground(Color.decode(MyProperties.Color_Teal));
