@@ -3,6 +3,8 @@ package gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -12,8 +14,11 @@ import java.awt.GridBagConstraints;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+
+import util.RoundedCornerBorder;
 
 public class MyProps {
 	static final int DEFAULT_WIDTH = 1280;
@@ -79,7 +84,7 @@ public class MyProps {
 	
 	public static GridBagConstraints MyGridBagConstraints(int x, int y, int width, int height, boolean isFillWidth, boolean isFillHeight) {
 		GridBagConstraints cons = new GridBagConstraints();
-		cons.insets = new Insets(5, 5, 5, 5);
+		cons.insets = new Insets(8, 5, 8, 5);
 		cons.gridx = x;
 		cons.gridy = y;
 		cons.gridwidth = width;
@@ -94,5 +99,27 @@ public class MyProps {
 		}
 		
 		return cons;
+	}
+	
+	public static JTextField RoundedTextField(int columns) {
+		JTextField txt = new JTextField(columns) {
+			@Override protected void paintComponent(Graphics g) {
+			    if (!isOpaque() && getBorder() instanceof RoundedCornerBorder) {
+			      Graphics2D g2 = (Graphics2D) g.create();
+			      g2.setPaint(getBackground());
+			      g2.fill(((RoundedCornerBorder) getBorder()).getBorderShape(
+			          0, 0, getWidth() - 1, getHeight() - 1));
+			      g2.dispose();
+			    }
+			    super.paintComponent(g);
+			  }
+			  @Override public void updateUI() {
+			    super.updateUI();
+			    setOpaque(false);
+			    setBorder(new RoundedCornerBorder());
+			  }
+		};
+		
+		return txt;	
 	}
 }

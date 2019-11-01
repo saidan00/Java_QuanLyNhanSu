@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -16,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 
 import bus.NhanVienBUS;
 import dto.NhanVienDTO;
+import util.RoundedCornerBorder;
 
 public class NhanVienGUI extends JPanel {
 	JPanel pnlTable;
@@ -82,21 +85,23 @@ public class NhanVienGUI extends JPanel {
 		cons = MyProps.MyGridBagConstraints(1, 1, 3, 4, true, true);
 		pnlForm.add(pnlImg, cons);
 		
-		txtMaNV = new JTextField(5);
+		txtMaNV = MyProps.RoundedTextField(5);
 		cons = MyProps.MyGridBagConstraints(4, 1, 1, 1, true, true);
 		pnlForm.add(txtMaNV, cons);
 		
-		txtHoNV = new JTextField(5);
+		txtHoNV = MyProps.RoundedTextField(5);
 		cons = MyProps.MyGridBagConstraints(4, 2, 1, 1, true, true);
 		pnlForm.add(txtHoNV, cons);
 		
+		txtTenNV = MyProps.RoundedTextField(5);
 		cons = MyProps.MyGridBagConstraints(4, 3, 1, 1, true, true);
-		pnlForm.add(txtMaNV, cons);
+		pnlForm.add(txtTenNV, cons);
 		
+		txtSoCMND = MyProps.RoundedTextField(5);
 		cons = MyProps.MyGridBagConstraints(4, 4, 1, 1, true, true);
-		pnlForm.add(txtMaNV, cons);
+		pnlForm.add(txtSoCMND, cons);
 		
-		this.add(pnlForm);
+		this.add(pnlForm); 
 	}
 	
 	// khởi tạo  form
