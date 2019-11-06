@@ -48,24 +48,64 @@ public class NhanVienDAO {
 	public void NhanVienAdd(NhanVienDTO aNV) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 		
-		String sql = "INSERT INTO nhanvien SET('manv', 'honv', 'tennv', 'socmnd', 'ngaysinh', 'gioitinh', 'sdt', 'diachi') "
-				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO nhanvien (honv, tennv, socmnd, ngaysinh, gioitinh, sdt, diachi) "
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?)";
 		
 		// prepare statement
 		conn.prepare(sql);
 		
 		// bind values
-		conn.bind(1, aNV.getMaNV());
-		conn.bind(2, aNV.getHoNV());
-		conn.bind(3, aNV.getTenNV());
-		conn.bind(4, aNV.getSoCMND());
-		conn.bind(5, aNV.getNgaySinh());
-		conn.bind(6, aNV.getGioiTinh());
-		conn.bind(7, aNV.getSDT());
-		conn.bind(8, aNV.getDiaChi());
+		conn.bind(1, aNV.getHoNV());
+		conn.bind(2, aNV.getTenNV());
+		conn.bind(3, aNV.getSoCMND());
+		conn.bind(4, aNV.getNgaySinh());
+		conn.bind(5, aNV.getGioiTinh());
+		conn.bind(6, aNV.getSDT());
+		conn.bind(7, aNV.getDiaChi());
 		
-		conn.executeQueryPre();
+		conn.executeUpdatePre();
 		
 		conn.Close();
 	}
+	
+	// Sửa nhân viên
+	public void NhanVienEdit(NhanVienDTO aNV) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+        
+        String  sql = "UPDATE nhanvien SET honv = ?, tennv = ?, socmnd =?, ngaysinh = ?, gioitinh = ?, sdt = ?, diachi =? WHERE manv = ?";
+        // prepare statement
+ 		conn.prepare(sql);
+     		
+ 		// bind values
+ 		conn.bind(1, aNV.getHoNV());
+ 		conn.bind(2, aNV.getTenNV());
+ 		conn.bind(3, aNV.getSoCMND());
+ 		conn.bind(4, aNV.getNgaySinh());
+ 		conn.bind(5, aNV.getGioiTinh());
+ 		conn.bind(6, aNV.getSDT());
+ 		conn.bind(7, aNV.getDiaChi());
+ 		
+ 		conn.bind(8, aNV.getMaNV());
+ 		
+ 		conn.executeUpdatePre();
+ 		
+ 		conn.Close();
+    }
+	
+	// xóa nhân viên
+    public void NhanVienDelete(int maNv) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+		
+		String sql = "DELETE FROM nhanvien WHERE manv = ?";
+		   
+		// prepare statement
+		conn.prepare(sql);
+			
+		// bind values
+		conn.bind(1, maNv);
+		
+		conn.executeUpdatePre();
+ 		
+ 		conn.Close();
+    }
 }

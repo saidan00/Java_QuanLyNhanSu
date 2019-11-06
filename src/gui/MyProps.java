@@ -23,7 +23,8 @@ public class MyProps {
 	public static final int DEFAULT_WIDTH = 1280;
 	public static final int DEFAULT_HEIGHT = 720;
 	public final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 20);
-	public final Font DEFAULT_FONT_SMALL = new Font("Verdana", Font.PLAIN, 16);
+	public final Font DEFAULT_FONT_MEDIUM = new Font("Verdana", Font.PLAIN, 16);
+	public final Font DEFAULT_FONT_SMALL = new Font("Verdana", Font.PLAIN, 12);
 	public final String Color_Teal = "#00796b";
 	public final String Color_Teal_Dark = "#004c40";
 	public final String Color_Teal_Light = "#48a999";
@@ -35,7 +36,7 @@ public class MyProps {
 	
 	public void BtnFlat(JButton btn) {
 		// flat style
-		btn.setBorderPainted(false);
+//		btn.setBorderPainted(false);
 		btn.setFocusPainted(false);
 	}
 	
@@ -84,7 +85,7 @@ public class MyProps {
 	
 	public GridBagConstraints MyGridBagConstraints(int x, int y, int width, int height, boolean isFillWidth, boolean isFillHeight) {
 		GridBagConstraints cons = new GridBagConstraints();
-		cons.insets = new Insets(8, 8, 8, 8);
+		cons.insets = new Insets(10, 10, 10, 10);
 		cons.gridx = x;
 		cons.gridy = y;
 		cons.gridwidth = width;

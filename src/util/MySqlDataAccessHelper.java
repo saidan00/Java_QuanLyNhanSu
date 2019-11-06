@@ -113,7 +113,7 @@ public class MySqlDataAccessHelper {
 					this.preStmt.setInt(index, (Integer)o);
 					break;
 				case "java.lang.String":
-					this.preStmt.setString(index, (String)o);
+					this.preStmt.setNString(index, (String)o);
 					break;
 				default:
 					break;

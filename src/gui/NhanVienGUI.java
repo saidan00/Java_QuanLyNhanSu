@@ -1,18 +1,23 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -21,7 +26,6 @@ import javax.swing.table.DefaultTableModel;
 
 import bus.NhanVienBUS;
 import dto.NhanVienDTO;
-import util.RoundedCornerBorder;
 
 public class NhanVienGUI extends JPanel {
 	NhanVienBUS nvBUS = new NhanVienBUS();
@@ -82,6 +86,11 @@ public class NhanVienGUI extends JPanel {
 		initPnlTable();
 		initTblNV();
 		tblNVMouseListener();
+		
+		initButton();
+		btnThemClicked();
+		btnXoaClicked();
+		btnSuaClicked();
 	}
 	
 	// khởi tạo Panel chứa form
@@ -228,18 +237,7 @@ public class NhanVienGUI extends JPanel {
         header.add(SDT);
         header.add(DIA_CHI);
 		
-		DefaultTableModel dtm = new DefaultTableModel(header, 0) {
-            @SuppressWarnings("unchecked")
-			@Override
-            public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return Integer.class;
-                    default:
-                        return String.class;
-                }
-            }
-        };
+		DefaultTableModel dtm = new DefaultTableModel(header, 0);
 		
         ArrayList<NhanVienDTO> lstNV = new ArrayList<NhanVienDTO>();
         lstNV = nvBUS.NhanVienAll();
@@ -284,5 +282,101 @@ public class NhanVienGUI extends JPanel {
 					txtDiaChi.setText(tblNV.getValueAt(row, 7).toString());
 				}
 			});
+	}
+	
+	private void btnThemClicked() {
+		btnThem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	NhanVienDTO nv = new NhanVienDTO();
+            	
+            	nv.setHoNV(String.valueOf(txtHoNV.getText()));
+            	nv.setTenNV(String.valueOf(txtTenNV.getText()));
+            	nv.setGioiTinh(String.valueOf(txtGioiTinh.getText()));
+            	nv.setSoCMND(String.valueOf(txtSoCMND.getText()));
+            	nv.setNgaySinh(String.valueOf(txtNgaySinh.getText()));
+            	nv.setSDT(String.valueOf(txtSDT.getText()));
+            	nv.setDiaChi(String.valueOf(txtDiaChi.getText()));
+            	
+                nvBUS.NhanVienAdd(nv);
+                
+                JOptionPane.showMessageDialog(null, "Thêm thành công");
+                
+                setModelTable();
+            }
+        });
+	}
+	
+	private void btnXoaClicked() {
+		btnXoa.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	int maNv = Integer.valueOf(txtMaNV.getText());
+            	
+            	nvBUS.NhanVienDelete(maNv);
+                
+                JOptionPane.showMessageDialog(null, "Xóa thành công");
+                
+                setModelTable();
+            }
+        });
+	}
+	
+	private void btnSuaClicked() {
+		btnSua.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	NhanVienDTO nv = new NhanVienDTO();
+            	
+            	nv.setMaNV(Integer.valueOf(txtMaNV.getText()));
+            	nv.setHoNV(String.valueOf(txtHoNV.getText()));
+            	nv.setTenNV(String.valueOf(txtTenNV.getText()));
+            	nv.setGioiTinh(String.valueOf(txtGioiTinh.getText()));
+            	nv.setSoCMND(String.valueOf(txtSoCMND.getText()));
+            	nv.setNgaySinh(String.valueOf(txtNgaySinh.getText()));
+            	nv.setSDT(String.valueOf(txtSDT.getText()));
+            	nv.setDiaChi(String.valueOf(txtDiaChi.getText()));
+            	
+            	nvBUS.NhanVienEdit(nv);
+                
+                JOptionPane.showMessageDialog(null, "Sửa thành công");
+                
+                setModelTable();
+            }
+        });
+	}
+	
+	private void initButton() {
+		GridBagConstraints cons = new GridBagConstraints();
+		JPanel pnlButton = new JPanel();
+		
+		btnThem = new JButton();
+		myProps.BtnFlat(btnThem);
+		btnThem.setBackground(Color.decode("#4caf50"));
+		btnThem.setForeground(Color.WHITE);
+		btnThem.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnThem.setText("Thêm");
+		btnThem.setSize(20, 10);
+		
+		btnXoa = new JButton();
+		myProps.BtnFlat(btnXoa);
+		btnXoa.setBackground(Color.decode("#e53935"));
+		btnXoa.setForeground(Color.WHITE);
+		btnXoa.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnXoa.setText("Xóa");
+		
+		btnSua = new JButton();
+		myProps.BtnFlat(btnSua);
+		btnSua.setBackground(Color.decode("#e0e0e0"));
+		btnSua.setForeground(Color.BLACK);
+		btnSua.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnSua.setText("Sửa");
+		
+		pnlButton.add(btnThem);
+		pnlButton.add(btnXoa);
+		pnlButton.add(btnSua);
+
+		cons = myProps.MyGridBagConstraints(4, 8, 9, 1, true, true);
+		pnlForm.add(pnlButton, cons);
 	}
 }
