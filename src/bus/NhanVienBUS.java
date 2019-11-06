@@ -6,7 +6,9 @@ import dao.NhanVienDAO;
 import dto.NhanVienDTO;
 
 public class NhanVienBUS {
-	public static ArrayList<NhanVienDTO> NhanVienAll() {
-        return NhanVienDAO.NhanVienAll();
+	private NhanVienDAO nvDAO = new NhanVienDAO();
+	
+	public ArrayList<NhanVienDTO> NhanVienAll() {
+        return nvDAO.NhanVienAll();
     }
 }

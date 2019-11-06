@@ -2,6 +2,7 @@ package util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,6 +15,7 @@ public class MySqlDataAccessHelper {
 
 	Connection connect;
 	Statement stmt;
+	PreparedStatement preStmt;
 	ResultSet result;
 
 	public MySqlDataAccessHelper() {
@@ -71,11 +73,11 @@ public class MySqlDataAccessHelper {
 	}
 
 	public ResultSet executeQuery(String Query) {
-			try {
-				this.result = this.getStatement().executeQuery(Query);
-			} catch (SQLException e) {
-				displayError(e);
-			}
+		try {
+			this.result = this.getStatement().executeQuery(Query);
+		} catch (SQLException e) {
+			displayError(e);
+		}
 		return this.result;
 	}
 
@@ -91,7 +93,59 @@ public class MySqlDataAccessHelper {
 
 		return res;
 	}
+	
+	// Create prepared statement
+	public void prepare(String sql) {
+		try {
+			this.preStmt = this.getConnect().prepareStatement(sql);
+		} catch (SQLException e) {
+			displayError(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// Bind value
+	public void bind(int index, Object o) {
+		try {
+			switch(o.getClass().getCanonicalName()) {
+				case "java.lang.Integer":
+					this.preStmt.setInt(index, (Integer)o);
+					break;
+				case "java.lang.String":
+					this.preStmt.setString(index, (String)o);
+					break;
+				default:
+					break;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// Execute
+	public ResultSet executeQueryPre() {
+		try {
+			this.result = this.preStmt.executeQuery();
+		} catch (SQLException e) {
+			displayError(e);
+		}
+		return this.result;
+	}
+	
+	public int executeUpdatePre() {
+		int res = Integer.MIN_VALUE;
+		try {
+			res = this.preStmt.executeUpdate();
+		} catch (SQLException e) {
+			displayError(e);
+		} finally {
+			this.Close();
+		}
 
+		return res;
+	}
+	
 	public void Close() {
 		try {
 			if (this.result != null) {

@@ -16,6 +16,7 @@ public class MainFrame extends JFrame {
 	JPanel nav;
 	JPanel navContainer;
 	ArrayList<JButton> navLinks;
+	MyProps myProps = new MyProps();
 	
 	public MainFrame() {
 		init();

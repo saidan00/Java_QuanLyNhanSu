@@ -9,8 +9,7 @@ import util.MySqlDataAccessHelper;
 
 public class NhanVienDAO {
 	// Lấy danh sách tất cả nhân viên
-	public static ArrayList<NhanVienDTO> NhanVienAll() {
-
+	public ArrayList<NhanVienDTO> NhanVienAll() {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 
 		ArrayList<NhanVienDTO> arr = new ArrayList<NhanVienDTO>();
@@ -40,21 +39,33 @@ public class NhanVienDAO {
 			conn.displayError(ex);
 		}
 		
+		conn.Close();
+	
 		return arr;
 	}
 	
 	// Thêm nhân viên
-	public static void NhanVienAdd(NhanVienDTO aNV) {
-		String sql = "INSERT INTO nhanvien "
-				+ "SET('manv', 'honv', 'tennv', 'socmnd', 'ngaysinh', 'gioitinh', 'sdt') "
-				+ "VALUES("
-				+ aNV.getMaNV() + ","
-				+ aNV.getHoNV() + ","
-				+ aNV.getTenNV() + ","
-				+ aNV.getSoCMND() + ","
-				+ aNV.getNgaySinh() + ","
-				+ aNV.getGioiTinh() + ","
-				+ aNV.getSDT() + ","
-				+ ")";
+	public void NhanVienAdd(NhanVienDTO aNV) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+		
+		String sql = "INSERT INTO nhanvien SET('manv', 'honv', 'tennv', 'socmnd', 'ngaysinh', 'gioitinh', 'sdt', 'diachi') "
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+		
+		// prepare statement
+		conn.prepare(sql);
+		
+		// bind values
+		conn.bind(1, aNV.getMaNV());
+		conn.bind(2, aNV.getHoNV());
+		conn.bind(3, aNV.getTenNV());
+		conn.bind(4, aNV.getSoCMND());
+		conn.bind(5, aNV.getNgaySinh());
+		conn.bind(6, aNV.getGioiTinh());
+		conn.bind(7, aNV.getSDT());
+		conn.bind(8, aNV.getDiaChi());
+		
+		conn.executeQueryPre();
+		
+		conn.Close();
 	}
 }

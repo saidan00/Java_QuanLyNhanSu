@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.GridBagConstraints;
 
@@ -21,25 +20,26 @@ import javax.swing.table.TableColumnModel;
 import util.RoundedCornerBorder;
 
 public class MyProps {
-	static final int DEFAULT_WIDTH = 1280;
-	static final int DEFAULT_HEIGHT = 720;
-	static final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 20);
-	static final String Color_Teal = "#00796b";
-	static final String Color_Teal_Dark = "#004c40";
-	static final String Color_Teal_Light = "#48a999";
+	public static final int DEFAULT_WIDTH = 1280;
+	public static final int DEFAULT_HEIGHT = 720;
+	public final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 20);
+	public final Font DEFAULT_FONT_SMALL = new Font("Verdana", Font.PLAIN, 16);
+	public final String Color_Teal = "#00796b";
+	public final String Color_Teal_Dark = "#004c40";
+	public final String Color_Teal_Light = "#48a999";
 	
 	
-	public static void DEFAULT_BUTTON(JButton btn, String background, String foreground, Rectangle rec) {
+	public void DEFAULT_BUTTON(JButton btn, String background, String foreground, Rectangle rec) {
 		
 	}
 	
-	public static void BtnFlat(JButton btn) {
+	public void BtnFlat(JButton btn) {
 		// flat style
 		btn.setBorderPainted(false);
 		btn.setFocusPainted(false);
 	}
 	
-	public static void BtnHover(JButton btn) {
+	public void BtnHover(JButton btn) {
 		Color originColor = btn.getBackground(); 
 		
 		btn.addMouseListener(new MouseAdapter() {
@@ -53,7 +53,7 @@ public class MyProps {
 		});
 	}
 	
-	public static void BtnHover(JButton btn, Color hoverColor) {
+	public void BtnHover(JButton btn, Color hoverColor) {
 		Color originColor = btn.getBackground(); 
 		
 		btn.addMouseListener(new MouseAdapter() {
@@ -67,7 +67,7 @@ public class MyProps {
 		});
 	}
 	
-	public static void resizeColumnWidth(JTable table) {
+	public void resizeColumnWidth(JTable table) {
 	    final TableColumnModel columnModel = table.getColumnModel();
 	    for (int column = 0; column < table.getColumnCount(); column++) {
 	        int width = 15; // Min width
@@ -82,9 +82,9 @@ public class MyProps {
 	    }
 	}
 	
-	public static GridBagConstraints MyGridBagConstraints(int x, int y, int width, int height, boolean isFillWidth, boolean isFillHeight) {
+	public GridBagConstraints MyGridBagConstraints(int x, int y, int width, int height, boolean isFillWidth, boolean isFillHeight) {
 		GridBagConstraints cons = new GridBagConstraints();
-		cons.insets = new Insets(8, 5, 8, 5);
+		cons.insets = new Insets(8, 8, 8, 8);
 		cons.gridx = x;
 		cons.gridy = y;
 		cons.gridwidth = width;
@@ -101,7 +101,7 @@ public class MyProps {
 		return cons;
 	}
 	
-	public static JTextField RoundedTextField(int columns) {
+	public JTextField RoundedTextField(int columns) {
 		JTextField txt = new JTextField(columns) {
 			@Override protected void paintComponent(Graphics g) {
 			    if (!isOpaque() && getBorder() instanceof RoundedCornerBorder) {

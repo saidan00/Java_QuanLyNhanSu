@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 public class ContentPanel extends JPanel {
 
+	MyProps myProps = new MyProps();
 	public static final int WIDTH = MyProps.DEFAULT_WIDTH - NavPanel.WIDTH;
 	public static final int HEIGHT = MyProps.DEFAULT_HEIGHT - HeaderPanel.HEIGHT;
 	

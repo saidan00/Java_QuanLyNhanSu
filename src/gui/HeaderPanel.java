@@ -17,6 +17,7 @@ public class HeaderPanel extends JPanel {
 	JButton btnMinimize;
 	JLabel lblTitle;
 	final String TITLE = "HR Manager";
+	MyProps myProps = new MyProps();
 	
 	// default size
 	public static final int WIDTH = MyProps.DEFAULT_WIDTH;
@@ -24,7 +25,7 @@ public class HeaderPanel extends JPanel {
 	
 	public HeaderPanel() {
 		this.setLayout(null);
-		this.setBackground(Color.decode(MyProps.Color_Teal_Dark));
+		this.setBackground(Color.decode(myProps.Color_Teal_Dark));
 		this.setBounds(0, 0, WIDTH, HEIGHT);
 		
 		this.setSize(WIDTH, HEIGHT);
@@ -40,24 +41,19 @@ public class HeaderPanel extends JPanel {
 		
 		// set properties
 		btnExit.setBounds(WIDTH - HEIGHT, 0, HEIGHT, HEIGHT);
-		btnExit.setBackground(Color.decode(MyProps.Color_Teal_Dark));
+		btnExit.setBackground(Color.decode(myProps.Color_Teal_Dark));
 		btnExit.setForeground(Color.WHITE);
-		btnExit.setFont(MyProps.DEFAULT_FONT);
+		btnExit.setFont(myProps.DEFAULT_FONT);
 		
 		// flat style
 		btnExit.setBorderPainted(false);
 		btnExit.setFocusPainted(false);
 		
     	// hover effect
+		myProps.BtnHover(btnExit, Color.decode("#d50000"));
+		
+		// confirm exit
 		btnExit.addMouseListener(new MouseAdapter() {
-		    public void mouseEntered(MouseEvent evt) {
-		    	btnExit.setBackground(Color.decode("#d50000"));
-		    }
-
-		    public void mouseExited(java.awt.event.MouseEvent evt) {
-				btnExit.setBackground(Color.decode(MyProps.Color_Teal_Dark));
-		    }
-		    
 		    public void mouseClicked(MouseEvent e) {
 		    	// confirm dialog exit or not
 				int dialogResult = JOptionPane.showConfirmDialog(
@@ -82,24 +78,16 @@ public class HeaderPanel extends JPanel {
 		
 		// set properties
 		btnMinimize.setBounds(WIDTH - 2*HEIGHT, 0, HEIGHT, HEIGHT);
-		btnMinimize.setBackground(Color.decode(MyProps.Color_Teal_Dark));
+		btnMinimize.setBackground(Color.decode(myProps.Color_Teal_Dark));
 		btnMinimize.setForeground(Color.WHITE);
-		btnMinimize.setFont(MyProps.DEFAULT_FONT);
+		btnMinimize.setFont(myProps.DEFAULT_FONT);
 		
 		// flat style
 		btnMinimize.setBorderPainted(false);
 		btnMinimize.setFocusPainted(false);
 		
 		// hover effect
-		btnMinimize.addMouseListener(new MouseAdapter() {
-		    public void mouseEntered(MouseEvent evt) {
-		    	btnMinimize.setBackground(Color.decode(MyProps.Color_Teal));
-		    }
-
-		    public void mouseExited(java.awt.event.MouseEvent evt) {
-		    	btnMinimize.setBackground(Color.decode(MyProps.Color_Teal_Dark));
-		    }
-		});
+		myProps.BtnHover(btnMinimize, Color.decode(myProps.Color_Teal));
 		
 		this.add(btnMinimize);
 	}

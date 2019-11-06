@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 public class NavPanel extends JPanel {
 	ArrayList<JButton> navLink;
+	MyProps myProps = new MyProps();
 	
 	public static final int WIDTH = MyProps.DEFAULT_WIDTH * 20 / 100;
 	public static final int HEIGHT = MyProps.DEFAULT_HEIGHT - HeaderPanel.HEIGHT;
@@ -18,7 +19,7 @@ public class NavPanel extends JPanel {
 	public NavPanel() {
 		this.setLayout(null);
 		this.setBounds(0, HeaderPanel.HEIGHT, WIDTH, HEIGHT);
-		this.setBackground(Color.decode(MyProps.Color_Teal));
+		this.setBackground(Color.decode(myProps.Color_Teal));
 		
 		initNavLink();
 	}
@@ -45,7 +46,7 @@ public class NavPanel extends JPanel {
 	// Khởi tạo các button
 	private void initBtn(JButton btn, String lbl, int index) {
 		btn.setText(lbl);
-		btn.setBackground(Color.decode(MyProps.Color_Teal));
+		btn.setBackground(Color.decode(myProps.Color_Teal));
 		btn.setForeground(Color.WHITE);
 		btn.setFont(new Font("Verdana", Font.BOLD, 20));
 
@@ -53,13 +54,13 @@ public class NavPanel extends JPanel {
 		Rectangle rec = new Rectangle(0, marginTop, WIDTH, 75);
 		btn.setBounds(rec);
 		
-		btn.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode(MyProps.Color_Teal_Light)));
+		btn.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode(myProps.Color_Teal_Light)));
 		
-		MyProps.BtnFlat(btn);
+		myProps.BtnFlat(btn);
 		
 		btn.setBorderPainted(true);
 		
-		MyProps.BtnHover(btn, Color.decode(MyProps.Color_Teal_Light));
+		myProps.BtnHover(btn, Color.decode(myProps.Color_Teal_Light));
 		
 		this.add(btn);
 	}
