@@ -2,8 +2,6 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -15,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -237,7 +234,17 @@ public class NhanVienGUI extends JPanel {
         header.add(SDT);
         header.add(DIA_CHI);
 		
-		DefaultTableModel dtm = new DefaultTableModel(header, 0);
+		DefaultTableModel dtm = new DefaultTableModel(header, 0) {
+            @Override
+            public Class<?> getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return Integer.class;
+                    default:
+                        return String.class;
+                }
+            }
+        };
 		
         ArrayList<NhanVienDTO> lstNV = new ArrayList<NhanVienDTO>();
         lstNV = nvBUS.NhanVienAll();
@@ -311,13 +318,17 @@ public class NhanVienGUI extends JPanel {
 		btnXoa.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	int maNv = Integer.valueOf(txtMaNV.getText());
-            	
-            	nvBUS.NhanVienDelete(maNv);
-                
-                JOptionPane.showMessageDialog(null, "Xóa thành công");
-                
-                setModelTable();
+            	if (txtMaNV.getText().isEmpty()) {
+            		JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên");
+            	} else {
+                	int maNv = Integer.valueOf(txtMaNV.getText());
+                	
+                	nvBUS.NhanVienDelete(maNv);
+                    
+                    JOptionPane.showMessageDialog(null, "Xóa thành công");
+                    
+                    setModelTable();
+            	}
             }
         });
 	}

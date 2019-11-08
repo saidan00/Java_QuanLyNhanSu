@@ -7,5 +7,4 @@ public class MainLauncher {
 		MainFrame aMainFrame = new MainFrame();
 		aMainFrame.setVisible(true);
 	}
-
 }
