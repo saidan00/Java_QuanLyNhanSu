@@ -3,6 +3,8 @@ package gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -15,6 +17,11 @@ public class NavPanel extends JPanel {
 	
 	public static final int WIDTH = MyProps.DEFAULT_WIDTH * 20 / 100;
 	public static final int HEIGHT = MyProps.DEFAULT_HEIGHT - HeaderPanel.HEIGHT;
+	
+	private final String HOME = "Home";
+	private final String NHAN_VIEN = "Nhân viên";
+	private final String PHONG_BAN = "Phòng ban";
+	private final String THONG_KE = "Thống kê";
 	
 	public NavPanel() {
 		this.setLayout(null);
@@ -29,9 +36,10 @@ public class NavPanel extends JPanel {
 		navLink = new ArrayList<JButton>();
 		
 		ArrayList<String> lbl = new ArrayList<String>();
-		lbl.add("Home");
-		lbl.add("Nhân viên");
-		lbl.add("Thống kê");
+		lbl.add(HOME);
+		lbl.add(NHAN_VIEN);
+		lbl.add(PHONG_BAN);
+		lbl.add(THONG_KE);
 		
 		JButton btnTemp;
 		
@@ -40,6 +48,11 @@ public class NavPanel extends JPanel {
 			btnTemp = new JButton();
 			navLink.add(btnTemp);
 			initBtn(navLink.get(i), lbl.get(i), i);
+		}
+		
+		// add to panel
+		for (int i = 0; i < arrSize; i++) {
+			this.add(navLink.get(i));
 		}
 	}
 	
@@ -61,7 +74,58 @@ public class NavPanel extends JPanel {
 		btn.setBorderPainted(true);
 		
 		myProps.BtnHover(btn, Color.decode(myProps.Color_Teal_Light));
+	}
+	
+	public void addSwitchPanel(JPanel contentPanel) {
+		JButton btnTemp = new JButton();
+		int navSize = navLink.size();
+		for (int i = 0; i< navSize; i++) {
+			btnTemp = navLink.get(i);
+			addBtnClicked(contentPanel, btnTemp);
+		}
+	}
+	
+	private void addBtnClicked(JPanel contentPanel, JButton btn) {
+		btn.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent e) {
+		    	String lbl = btn.getText();
+				switch (lbl) {
+					case NHAN_VIEN:
+						NhanVienGUI nvGUI = new NhanVienGUI();
+						switchPanel(contentPanel, nvGUI);
+						break;
+					case PHONG_BAN:
+						PhongBanGUI pbGUI = new PhongBanGUI();
+						switchPanel(contentPanel, pbGUI);
+						break;
+					default:
+						break;
+				}
+				setActiveBackground(btn);
+		     }
+		});
+	}
+	
+	private void switchPanel(JPanel parentPanel, JPanel childPanel) {
+		//removing panel
+		parentPanel.removeAll();
+		parentPanel.repaint();
+		parentPanel.revalidate();
 		
-		this.add(btn);
+		//adding panel
+		parentPanel.add(childPanel);
+		parentPanel.repaint();
+		parentPanel.revalidate();
+	}
+	
+	private void setActiveBackground(JButton btn) {
+		int navSize = navLink.size();
+		for (int i = 0; i< navSize; i++) {
+			navLink.get(i).setBackground(Color.decode(myProps.Color_Teal));
+			myProps.BtnHover(navLink.get(i), Color.decode(myProps.Color_Teal_Light));
+		}
+		
+		btn.setBackground(Color.decode(myProps.Color_Teal_Light));
+		myProps.BtnHover(btn, Color.decode(myProps.Color_Teal_Light));
 	}
 }

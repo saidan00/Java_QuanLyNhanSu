@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 public class MainFrame extends JFrame {
 	HeaderPanel header;
 	ContentPanel content;
-	JPanel nav;
+	NavPanel nav;
 	JPanel navContainer;
 	ArrayList<JButton> navLinks;
 	MyProps myProps = new MyProps();
@@ -35,6 +35,7 @@ public class MainFrame extends JFrame {
 		initHeader();
 		initNav();
 		initContent();
+		nav.addSwitchPanel(content);
 	}
 	
 	public void centeredFrame() {
