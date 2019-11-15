@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,6 +19,8 @@ import dto.PhongBanDTO;
 
 public class PhongBanGUI extends JPanel {
 	PhongBanBUS pbBUS = new PhongBanBUS();
+	MyProps myProps = new MyProps();
+	
 	JLabel lbl = new JLabel("Phong ban");
 	
 	JPanel pnlPB;
@@ -24,6 +28,9 @@ public class PhongBanGUI extends JPanel {
 
 	JTable tblPB;
 	JTable tblNV;
+	
+	JLabel lblPB;
+	JLabel lblNV;
 	
 	JLabel lblPbMaPhong, lblPbTenPhong;
 	JLabel lblNvMaNV, lblNvHoNV, lblNvTenNV, lblNvChucVu;
@@ -45,8 +52,8 @@ public class PhongBanGUI extends JPanel {
 	
 	// khởi tạo các component
 	private void initComponents() {
-		this.setLayout(new GridLayout(1, 2));
-		this.setBackground(Color.PINK);
+		this.setLayout(new GridLayout(1, 1));
+//		this.setBackground(Color.PINK);
 		
 		initPanelPhongBan();
 		initTablePhongBan();
@@ -65,6 +72,10 @@ public class PhongBanGUI extends JPanel {
 		tblPB = new JTable();
 		
 		setModelTablePB();
+		
+		lblPB = new JLabel("PHONG BAN");
+		GridBagConstraints cons = myProps.MyGridBagConstraints(1, 1, 4, 1, true, true);
+		pnlPB.add(lblPB, cons);
 	}
 	
 	private void setModelTablePB() {
@@ -99,7 +110,7 @@ public class PhongBanGUI extends JPanel {
 	        	dtm.addRow(row);
 	        }
 	        
-	        tblNV.setModel(dtm);
+	        tblPB.setModel(dtm);
 	}
 	
 	private void initPanelNhanVien() {
