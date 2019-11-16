@@ -192,7 +192,11 @@ public class NhanVienGUI extends JPanel {
 
 	// khởi tạo table Nhân viên
 	private void initTblNV() {
-		tblNV = new JTable();
+		tblNV = new JTable() {
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+				return false; //Disallow the editing of any cell
+			}
+		};
 //		tblNV.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         
         // đọc dữ liệu
