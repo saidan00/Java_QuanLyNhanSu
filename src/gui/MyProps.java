@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.awt.Insets;
 import java.awt.GridBagConstraints;
 
@@ -32,6 +34,13 @@ public class MyProps {
 	
 	public void DEFAULT_BUTTON(JButton btn, String background, String foreground, Rectangle rec) {
 		
+	}
+	
+	public String currentDate() {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+		LocalDateTime now = LocalDateTime.now();  
+		String currentDate = dtf.format(now);
+		return currentDate;
 	}
 	
 	public void BtnFlat(JButton btn) {

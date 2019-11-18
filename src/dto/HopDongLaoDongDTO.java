@@ -9,7 +9,7 @@ public class HopDongLaoDongDTO {
     private int ThoiGianLamViec;
     private double HeSoLuong;
     private int MaCV;
-    private int MaPhong;
+    private Integer MaPhong;
     
     //get
     public int getMaHD()
@@ -44,7 +44,7 @@ public class HopDongLaoDongDTO {
     {
         return MaCV;
     }
-    public int getMaPhong()
+    public Integer getMaPhong()
     {
         return MaPhong;
     }
@@ -83,7 +83,7 @@ public class HopDongLaoDongDTO {
     {
         MaCV = macv;
     }
-    public void setMaPhong(int maphong)
+    public void setMaPhong(Integer maphong)
     {
         MaPhong = maphong;
     }

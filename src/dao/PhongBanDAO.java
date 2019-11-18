@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import dto.HopDongLaoDongDTO;
 import dto.PhongBanDTO;
 import util.MySqlDataAccessHelper;
 
@@ -57,7 +58,6 @@ public class PhongBanDAO {
 		
 		conn.Close();
 	}
-	
 	
 	public void PhongBanEdit(PhongBanDTO PB) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();

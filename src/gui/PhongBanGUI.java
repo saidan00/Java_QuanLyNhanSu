@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -38,7 +40,7 @@ public class PhongBanGUI extends JPanel {
 	JLabel lblPbMaPhong, lblPbTenPhong;
 	JLabel lblNvMaNV, lblNvHoNV, lblNvTenNV, lblNvChucVu;
 	
-	JButton btnPbThem, btnPbSua;
+	JButton btnPbThem, btnPbSua, btnPbXoa;
 	JButton btnNvThem, btnNvXoa;
 	
 	final String MA_PHONG = "Mã Phòng";
@@ -162,6 +164,14 @@ public class PhongBanGUI extends JPanel {
 		btnPbSua.setFont(new Font("Verdana", Font.PLAIN, 12));
 		btnPbSua.setText("Sửa");
 		
+		btnPbXoa = new JButton("Xóa");
+		cons = myProps.MyGridBagConstraints(5, 1, 2, 1, true, true);
+		pnlBtn.add(btnPbXoa, cons);
+		myProps.BtnFlat(btnPbXoa);
+		btnPbXoa.setBackground(Color.decode("#e53935"));
+		btnPbXoa.setForeground(Color.WHITE);
+		btnPbXoa.setFont(new Font("Verdana", Font.PLAIN, 12));
+		
 		cons = myProps.MyGridBagConstraints(1, 7, 4, 1, true, true);
 		pnlPB.add(pnlBtn, cons);
 	}
@@ -206,7 +216,7 @@ public class PhongBanGUI extends JPanel {
         pnlNV.add(scroll, cons);
 	}
 	
-	private void setModelTableNV() {
+	private void setModelTableNV(ArrayList<NhanVienDTO> lstNV) {
 		// table header
 			Vector<String> header = new Vector<String>();
 	        header.add(MA_NV);
@@ -223,9 +233,6 @@ public class PhongBanGUI extends JPanel {
 	                }
 	            }
 	        };
-			
-	        ArrayList<NhanVienDTO> lstNV = new ArrayList<NhanVienDTO>();
-	        lstNV = nvBUS.NhanVienAll();
 	        
 	        NhanVienDTO nv = new NhanVienDTO();
 	        
@@ -239,6 +246,18 @@ public class PhongBanGUI extends JPanel {
 	        }
 	        
 	        tblNV.setModel(dtm);
+	}
+	
+	private void tblPBMouseListener() {
+		tblPB.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int row = tblPB.getSelectedRow();
+				int maPb = (int) tblPB.getValueAt(row, 0);
+				
+				ArrayList<NhanVienDTO> lstNV = nvBUS.NhanVienTheoPhongBan(row);
+				
+			}
+		});
 	}
 	
 	private void initButtonNhanVien() {

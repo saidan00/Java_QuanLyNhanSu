@@ -279,20 +279,20 @@ public class NhanVienGUI extends JPanel {
 	}
 	
 	private void tblNVMouseListener() {
-			tblNV.addMouseListener(new MouseAdapter() {
-				public void mouseClicked(MouseEvent e) {
-					int row = tblNV.getSelectedRow();
-					
-					txtMaNV.setText(tblNV.getValueAt(row, 0).toString());
-					txtHoNV.setText(tblNV.getValueAt(row, 1).toString());
-					txtTenNV.setText(tblNV.getValueAt(row, 2).toString());
-					txtGioiTinh.setText(tblNV.getValueAt(row, 5).toString());
-					txtSoCMND.setText(tblNV.getValueAt(row, 3).toString());
-					txtNgaySinh.setText(tblNV.getValueAt(row, 4).toString());
-					txtSDT.setText(tblNV.getValueAt(row, 6).toString());
-					txtDiaChi.setText(tblNV.getValueAt(row, 7).toString());
-				}
-			});
+		tblNV.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int row = tblNV.getSelectedRow();
+				
+				txtMaNV.setText(tblNV.getValueAt(row, 0).toString());
+				txtHoNV.setText(tblNV.getValueAt(row, 1).toString());
+				txtTenNV.setText(tblNV.getValueAt(row, 2).toString());
+				txtGioiTinh.setText(tblNV.getValueAt(row, 5).toString());
+				txtSoCMND.setText(tblNV.getValueAt(row, 3).toString());
+				txtNgaySinh.setText(tblNV.getValueAt(row, 4).toString());
+				txtSDT.setText(tblNV.getValueAt(row, 6).toString());
+				txtDiaChi.setText(tblNV.getValueAt(row, 7).toString());
+			}
+		});
 	}
 	
 	private void btnThemClicked() {

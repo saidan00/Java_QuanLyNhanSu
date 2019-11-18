@@ -1,12 +1,16 @@
 package dao;
 
 import dto.HopDongLaoDongDTO;
+import gui.MyProps;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import util.MySqlDataAccessHelper;
 
 public class HopDongLaoDongDAO {
+	private MyProps myProps = new MyProps();
+	
     public ArrayList<HopDongLaoDongDTO> HopDongLaoDongAll(){
         MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
         
@@ -42,6 +46,7 @@ public class HopDongLaoDongDAO {
 		return arr;
         
     }
+    
     /// Thêm hợp dồng lao động
 	public void HopDongLaoDongAdd(HopDongLaoDongDTO aHDLD) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
@@ -66,11 +71,12 @@ public class HopDongLaoDongDAO {
 		
 		conn.Close();
 	}
+	
         // sửa hợp đồng lao dộng
 	public void HopDongLaoDongEdit(HopDongLaoDongDTO aHDLD) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 		
-		String sql = "INSERT hopdonglaodong SET manv = ?, tungay = ?, denngay = ?, diadiemlamviec =?, thoigianlamviec = ?, hesoluong = ?, macv = ?, maphong =? "
+		String sql = "UPDATE hopdonglaodong SET manv = ?, tungay = ?, denngay = ?, diadiemlamviec =?, thoigianlamviec = ?, hesoluong = ?, macv = ?, maphong =? "
 				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		// prepare statement
@@ -92,6 +98,7 @@ public class HopDongLaoDongDAO {
 		
 		conn.Close();
 	}
+	
         // xóa hợp đồng lao động
     public void HopDongLaoDongDelete(int maHDLD) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
@@ -103,6 +110,51 @@ public class HopDongLaoDongDAO {
 			
 		// bind values
 		conn.bind(1, maHDLD);
+		
+		conn.executeUpdatePre();
+ 		
+ 		conn.Close();
+    }
+    
+    public void ThemNhanVienPhongBan(int maPb, int maNv, HopDongLaoDongDTO hd) {
+    	MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+    	
+    	if (hd.getMaPhong() == null) {
+    		String sql = "UPDATE hopdonglaodong SET maphong = ? WHERE mahd = ?";
+  		  
+    		conn.prepare(sql);
+    			
+    		conn.bind(1, maPb);
+    		conn.bind(2, hd.getMaHD());
+    		
+    		conn.executeUpdatePre();
+    	} else {
+    		// gán hợp đồng cũ
+    		String sql = "UPDATE hopdonglaodong SET denngay = ? WHERE mahd = ?";
+    		  
+    		conn.prepare(sql);
+    			
+    		conn.bind(1, myProps.currentDate());
+    		conn.bind(2, hd.getMaHD());
+    		
+    		conn.executeUpdatePre();
+    		
+    		// thêm hợp đồng mới
+    		sql = "UPDATE hopdonglaodong SET denngay = ? WHERE mahd = ?";
+    		  
+    		conn.prepare(sql);
+    			
+    		conn.bind(1, myProps.currentDate());
+    		conn.bind(2, hd.getMaHD());
+    		
+    		conn.executeUpdatePre();
+    	}
+		
+		String sql = "";
+		  
+		conn.prepare(sql);
+			
+		conn.bind(1, maPb);
 		
 		conn.executeUpdatePre();
  		

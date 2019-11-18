@@ -9,12 +9,16 @@ import util.MySqlDataAccessHelper;
 
 public class NhanVienDAO {
 	// Lấy danh sách tất cả nhân viên
-	public ArrayList<NhanVienDTO> NhanVienAll() {
+	public ArrayList<NhanVienDTO> NhanVienAll(Integer maPb) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 
 		ArrayList<NhanVienDTO> arr = new ArrayList<NhanVienDTO>();
 
-		String query = "SELECT * FROM nhanvien";
+		String query = "SELECT * FROM nhanvien ";
+		
+		if (maPb != null) {
+			query += "nv JOIN hopdonglaodong hd ON nv.manv = hd.manv WHERE hd.maphong = " + maPb;
+		}
 
 		try {
 			ResultSet rs = conn.executeQuery(query);
