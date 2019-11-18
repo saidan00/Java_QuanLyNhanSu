@@ -11,12 +11,17 @@ import util.MySqlDataAccessHelper;
 public class HopDongLaoDongDAO {
 	private MyProps myProps = new MyProps();
 	
-    public ArrayList<HopDongLaoDongDTO> HopDongLaoDongAll(){
+    public ArrayList<HopDongLaoDongDTO> HopDongLaoDongAll(Integer maNv) {
         MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
         
         ArrayList<HopDongLaoDongDTO> arr = new ArrayList<HopDongLaoDongDTO>();
         
         String  query = "SELECT * FROM hopdonglaodong";
+        
+        if (maNv != null) {
+        	query = "SELECT TOP 1 * FROM hopdonglaodong WHERE manv = " + maNv + " ORDER BY tungay DESC";
+        }
+        
         try {
 			ResultSet rs = conn.executeQuery(query);
 			while (rs.next()) {
@@ -76,8 +81,7 @@ public class HopDongLaoDongDAO {
 	public void HopDongLaoDongEdit(HopDongLaoDongDTO aHDLD) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 		
-		String sql = "UPDATE hopdonglaodong SET manv = ?, tungay = ?, denngay = ?, diadiemlamviec =?, thoigianlamviec = ?, hesoluong = ?, macv = ?, maphong =? "
-				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "UPDATE hopdonglaodong SET manv = ?, tungay = ?, denngay = ?, diadiemlamviec = ?, thoigianlamviec = ?, hesoluong = ?, macv = ?, maphong = ? ";
 		
 		// prepare statement
 		conn.prepare(sql);
@@ -116,11 +120,12 @@ public class HopDongLaoDongDAO {
  		conn.Close();
     }
     
-    public void ThemNhanVienPhongBan(int maPb, int maNv, HopDongLaoDongDTO hd) {
+    public void ThemNhanVienPhongBan(HopDongLaoDongDTO hd, int maPb) {
     	MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+    	String sql = "";
     	
     	if (hd.getMaPhong() == null) {
-    		String sql = "UPDATE hopdonglaodong SET maphong = ? WHERE mahd = ?";
+    		sql = "UPDATE hopdonglaodong SET maphong = ? WHERE mahd = ?";
   		  
     		conn.prepare(sql);
     			
@@ -129,8 +134,8 @@ public class HopDongLaoDongDAO {
     		
     		conn.executeUpdatePre();
     	} else {
-    		// gán hợp đồng cũ
-    		String sql = "UPDATE hopdonglaodong SET denngay = ? WHERE mahd = ?";
+    		// gán kết thúc hợp đồng cũ
+    		sql = "UPDATE hopdonglaodong SET denngay = ? WHERE mahd = ?";
     		  
     		conn.prepare(sql);
     			
@@ -140,23 +145,10 @@ public class HopDongLaoDongDAO {
     		conn.executeUpdatePre();
     		
     		// thêm hợp đồng mới
-    		sql = "UPDATE hopdonglaodong SET denngay = ? WHERE mahd = ?";
-    		  
-    		conn.prepare(sql);
-    			
-    		conn.bind(1, myProps.currentDate());
-    		conn.bind(2, hd.getMaHD());
-    		
-    		conn.executeUpdatePre();
+    		HopDongLaoDongDTO hdMoi = new HopDongLaoDongDTO(hd);
+    		hdMoi.setMaPhong(maPb);
+    		this.HopDongLaoDongAdd(hdMoi);
     	}
-		
-		String sql = "";
-		  
-		conn.prepare(sql);
-			
-		conn.bind(1, maPb);
-		
-		conn.executeUpdatePre();
  		
  		conn.Close();
     }

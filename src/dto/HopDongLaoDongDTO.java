@@ -11,6 +11,20 @@ public class HopDongLaoDongDTO {
     private int MaCV;
     private Integer MaPhong;
     
+    public HopDongLaoDongDTO() {}
+    
+    public HopDongLaoDongDTO(HopDongLaoDongDTO hd) {
+    	this.MaHD = hd.MaHD;
+    	this.MaNV = hd.MaNV;
+    	this.TuNgay = hd.TuNgay;
+    	this.DenNgay = hd.DenNgay;
+    	this.DiaDiemLamViec = hd.DiaDiemLamViec;
+    	this.ThoiGianLamViec = hd.ThoiGianLamViec;
+    	this.HeSoLuong = hd.HeSoLuong;
+    	this.MaCV = hd.MaCV;
+    	this.MaPhong = hd.MaPhong;
+    }
+    
     //get
     public int getMaHD()
     {

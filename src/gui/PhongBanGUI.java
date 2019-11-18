@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -12,9 +14,11 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -40,6 +44,8 @@ public class PhongBanGUI extends JPanel {
 	JLabel lblPbMaPhong, lblPbTenPhong;
 	JLabel lblNvMaNV, lblNvHoNV, lblNvTenNV, lblNvChucVu;
 	
+	JTextField txtPbMaPhong, txtPbTenPhong;
+	
 	JButton btnPbThem, btnPbSua, btnPbXoa;
 	JButton btnNvThem, btnNvXoa;
 	
@@ -61,12 +67,18 @@ public class PhongBanGUI extends JPanel {
 //		this.setBackground(Color.PINK);
 		
 		initPanelPhongBan();
+		initFormPhongBan();
 		initTablePhongBan();
+		
+		// button phong ban
 		initButtonPhongBan();
+		btnPbThemClicked();
 		
 		initPanelNhanVien();
 		initTableNhanVien();
 		initButtonNhanVien();
+		
+		tblPBMouseListener();
 	}
 	
 	private void initPanelPhongBan() {
@@ -80,6 +92,30 @@ public class PhongBanGUI extends JPanel {
 	    pnlPB.setBorder(border);
 		
 		this.add(pnlPB);
+	}
+	
+	private void initFormPhongBan() {
+		GridBagConstraints cons = new GridBagConstraints();
+		// mã nhân viên
+		lblPbMaPhong = new JLabel(MA_PHONG);
+		lblPbMaPhong.setFont(myProps.DEFAULT_FONT_SMALL);
+		cons = myProps.MyGridBagConstraints(1, 1, 1, 1, true, true);
+		pnlPB.add(lblPbMaPhong, cons);
+		
+		txtPbMaPhong = myProps.RoundedTextField(5);
+		txtPbMaPhong.setEditable(false); // không cho sửa
+		cons = myProps.MyGridBagConstraints(2, 1, 1, 1, true, true);
+		pnlPB.add(txtPbMaPhong, cons);
+		
+		// họ nhân viên
+		lblPbTenPhong = new JLabel(TEN_PHONG);
+		lblPbTenPhong.setFont(myProps.DEFAULT_FONT_SMALL);
+		cons = myProps.MyGridBagConstraints(3, 1, 1, 1, true, true);
+		pnlPB.add(lblPbTenPhong, cons);
+		
+		txtPbTenPhong = myProps.RoundedTextField(5);
+		cons = myProps.MyGridBagConstraints(4, 1, 1, 1, true, true);
+		pnlPB.add(txtPbTenPhong, cons);
 	}
 	
 	private void initTablePhongBan() {
@@ -197,7 +233,8 @@ public class PhongBanGUI extends JPanel {
 		};
         
         // đọc dữ liệu
-        setModelTableNV();
+		ArrayList<NhanVienDTO> lstNV = new ArrayList<NhanVienDTO>();
+        setModelTableNV(lstNV);
         
         // không cho phép di chuyển vị trí columns
         tblNV.getTableHeader().setReorderingAllowed(false);
@@ -254,10 +291,28 @@ public class PhongBanGUI extends JPanel {
 				int row = tblPB.getSelectedRow();
 				int maPb = (int) tblPB.getValueAt(row, 0);
 				
-				ArrayList<NhanVienDTO> lstNV = nvBUS.NhanVienTheoPhongBan(row);
-				
+				ArrayList<NhanVienDTO> lstNV = nvBUS.NhanVienTheoPhongBan(maPb);
+				setModelTableNV(lstNV);
 			}
 		});
+	}
+	
+	private void btnPbThemClicked() {
+		btnPbThem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	PhongBanDTO pb = new PhongBanDTO();
+            	
+            	pb.setTenPhong(String.valueOf(txtPbTenPhong.getText()));
+            	pb.setMaTruongPhong(null);
+            	
+                pbBUS.PhongBanAdd(pb);
+                
+                JOptionPane.showMessageDialog(null, "Thêm thành công");
+                
+                setModelTablePB();
+            }
+        });
 	}
 	
 	private void initButtonNhanVien() {

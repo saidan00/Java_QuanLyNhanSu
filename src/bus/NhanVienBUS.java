@@ -20,9 +20,10 @@ public class NhanVienBUS {
 		return nvDAO.NhanVienAll(maPb);
 	}
 	
-	@SuppressWarnings("null")
 	public void NhanVienAdd(NhanVienDTO nv) {
 		nvDAO.NhanVienAdd(nv);
+		
+		nv = nvDAO.NhanVienMoiNhat();
 		
 		HopDongLaoDongDAO hdDAO = new HopDongLaoDongDAO();
 		HopDongLaoDongDTO hd = new HopDongLaoDongDTO();

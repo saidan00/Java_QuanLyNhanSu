@@ -108,15 +108,22 @@ public class MySqlDataAccessHelper {
 	// Bind value
 	public void bind(int index, Object o) {
 		try {
-			switch(o.getClass().getCanonicalName()) {
-				case "java.lang.Integer":
-					this.preStmt.setInt(index, (Integer)o);
-					break;
-				case "java.lang.String":
-					this.preStmt.setNString(index, (String)o);
-					break;
-				default:
-					break;
+			if (o == null) {
+				this.preStmt.setNull(index, java.sql.Types.VARCHAR);
+			} else {
+				switch(o.getClass().getCanonicalName()) {
+					case "java.lang.Integer":
+						this.preStmt.setInt(index, (Integer)o);
+						break;
+					case "java.lang.String":
+						this.preStmt.setNString(index, (String)o);
+						break;
+					case "java.lang.Double":
+						this.preStmt.setDouble(index, (Double)o);
+						break;
+					default:
+						break;
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

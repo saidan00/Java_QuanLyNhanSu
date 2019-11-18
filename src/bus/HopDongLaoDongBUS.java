@@ -8,7 +8,7 @@ public class HopDongLaoDongBUS {
     private HopDongLaoDongDAO hdldDAO = new HopDongLaoDongDAO();
 	
 	public ArrayList<HopDongLaoDongDTO> NhanVienAll() {
-        return hdldDAO.HopDongLaoDongAll();
+        return hdldDAO.HopDongLaoDongAll(null);
     }
 	
 	public void HpDongLaoDongAdd(HopDongLaoDongDTO hdld) {

@@ -8,8 +8,7 @@ package dto;
 public class PhongBanDTO {
     private int MaPhong;
     private String TenPhong;
-    private int MaTruongPhong;
-    private String SdtPhongBan;
+    private Integer MaTruongPhong;
 
     public PhongBanDTO() {
 
@@ -19,7 +18,6 @@ public class PhongBanDTO {
         this.MaPhong = maphg;
         this.TenPhong = tenphg;
         this.MaTruongPhong = trgphg;
-        this.SdtPhongBan = sdtphongban;
     }
 
 	public String getTenPhong() {
@@ -30,20 +28,12 @@ public class PhongBanDTO {
 		TenPhong = tenPhong;
 	}
 
-	public int getMaTruongPhong() {
+	public Integer getMaTruongPhong() {
 		return MaTruongPhong;
 	}
 
-	public void setMaTruongPhong(int truongPhong) {
+	public void setMaTruongPhong(Integer truongPhong) {
 		MaTruongPhong = truongPhong;
-	}
-
-	public String getSdtPhongBan() {
-		return SdtPhongBan;
-	}
-
-	public void setSdtPhongBan(String sdtPhongBan) {
-		SdtPhongBan = sdtPhongBan;
 	}
 
 	public int getMaPhong() {

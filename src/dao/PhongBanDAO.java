@@ -27,7 +27,6 @@ public class PhongBanDAO {
 				PhongBan.setMaPhong(rs.getInt("maphong"));
 				PhongBan.setTenPhong(rs.getString("tenphong"));
 				PhongBan.setMaTruongPhong(rs.getInt("matruongphong"));
-				PhongBan.setSdtPhongBan(rs.getString("sdtphongban"));
 				arr.add(PhongBan);
 			}
 		} catch (SQLException ex) {
@@ -42,17 +41,15 @@ public class PhongBanDAO {
 	public void PhongBanAdd(PhongBanDTO PB) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 		
-		String sql = "INSERT INTO phongban (tenphong, matruongphong, sdtphongban) "
-				+ "VALUES(?, ?, ?)";
+		String sql = "INSERT INTO phongban (tenphong, matruongphong) "
+				+ "VALUES(?, ?)";
 		
 		// prepare statement
 		conn.prepare(sql);
 		
 		// bind values
-		conn.bind(1, PB.getMaPhong());
-		conn.bind(2, PB.getTenPhong());
-		conn.bind(3, PB.getMaTruongPhong());
-		conn.bind(4, PB.getSdtPhongBan());
+		conn.bind(1, PB.getTenPhong());
+		conn.bind(2, PB.getMaTruongPhong());
 		
 		conn.executeUpdatePre();
 		
@@ -62,15 +59,14 @@ public class PhongBanDAO {
 	public void PhongBanEdit(PhongBanDTO PB) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
         
-        String  sql = "UPDATE phongban SET tenphong = ?, sdtphongban= ?, matruongphong = ?  WHERE maphg= ?";
+        String  sql = "UPDATE phongban SET tenphong = ?, matruongphong = ?  WHERE maphg= ?";
      
  		conn.prepare(sql);
 
 		conn.bind(1, PB.getTenPhong());
-		conn.bind(2, PB.getSdtPhongBan());
-		conn.bind(3, PB.getMaTruongPhong());
+		conn.bind(2, PB.getMaTruongPhong());
 		
- 		conn.bind(4, PB.getMaPhong());
+ 		conn.bind(3, PB.getMaPhong());
 
  		conn.executeUpdatePre();
  		
