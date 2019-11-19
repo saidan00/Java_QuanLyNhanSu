@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import dto.HopDongLaoDongDTO;
 import dto.PhongBanDTO;
 import util.MySqlDataAccessHelper;
 
@@ -59,7 +58,7 @@ public class PhongBanDAO {
 	public void PhongBanEdit(PhongBanDTO PB) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
         
-        String  sql = "UPDATE phongban SET tenphong = ?, matruongphong = ?  WHERE maphg= ?";
+        String  sql = "UPDATE phongban SET tenphong = ?, matruongphong = ?  WHERE maphong = ?";
      
  		conn.prepare(sql);
 
@@ -77,7 +76,7 @@ public class PhongBanDAO {
     public void PhongBanDelete(int maPb) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 		
-		String sql = "DELETE FROM PhongBan WHERE maphg = ?";
+		String sql = "DELETE FROM PhongBan WHERE maphong = ?";
 		  
 		conn.prepare(sql);
 			
@@ -86,5 +85,21 @@ public class PhongBanDAO {
 		conn.executeUpdatePre();
  		
  		conn.Close();
+    }
+    
+
+    public void CapNhatTruongPhong(int maPb, int maTruongPhong)
+    {
+        MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+        String sql = "UPDATE phongban SET matruongphong = ? WHERE maphg = ?";
+        
+        conn.prepare(sql);
+        
+        conn.bind(1, maTruongPhong);
+        conn.bind(2, maPb);
+        
+        conn.executeUpdatePre();
+        
+        conn.Close();
     }
 }

@@ -388,8 +388,8 @@ public class NhanVienGUI extends JPanel {
 		btnSua.setText("Sửa");
 		
 		pnlButton.add(btnThem);
-		pnlButton.add(btnXoa);
 		pnlButton.add(btnSua);
+		pnlButton.add(btnXoa);
 
 		cons = myProps.MyGridBagConstraints(4, 8, 9, 1, true, true);
 		pnlForm.add(pnlButton, cons);

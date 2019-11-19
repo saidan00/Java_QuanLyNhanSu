@@ -17,7 +17,7 @@ public class NhanVienDAO {
 		String query = "SELECT * FROM nhanvien";
 		
 		if (maPb != null) {
-			query += " nv JOIN hopdonglaodong hd ON nv.manv = hd.manv WHERE hd.maphong = " + maPb;
+			query = "SELECT DISTINCT nv.manv, honv, tennv, socmnd, ngaysinh, gioitinh, sdt, diachi FROM nhanvien nv JOIN hopdonglaodong hd ON nv.manv = hd.manv WHERE hd.maphong = " + maPb + " ORDER BY hd.denngay DESC";
 		}
 
 		try {

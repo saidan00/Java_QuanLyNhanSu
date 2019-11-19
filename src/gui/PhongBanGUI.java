@@ -22,14 +22,17 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import bus.HopDongLaoDongBUS;
 import bus.NhanVienBUS;
 import bus.PhongBanBUS;
+import dto.HopDongLaoDongDTO;
 import dto.NhanVienDTO;
 import dto.PhongBanDTO;
 
 public class PhongBanGUI extends JPanel {
 	PhongBanBUS pbBUS = new PhongBanBUS();
 	NhanVienBUS nvBUS = new NhanVienBUS();
+	HopDongLaoDongBUS hdBUS = new HopDongLaoDongBUS();
 	MyProps myProps = new MyProps();
 	
 	JPanel pnlPB;
@@ -47,7 +50,7 @@ public class PhongBanGUI extends JPanel {
 	JTextField txtPbMaPhong, txtPbTenPhong;
 	
 	JButton btnPbThem, btnPbSua, btnPbXoa;
-	JButton btnNvThem, btnNvXoa;
+	JButton btnNvThem, btnNvTp, btnNvXoa;
 	
 	final String MA_PHONG = "Mã Phòng";
 	final String TEN_PHONG = "Tên Phòng";
@@ -73,10 +76,14 @@ public class PhongBanGUI extends JPanel {
 		// button phong ban
 		initButtonPhongBan();
 		btnPbThemClicked();
+		btnPbXoaClicked();
 		
 		initPanelNhanVien();
 		initTableNhanVien();
 		initButtonNhanVien();
+		
+		// button nhan vien
+		btnNvTpClicked();
 		
 		tblPBMouseListener();
 	}
@@ -258,6 +265,7 @@ public class PhongBanGUI extends JPanel {
 			Vector<String> header = new Vector<String>();
 	        header.add(MA_NV);
 	        header.add(TEN_NV);
+	        header.add(CHUC_VU);
 			
 			DefaultTableModel dtm = new DefaultTableModel(header, 0) {
 	            @Override
@@ -277,7 +285,8 @@ public class PhongBanGUI extends JPanel {
 	        	nv = lstNV.get(i);
 	        	Object[] row = {
         			nv.getMaNV(),
-        			nv.getHoNV() + " " + nv.getTenNV()
+        			nv.getHoNV() + " " + nv.getTenNV(),
+        			hdBUS.ChucVuCuaNhanVien(nv.getMaNV())
 	        	};
 	        	dtm.addRow(row);
 	        }
@@ -290,6 +299,9 @@ public class PhongBanGUI extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				int row = tblPB.getSelectedRow();
 				int maPb = (int) tblPB.getValueAt(row, 0);
+				
+				txtPbMaPhong.setText(tblPB.getValueAt(row, 0).toString());
+				txtPbTenPhong.setText(tblPB.getValueAt(row, 1).toString());
 				
 				ArrayList<NhanVienDTO> lstNV = nvBUS.NhanVienTheoPhongBan(maPb);
 				setModelTableNV(lstNV);
@@ -306,11 +318,33 @@ public class PhongBanGUI extends JPanel {
             	pb.setTenPhong(String.valueOf(txtPbTenPhong.getText()));
             	pb.setMaTruongPhong(null);
             	
-                pbBUS.PhongBanAdd(pb);
-                
-                JOptionPane.showMessageDialog(null, "Thêm thành công");
-                
+            	if (pb.getTenPhong().isBlank()) {
+            		JOptionPane.showMessageDialog(null, "Vui lòng nhập tên phòng");
+            		txtPbTenPhong.requestFocus();
+            	} else {
+            		pbBUS.PhongBanAdd(pb);
+                    
+                    JOptionPane.showMessageDialog(null, "Thêm thành công");
+            	}
+            	
                 setModelTablePB();
+            }
+        });
+	}
+	
+	private void btnPbXoaClicked() {
+		btnPbXoa.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	if (txtPbMaPhong.getText().isEmpty()) {
+            		JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng ban");
+            	} else {
+                	int maPb = Integer.valueOf(txtPbMaPhong.getText());
+                	
+                	pbBUS.PhongBanDelete(maPb);
+                    
+                    setModelTablePB();
+            	}
             }
         });
 	}
@@ -327,8 +361,16 @@ public class PhongBanGUI extends JPanel {
 		btnNvThem.setForeground(Color.WHITE);
 		btnNvThem.setFont(new Font("Verdana", Font.PLAIN, 12));
 		
-		btnNvXoa = new JButton("Xóa khỏi phòng");
+		btnNvTp = new JButton("Gán trưởng phòng");
 		cons = myProps.MyGridBagConstraints(3, 1, 2, 1, true, true);
+		pnlBtn.add(btnNvTp, cons);
+		myProps.BtnFlat(btnNvTp);
+		btnNvTp.setBackground(Color.decode("#e0e0e0"));
+		btnNvTp.setForeground(Color.BLACK);
+		btnNvTp.setFont(new Font("Verdana", Font.PLAIN, 12));
+		
+		btnNvXoa = new JButton("Xóa khỏi phòng");
+		cons = myProps.MyGridBagConstraints(5, 1, 2, 1, true, true);
 		pnlBtn.add(btnNvXoa, cons);
 		myProps.BtnFlat(btnNvXoa);
 		btnNvXoa.setBackground(Color.decode("#e53935"));
@@ -337,5 +379,31 @@ public class PhongBanGUI extends JPanel {
 		
 		cons = myProps.MyGridBagConstraints(1, 7, 4, 1, true, true);
 		pnlNV.add(pnlBtn, cons);
+	}
+	
+	private void btnNvTpClicked() {
+		btnNvTp.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	int row = tblNV.getSelectedRow();
+            	
+            	if (row == -1) {
+            		JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên");
+            	} else {
+            		int maPb = Integer.valueOf(txtPbMaPhong.getText());
+                	
+                	int maNv = (int) tblNV.getValueAt(row, 0);
+                	
+                	HopDongLaoDongDTO hd = hdBUS.HopDongMoiNhat(maNv);
+                	
+                	hdBUS.CapNhatTruongPhong(maPb, maNv, hd);
+                	
+                	JOptionPane.showMessageDialog(null, "Gán thành công");
+                	
+                	ArrayList<NhanVienDTO> lstNV = nvBUS.NhanVienTheoPhongBan(maPb);
+                	setModelTableNV(lstNV);
+            	}
+            }
+        });
 	}
 }

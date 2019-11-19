@@ -6,41 +6,38 @@ import gui.MyProps;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import util.MySqlDataAccessHelper;
 
 public class HopDongLaoDongDAO {
 	private MyProps myProps = new MyProps();
 	
-    public ArrayList<HopDongLaoDongDTO> HopDongLaoDongAll(Integer maNv) {
+    public ArrayList<HopDongLaoDongDTO> HopDongLaoDongAll() {
         MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
         
         ArrayList<HopDongLaoDongDTO> arr = new ArrayList<HopDongLaoDongDTO>();
         
         String  query = "SELECT * FROM hopdonglaodong";
         
-        if (maNv != null) {
-        	query = "SELECT TOP 1 * FROM hopdonglaodong WHERE manv = " + maNv + " ORDER BY tungay DESC";
-        }
-        
         try {
 			ResultSet rs = conn.executeQuery(query);
 			while (rs.next()) {
 				// khởi tạo
-				HopDongLaoDongDTO aHopDongLaoDong = new HopDongLaoDongDTO();
+				HopDongLaoDongDTO hd = new HopDongLaoDongDTO();
 
 				// gán giá trị
-				aHopDongLaoDong.setMaHD(rs.getInt("mahd"));
-                aHopDongLaoDong.setMaNV(rs.getInt("manv"));
-                aHopDongLaoDong.setTuNgay(rs.getString("tungay"));
-                aHopDongLaoDong.setDenNgay(rs.getString("denngay"));
-                aHopDongLaoDong.setDiaDiemLamViec(rs.getString("diadiemlamviec"));
-                aHopDongLaoDong.setThoiGianLamViec(rs.getInt("thoigianlamviec"));
-                aHopDongLaoDong.setHeSoLuong(rs.getDouble("hesoluong"));
-                aHopDongLaoDong.setMaCV(rs.getInt("macv"));
-                aHopDongLaoDong.setMaPhong(rs.getInt("maphong"));
+				hd.setMaHD(rs.getInt("mahd"));
+                hd.setMaNV(rs.getInt("manv"));
+                hd.setTuNgay(rs.getString("tungay"));
+                hd.setDenNgay(rs.getString("denngay"));
+                hd.setDiaDiemLamViec(rs.getString("diadiemlamviec"));
+                hd.setThoiGianLamViec(rs.getInt("thoigianlamviec"));
+                hd.setHeSoLuong(rs.getDouble("hesoluong"));
+                hd.setMaCV(rs.getInt("macv"));
+                hd.setMaPhong(rs.getInt("maphong"));
 				
 				// thêm vào array list
-				arr.add(aHopDongLaoDong);
+				arr.add(hd);
 			}
 		} catch (SQLException ex) {
 			conn.displayError(ex);
@@ -151,5 +148,159 @@ public class HopDongLaoDongDAO {
     	}
  		
  		conn.Close();
+    }
+    
+    public void CapNhatTruongPhong(int maPb, int maNv, HopDongLaoDongDTO hd) {
+    	MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+    	String sql = "";
+    	
+    	if (hd.getMaCV() != 2) {
+    		// gán kết thúc hợp đồng cũ
+    		sql = "UPDATE hopdonglaodong SET denngay = ? WHERE mahd = ?";
+    		  
+    		conn.prepare(sql);
+    			
+    		conn.bind(1, myProps.currentDate());
+    		conn.bind(2, hd.getMaHD());
+    		
+    		conn.executeUpdatePre();
+    		
+    		// lấy hd của tp hiện tại
+    		HopDongLaoDongDTO hdTpHienTai = TruongPhongHienTai(maPb);
+    		
+    		// gán kết thúc hợp đồng cũ của tp hiện tại
+    		sql = "UPDATE hopdonglaodong SET denngay = ? WHERE mahd = ?";
+    		conn.prepare(sql);
+    		conn.bind(1, myProps.currentDate());
+    		conn.bind(2, hdTpHienTai.getMaHD());
+    		conn.executeUpdatePre();
+    		
+    		// thêm hd mới gán tp cũ thành nv
+    		HopDongLaoDongDTO hdTpCu = new HopDongLaoDongDTO(hdTpHienTai);
+    		hdTpCu.setMaCV(1);
+    		this.HopDongLaoDongAdd(hdTpCu);
+    		
+    		// thêm hợp đồng mới
+    		HopDongLaoDongDTO hdMoi = new HopDongLaoDongDTO(hd);
+    		hdMoi.setMaCV(2);
+    		this.HopDongLaoDongAdd(hdMoi);
+    		
+    		sql = "UPDATE phongban SET matruongphong = ? WHERE maphong = ?";
+    		conn.prepare(sql);
+    		conn.bind(1, maNv);
+    		conn.bind(2, maPb);
+    		conn.executeUpdatePre();
+    	}
+ 		
+ 		conn.Close();
+    }
+    
+    public HopDongLaoDongDTO HopDongMoiNhat(int maNv) {
+    	MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+    	ArrayList<HopDongLaoDongDTO> arr = new ArrayList<HopDongLaoDongDTO>();
+    	
+    	// chọn hd mới nhất
+    	String sql = "SELECT * FROM hopdonglaodong WHERE manv = ? ORDER BY denngay DESC LIMIT 1";
+    	
+    	conn.prepare(sql);
+		
+		conn.bind(1, maNv);
+		
+		try {
+			ResultSet rs = conn.executeQueryPre();
+			while (rs.next()) {
+				// khởi tạo
+				HopDongLaoDongDTO hd = new HopDongLaoDongDTO();
+
+				// gán giá trị
+				hd.setMaHD(rs.getInt("mahd"));
+                hd.setMaNV(rs.getInt("manv"));
+                hd.setTuNgay(rs.getString("tungay"));
+                hd.setDenNgay(rs.getString("denngay"));
+                hd.setDiaDiemLamViec(rs.getString("diadiemlamviec"));
+                hd.setThoiGianLamViec(rs.getInt("thoigianlamviec"));
+                hd.setHeSoLuong(rs.getDouble("hesoluong"));
+                hd.setMaCV(rs.getInt("macv"));
+                hd.setMaPhong(rs.getInt("maphong"));
+				
+				// thêm vào array list
+				arr.add(hd);
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+    	
+    	conn.Close();
+    	
+    	return arr.get(0);
+    }
+    
+    public HopDongLaoDongDTO TruongPhongHienTai(int maPb) {
+    	MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+    	ArrayList<HopDongLaoDongDTO> arr = new ArrayList<HopDongLaoDongDTO>();
+    	
+    	String sql = "SELECT * FROM hopdonglaodong WHERE maphong = ? AND macv = ? ORDER BY denngay DESC LIMIT 1";
+    	
+    	conn.prepare(sql);
+    	
+    	conn.bind(1, maPb);
+    	conn.bind(2, 2);
+    	
+    	try {
+			ResultSet rs = conn.executeQueryPre();
+			while (rs.next()) {
+				// khởi tạo
+				HopDongLaoDongDTO hd = new HopDongLaoDongDTO();
+
+				// gán giá trị
+				hd.setMaHD(rs.getInt("mahd"));
+                hd.setMaNV(rs.getInt("manv"));
+                hd.setTuNgay(rs.getString("tungay"));
+                hd.setDenNgay(rs.getString("denngay"));
+                hd.setDiaDiemLamViec(rs.getString("diadiemlamviec"));
+                hd.setThoiGianLamViec(rs.getInt("thoigianlamviec"));
+                hd.setHeSoLuong(rs.getDouble("hesoluong"));
+                hd.setMaCV(rs.getInt("macv"));
+                hd.setMaPhong(rs.getInt("maphong"));
+				
+				// thêm vào array list
+				arr.add(hd);
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+    	
+    	conn.Close();
+    	
+    	if (arr.size() != 0 ) {
+    		return arr.get(0);
+    	} else {
+    		return null;
+    	}
+    }
+    
+    public String ChucVuCuaNhanVien(int maNv) {
+    	MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+    	String cv = "";
+    	
+    	String sql = "SELECT * FROM hopdonglaodong hd JOIN chucvu cv ON hd.macv = cv.macv WHERE hd.manv = ? ORDER BY denngay DESC LIMIT 1";
+    	
+    	conn.prepare(sql);
+		
+		conn.bind(1, maNv);
+		
+		try {
+			ResultSet rs = conn.executeQueryPre();
+			while (rs.next()) {
+				// khởi tạo
+				cv = rs.getString("tencv");
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+    	
+    	conn.Close();
+    	
+    	return cv;
     }
 }

@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class HopDongLaoDongBUS {
     private HopDongLaoDongDAO hdldDAO = new HopDongLaoDongDAO();
 	
-	public ArrayList<HopDongLaoDongDTO> NhanVienAll() {
-        return hdldDAO.HopDongLaoDongAll(null);
+	public ArrayList<HopDongLaoDongDTO> HopDongLaoDongAll() {
+        return hdldDAO.HopDongLaoDongAll();
     }
 	
 	public void HpDongLaoDongAdd(HopDongLaoDongDTO hdld) {
@@ -21,5 +21,17 @@ public class HopDongLaoDongBUS {
 	
 	public void HopDongLaoDongDelete(int maHD) {
 		hdldDAO.HopDongLaoDongDelete(maHD);
+	}
+	
+	public String ChucVuCuaNhanVien(int maNv) {
+		return hdldDAO.ChucVuCuaNhanVien(maNv);
+	}
+	
+	public HopDongLaoDongDTO HopDongMoiNhat(int maNv) {
+		return hdldDAO.HopDongMoiNhat(maNv);
+	}
+	
+	public void CapNhatTruongPhong(int maPb, int maNv, HopDongLaoDongDTO hd) {
+		hdldDAO.CapNhatTruongPhong(maPb, maNv, hd);
 	}
 }
