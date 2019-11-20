@@ -9,19 +9,61 @@ import util.MySqlDataAccessHelper;
 
 public class NhanVienDAO {
 	// Lấy danh sách tất cả nhân viên
-	public ArrayList<NhanVienDTO> NhanVienAll(Integer maPb) {
+	public ArrayList<NhanVienDTO> NhanVienAll() {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 
 		ArrayList<NhanVienDTO> arr = new ArrayList<NhanVienDTO>();
 
 		String query = "SELECT * FROM nhanvien";
-		
-		if (maPb != null) {
-			query = "SELECT DISTINCT nv.manv, honv, tennv, socmnd, ngaysinh, gioitinh, sdt, diachi FROM nhanvien nv JOIN hopdonglaodong hd ON nv.manv = hd.manv WHERE hd.maphong = " + maPb + " ORDER BY hd.denngay DESC";
-		}
 
 		try {
 			ResultSet rs = conn.executeQuery(query);
+			while (rs.next()) {
+				// khởi tạo
+				NhanVienDTO aNhanVien = new NhanVienDTO();
+
+				// gán giá trị
+				aNhanVien.setMaNV(rs.getInt("manv"));
+				aNhanVien.setHoNV(rs.getString("honv"));
+				aNhanVien.setTenNV(rs.getString("tennv"));
+				aNhanVien.setSoCMND(rs.getString("socmnd"));
+				aNhanVien.setNgaySinh(rs.getString("ngaysinh"));
+				aNhanVien.setGioiTinh(rs.getString("gioitinh"));
+				aNhanVien.setSDT(rs.getString("sdt"));
+				aNhanVien.setDiaChi(rs.getString("diachi"));
+
+				// thêm vào array list
+				arr.add(aNhanVien);
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+		
+		conn.Close();
+	
+		return arr;
+	}
+	
+	public ArrayList<NhanVienDTO> NhanVienTheoPhongBan(Integer maPb) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+
+		ArrayList<NhanVienDTO> arr = new ArrayList<NhanVienDTO>();
+		
+		if (maPb == null) {
+			String sql = "SELECT * FROM nhanvien nv JOIN hopdonglaodong hd ON nv.manv = hd.manv WHERE maphong IS NULL AND denngay = ?";
+
+			conn.prepare(sql);
+			conn.bind(1, "2099-12-31");
+		} else {
+			String sql = "SELECT * FROM nhanvien nv JOIN hopdonglaodong hd ON nv.manv = hd.manv WHERE maphong = ? AND denngay = ?";
+
+			conn.prepare(sql);
+			conn.bind(1, maPb);
+			conn.bind(2, "2099-12-31");
+		}
+		
+		try {
+			ResultSet rs = conn.executeQueryPre();
 			while (rs.next()) {
 				// khởi tạo
 				NhanVienDTO aNhanVien = new NhanVienDTO();

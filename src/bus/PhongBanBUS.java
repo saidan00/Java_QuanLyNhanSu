@@ -28,7 +28,7 @@ public class PhongBanBUS {
     
     public void PhongBanDelete(int maPhongBan)
     {
-    	if (nvDAO.NhanVienAll(maPhongBan).size() != 0) {
+    	if (nvDAO.NhanVienTheoPhongBan(maPhongBan).size() != 0) {
     		JOptionPane.showMessageDialog(null, "Không thể xóa phòng có nhân viên");
     	} else {
             PhongBanDAO.PhongBanDelete(maPhongBan);

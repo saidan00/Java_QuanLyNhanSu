@@ -1,10 +1,12 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -66,7 +69,7 @@ public class PhongBanGUI extends JPanel {
 	
 	// khởi tạo các component
 	private void initComponents() {
-		this.setLayout(new GridLayout(1, 1));
+		this.setLayout(new GridLayout(1, 2));
 //		this.setBackground(Color.PINK);
 		
 		initPanelPhongBan();
@@ -84,6 +87,8 @@ public class PhongBanGUI extends JPanel {
 		
 		// button nhan vien
 		btnNvTpClicked();
+		btnNvXoaClicked();
+		btnNvThemClicked();
 		
 		tblPBMouseListener();
 	}
@@ -240,7 +245,7 @@ public class PhongBanGUI extends JPanel {
 		};
         
         // đọc dữ liệu
-		ArrayList<NhanVienDTO> lstNV = new ArrayList<NhanVienDTO>();
+    	ArrayList<NhanVienDTO> lstNV = new ArrayList<NhanVienDTO>();
         setModelTableNV(lstNV);
         
         // không cho phép di chuyển vị trí columns
@@ -262,36 +267,36 @@ public class PhongBanGUI extends JPanel {
 	
 	private void setModelTableNV(ArrayList<NhanVienDTO> lstNV) {
 		// table header
-			Vector<String> header = new Vector<String>();
-	        header.add(MA_NV);
-	        header.add(TEN_NV);
-	        header.add(CHUC_VU);
-			
-			DefaultTableModel dtm = new DefaultTableModel(header, 0) {
-	            @Override
-	            public Class<?> getColumnClass(int column) {
-	                switch (column) {
-	                    case 0:
-	                        return Integer.class;
-	                    default:
-	                        return String.class;
-	                }
-	            }
-	        };
-	        
-	        NhanVienDTO nv = new NhanVienDTO();
-	        
-	        for (int i = 0; i < lstNV.size(); i++) {
-	        	nv = lstNV.get(i);
-	        	Object[] row = {
-        			nv.getMaNV(),
-        			nv.getHoNV() + " " + nv.getTenNV(),
-        			hdBUS.ChucVuCuaNhanVien(nv.getMaNV())
-	        	};
-	        	dtm.addRow(row);
-	        }
-	        
-	        tblNV.setModel(dtm);
+		Vector<String> header = new Vector<String>();
+        header.add(MA_NV);
+        header.add(TEN_NV);
+        header.add(CHUC_VU);
+		
+		DefaultTableModel dtm = new DefaultTableModel(header, 0) {
+            @Override
+            public Class<?> getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return Integer.class;
+                    default:
+                        return String.class;
+                }
+            }
+        };
+        
+        NhanVienDTO nv = new NhanVienDTO();
+        
+        for (int i = 0; i < lstNV.size(); i++) {
+        	nv = lstNV.get(i);
+        	Object[] row = {
+    			nv.getMaNV(),
+    			nv.getHoNV() + " " + nv.getTenNV(),
+    			hdBUS.ChucVuCuaNhanVien(nv.getMaNV())
+        	};
+        	dtm.addRow(row);
+        }
+        
+        tblNV.setModel(dtm);
 	}
 	
 	private void tblPBMouseListener() {
@@ -405,5 +410,146 @@ public class PhongBanGUI extends JPanel {
             	}
             }
         });
+	}
+	
+	// xóa nv khỏi phòng ban
+	private void btnNvXoaClicked() {
+		btnNvXoa.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+				int row = tblNV.getSelectedRow();
+            	
+            	if (row == -1) {
+            		JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên");
+            	} else {
+            		int maPb = Integer.valueOf(txtPbMaPhong.getText());
+                	
+                	int maNv = (int) tblNV.getValueAt(row, 0);
+                	String chucVu = (String) tblNV.getValueAt(row, 2);
+                	
+                	if (chucVu.equals("Trưởng Phòng")) {
+                		JOptionPane.showMessageDialog(null, "Không thể xóa trưởng phòng");
+                	} else {
+                		hdBUS.XoaNhanVienKhoiPhongBan(maNv, maPb);
+                		JOptionPane.showMessageDialog(null, "Xóa thành công");
+                	}
+                	
+                	ArrayList<NhanVienDTO> lstNV = nvBUS.NhanVienTheoPhongBan(maPb);
+                	setModelTableNV(lstNV);
+            	}
+            }
+        });
+	}
+	
+	// thêm nv vào phòng ban
+	private void btnNvThemClicked() {
+		btnNvThem.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+				int row = tblPB.getSelectedRow();
+            	
+            	if (row == -1) {
+            		JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng ban");
+            	} else {
+            		int maPb = Integer.valueOf(txtPbMaPhong.getText());
+                	
+                	FrameThemNhanVien();
+            	}
+            }
+        });
+	}
+	
+	private void FrameThemNhanVien() {
+		JFrame nvFrame = new JFrame("Chọn nhân viên");
+		
+		nvFrame.setSize(MyProps.DEFAULT_WIDTH / 2, MyProps.DEFAULT_HEIGHT / 2);
+		nvFrame.setResizable(false);
+		nvFrame.setVisible(true);
+		
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		Dimension screenSize = kit.getScreenSize();
+		int screenWidth = screenSize.width;
+		int screenHeight = screenSize.height;
+		
+		int xLocation = (screenWidth - MyProps.DEFAULT_WIDTH/2) / 2;
+		int yLocation = ((screenHeight - MyProps.DEFAULT_HEIGHT/2) / 2 - 25);
+		nvFrame.setLocation(xLocation,yLocation);
+		
+		nvFrame.setLayout(new GridLayout(1, 1));
+		
+		JPanel pnlTblNvTemp = new JPanel();
+		pnlTblNvTemp.setLayout(new GridBagLayout());
+		
+		nvFrame.add(pnlTblNvTemp);
+		
+		JTable tblNvTemp = new JTable() {
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+				return false; // Disallow the editing of any cell
+			}
+			@Override
+			public Dimension getPreferredScrollableViewportSize() {
+		        return new Dimension(100, 100);
+		    }
+		};
+        
+        // không cho phép di chuyển vị trí columns
+        tblNvTemp.getTableHeader().setReorderingAllowed(false);
+        
+        // không cho phép resize column
+        tblNvTemp.getTableHeader().setResizingAllowed(false);
+        
+        // sắp xếp khi click header
+        tblNvTemp.setAutoCreateRowSorter(true);
+        
+     // đọc dữ liệu
+    	ArrayList<NhanVienDTO> lstNV = nvBUS.NhanVienTheoPhongBan(null);
+
+    	// table header
+		Vector<String> header = new Vector<String>();
+        header.add(MA_NV);
+        header.add(TEN_NV);
+		
+		DefaultTableModel dtm = new DefaultTableModel(header, 0) {
+            @Override
+            public Class<?> getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return Integer.class;
+                    default:
+                        return String.class;
+                }
+            }
+        };
+        
+        NhanVienDTO nv = new NhanVienDTO();
+        
+        for (int i = 0; i < lstNV.size(); i++) {
+        	nv = lstNV.get(i);
+        	Object[] row = {
+    			nv.getMaNV(),
+    			nv.getHoNV() + " " + nv.getTenNV()
+        	};
+        	dtm.addRow(row);
+        }
+        
+        tblNvTemp.setModel(dtm);
+        
+        // scroll bar
+        JScrollPane scroll = new JScrollPane(tblNvTemp);
+
+        GridBagConstraints cons = myProps.MyGridBagConstraints(1, 1, 1, 1, true, true);
+		cons.weightx = 1.0;
+		cons.weighty = 1.0;
+		
+        pnlTblNvTemp.add(scroll, cons);
+        
+        
+        JButton btnChon = new JButton("Chọn");
+        cons = myProps.MyGridBagConstraints(1, 2, 1, 1, false, true);
+		pnlTblNvTemp.add(btnChon, cons);
+		myProps.BtnFlat(btnChon);
+		btnChon.setBackground(Color.decode("#e0e0e0"));
+		btnChon.setForeground(Color.BLACK);
+		btnChon.setFont(new Font("Verdana", Font.PLAIN, 12));
 	}
 }

@@ -34,4 +34,8 @@ public class HopDongLaoDongBUS {
 	public void CapNhatTruongPhong(int maPb, int maNv, HopDongLaoDongDTO hd) {
 		hdldDAO.CapNhatTruongPhong(maPb, maNv, hd);
 	}
+	
+	public void XoaNhanVienKhoiPhongBan(int maNv, int maPb) {
+		hdldDAO.XoaNhanVienKhoiPhongBan(maNv, maPb);
+	}
 }

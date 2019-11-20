@@ -132,14 +132,7 @@ public class HopDongLaoDongDAO {
     		conn.executeUpdatePre();
     	} else {
     		// gán kết thúc hợp đồng cũ
-    		sql = "UPDATE hopdonglaodong SET denngay = ? WHERE mahd = ?";
-    		  
-    		conn.prepare(sql);
-    			
-    		conn.bind(1, myProps.currentDate());
-    		conn.bind(2, hd.getMaHD());
-    		
-    		conn.executeUpdatePre();
+    		KetThucHopDong(hd);
     		
     		// thêm hợp đồng mới
     		HopDongLaoDongDTO hdMoi = new HopDongLaoDongDTO(hd);
@@ -156,24 +149,13 @@ public class HopDongLaoDongDAO {
     	
     	if (hd.getMaCV() != 2) {
     		// gán kết thúc hợp đồng cũ
-    		sql = "UPDATE hopdonglaodong SET denngay = ? WHERE mahd = ?";
-    		  
-    		conn.prepare(sql);
-    			
-    		conn.bind(1, myProps.currentDate());
-    		conn.bind(2, hd.getMaHD());
-    		
-    		conn.executeUpdatePre();
+    		KetThucHopDong(hd);
     		
     		// lấy hd của tp hiện tại
     		HopDongLaoDongDTO hdTpHienTai = TruongPhongHienTai(maPb);
     		
     		// gán kết thúc hợp đồng cũ của tp hiện tại
-    		sql = "UPDATE hopdonglaodong SET denngay = ? WHERE mahd = ?";
-    		conn.prepare(sql);
-    		conn.bind(1, myProps.currentDate());
-    		conn.bind(2, hdTpHienTai.getMaHD());
-    		conn.executeUpdatePre();
+    		KetThucHopDong(hdTpHienTai);
     		
     		// thêm hd mới gán tp cũ thành nv
     		HopDongLaoDongDTO hdTpCu = new HopDongLaoDongDTO(hdTpHienTai);
@@ -200,12 +182,13 @@ public class HopDongLaoDongDAO {
     	ArrayList<HopDongLaoDongDTO> arr = new ArrayList<HopDongLaoDongDTO>();
     	
     	// chọn hd mới nhất
-    	String sql = "SELECT * FROM hopdonglaodong WHERE manv = ? ORDER BY denngay DESC LIMIT 1";
+    	String sql = "SELECT * FROM hopdonglaodong WHERE manv = ? AND denngay = ?";
     	
     	conn.prepare(sql);
 		
 		conn.bind(1, maNv);
-		
+    	conn.bind(2, "2099-12-31");
+    	
 		try {
 			ResultSet rs = conn.executeQueryPre();
 			while (rs.next()) {
@@ -239,12 +222,13 @@ public class HopDongLaoDongDAO {
     	MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
     	ArrayList<HopDongLaoDongDTO> arr = new ArrayList<HopDongLaoDongDTO>();
     	
-    	String sql = "SELECT * FROM hopdonglaodong WHERE maphong = ? AND macv = ? ORDER BY denngay DESC LIMIT 1";
+    	String sql = "SELECT * FROM hopdonglaodong WHERE maphong = ? AND macv = ? AND denngay = ?";
     	
     	conn.prepare(sql);
     	
     	conn.bind(1, maPb);
     	conn.bind(2, 2);
+    	conn.bind(3, "2099-12-31");
     	
     	try {
 			ResultSet rs = conn.executeQueryPre();
@@ -281,7 +265,7 @@ public class HopDongLaoDongDAO {
     
     public String ChucVuCuaNhanVien(int maNv) {
     	MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-    	String cv = "";
+    	String cv = "Nhân Viên";
     	
     	String sql = "SELECT * FROM hopdonglaodong hd JOIN chucvu cv ON hd.macv = cv.macv WHERE hd.manv = ? ORDER BY denngay DESC LIMIT 1";
     	
@@ -302,5 +286,33 @@ public class HopDongLaoDongDAO {
     	conn.Close();
     	
     	return cv;
+    }
+    
+    public void XoaNhanVienKhoiPhongBan(int maNv, int maPb) {
+    	MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+    	
+    	HopDongLaoDongDTO hdHienTai = HopDongMoiNhat(maNv);
+    	
+    	HopDongLaoDongDTO hdMoi = new HopDongLaoDongDTO(hdHienTai);
+    	
+    	KetThucHopDong(hdHienTai);
+    	
+    	hdMoi.setMaPhong(null);
+    	
+    	HopDongLaoDongAdd(hdMoi);
+    	
+    	conn.Close();
+    }
+    
+    public void KetThucHopDong(HopDongLaoDongDTO hd) {
+    	MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+    	
+    	String sql = "UPDATE hopdonglaodong SET denngay = ? WHERE mahd = ?";
+		conn.prepare(sql);
+		conn.bind(1, myProps.currentDate());
+		conn.bind(2, hd.getMaHD());
+		conn.executeUpdatePre();
+		
+		conn.Close();
     }
 }

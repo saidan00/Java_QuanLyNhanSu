@@ -13,11 +13,11 @@ public class NhanVienBUS {
 	private MyProps myProps = new MyProps();
 	
 	public ArrayList<NhanVienDTO> NhanVienAll() {
-        return nvDAO.NhanVienAll(null);
+        return nvDAO.NhanVienAll();
     }
 	
-	public ArrayList<NhanVienDTO> NhanVienTheoPhongBan(int maPb) {
-		return nvDAO.NhanVienAll(maPb);
+	public ArrayList<NhanVienDTO> NhanVienTheoPhongBan(Integer maPb) {
+		return nvDAO.NhanVienTheoPhongBan(maPb);
 	}
 	
 	public void NhanVienAdd(NhanVienDTO nv) {
