@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -451,8 +452,6 @@ public class PhongBanGUI extends JPanel {
             	if (row == -1) {
             		JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng ban");
             	} else {
-            		int maPb = Integer.valueOf(txtPbMaPhong.getText());
-                	
                 	FrameThemNhanVien();
             	}
             }
@@ -460,6 +459,7 @@ public class PhongBanGUI extends JPanel {
 	}
 	
 	private void FrameThemNhanVien() {
+		int maPb = Integer.valueOf(txtPbMaPhong.getText());
 		JFrame nvFrame = new JFrame("Chọn nhân viên");
 		
 		nvFrame.setSize(MyProps.DEFAULT_WIDTH / 2, MyProps.DEFAULT_HEIGHT / 2);
@@ -476,6 +476,7 @@ public class PhongBanGUI extends JPanel {
 		nvFrame.setLocation(xLocation,yLocation);
 		
 		nvFrame.setLayout(new GridLayout(1, 1));
+		nvFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JPanel pnlTblNvTemp = new JPanel();
 		pnlTblNvTemp.setLayout(new GridBagLayout());
@@ -551,5 +552,29 @@ public class PhongBanGUI extends JPanel {
 		btnChon.setBackground(Color.decode("#e0e0e0"));
 		btnChon.setForeground(Color.BLACK);
 		btnChon.setFont(new Font("Verdana", Font.PLAIN, 12));
+		
+		btnChon.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+				int row = tblNvTemp.getSelectedRow();
+            	
+            	if (row == -1) {
+            		JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên");
+            	} else {
+            		int maNv = (int) tblNvTemp.getValueAt(row, 0);
+            		
+            		HopDongLaoDongDTO hd = hdBUS.HopDongMoiNhat(maNv);
+            		
+            		hdBUS.ThemNhanVienVaoPhongBan(hd, maPb);
+                	
+                	JOptionPane.showMessageDialog(null, "Thêm thành công");
+                	
+                	ArrayList<NhanVienDTO> lstNV = nvBUS.NhanVienTheoPhongBan(maPb);
+                	setModelTableNV(lstNV);
+                	
+                	nvFrame.dispatchEvent(new WindowEvent(nvFrame, WindowEvent.WINDOW_CLOSING));
+            	}
+            }
+        });
 	}
 }

@@ -119,26 +119,15 @@ public class HopDongLaoDongDAO {
     
     public void ThemNhanVienPhongBan(HopDongLaoDongDTO hd, int maPb) {
     	MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-    	String sql = "";
     	
-    	if (hd.getMaPhong() == null) {
-    		sql = "UPDATE hopdonglaodong SET maphong = ? WHERE mahd = ?";
-  		  
-    		conn.prepare(sql);
-    			
-    		conn.bind(1, maPb);
-    		conn.bind(2, hd.getMaHD());
-    		
-    		conn.executeUpdatePre();
-    	} else {
-    		// gán kết thúc hợp đồng cũ
-    		KetThucHopDong(hd);
-    		
-    		// thêm hợp đồng mới
-    		HopDongLaoDongDTO hdMoi = new HopDongLaoDongDTO(hd);
-    		hdMoi.setMaPhong(maPb);
-    		this.HopDongLaoDongAdd(hdMoi);
-    	}
+		// thêm hợp đồng mới
+		HopDongLaoDongDTO hdMoi = new HopDongLaoDongDTO(hd);
+		
+		// gán kết thúc hợp đồng cũ
+		KetThucHopDong(hd);
+		
+		hdMoi.setMaPhong(maPb);
+		this.HopDongLaoDongAdd(hdMoi);
  		
  		conn.Close();
     }
