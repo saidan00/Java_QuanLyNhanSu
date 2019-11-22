@@ -8,7 +8,7 @@ import dto.PhongBanDTO;
 import util.MySqlDataAccessHelper;
 
 public class PhongBanDAO {
-	
+
 	public ArrayList<PhongBanDTO> PhongBanAll() {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 
@@ -20,7 +20,7 @@ public class PhongBanDAO {
 		try {
 			ResultSet rs = conn.executeQuery(query);
 			while (rs.next()) {
-			
+
 				PhongBanDTO PhongBan = new PhongBanDTO();
 
 				PhongBan.setMaPhong(rs.getInt("maphong"));
@@ -31,75 +31,71 @@ public class PhongBanDAO {
 		} catch (SQLException ex) {
 			conn.displayError(ex);
 		}
-		
+
 		conn.Close();
-	
+
 		return arr;
 	}
-	
+
 	public void PhongBanAdd(PhongBanDTO PB) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-		
-		String sql = "INSERT INTO phongban (tenphong, matruongphong) "
-				+ "VALUES(?, ?)";
-		
+
+		String sql = "INSERT INTO phongban (tenphong, matruongphong) " + "VALUES(?, ?)";
+
 		// prepare statement
 		conn.prepare(sql);
-		
+
 		// bind values
 		conn.bind(1, PB.getTenPhong());
 		conn.bind(2, PB.getMaTruongPhong());
-		
+
 		conn.executeUpdatePre();
-		
+
 		conn.Close();
 	}
-	
+
 	public void PhongBanEdit(PhongBanDTO PB) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-        
-        String  sql = "UPDATE phongban SET tenphong = ?, matruongphong = ?  WHERE maphong = ?";
-     
- 		conn.prepare(sql);
+
+		String sql = "UPDATE phongban SET tenphong = ?, matruongphong = ?  WHERE maphong = ?";
+
+		conn.prepare(sql);
 
 		conn.bind(1, PB.getTenPhong());
 		conn.bind(2, PB.getMaTruongPhong());
-		
- 		conn.bind(3, PB.getMaPhong());
 
- 		conn.executeUpdatePre();
- 		
- 		conn.Close();
-    }
-	
-	
-    public void PhongBanDelete(int maPb) {
-		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-		
-		String sql = "DELETE FROM PhongBan WHERE maphong = ?";
-		  
-		conn.prepare(sql);
-			
-		conn.bind(1, maPb);
-		
+		conn.bind(3, PB.getMaPhong());
+
 		conn.executeUpdatePre();
- 		
- 		conn.Close();
-    }
-    
 
-    public void CapNhatTruongPhong(int maPb, int maTruongPhong)
-    {
-        MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-        String sql = "UPDATE phongban SET matruongphong = ? WHERE maphg = ?";
-        
-        conn.prepare(sql);
-        
-        conn.bind(1, maTruongPhong);
-        conn.bind(2, maPb);
-        
-        conn.executeUpdatePre();
-        
-        conn.Close();
-    }
+		conn.Close();
+	}
+
+	public void PhongBanDelete(int maPb) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+
+		String sql = "DELETE FROM PhongBan WHERE maphong = ?";
+
+		conn.prepare(sql);
+
+		conn.bind(1, maPb);
+
+		conn.executeUpdatePre();
+
+		conn.Close();
+	}
+
+	public void CapNhatTruongPhong(int maPb, int maTruongPhong) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+		String sql = "UPDATE phongban SET matruongphong = ? WHERE maphg = ?";
+
+		conn.prepare(sql);
+
+		conn.bind(1, maTruongPhong);
+		conn.bind(2, maPb);
+
+		conn.executeUpdatePre();
+
+		conn.Close();
+	}
 }

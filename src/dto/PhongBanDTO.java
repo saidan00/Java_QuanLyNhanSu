@@ -6,19 +6,19 @@
 package dto;
 
 public class PhongBanDTO {
-    private int MaPhong;
-    private String TenPhong;
-    private Integer MaTruongPhong;
+	private int MaPhong;
+	private String TenPhong;
+	private Integer MaTruongPhong;
 
-    public PhongBanDTO() {
+	public PhongBanDTO() {
 
-    }
+	}
 
-    public PhongBanDTO(int maphg, String tenphg, int trgphg, String sdtphongban) {
-        this.MaPhong = maphg;
-        this.TenPhong = tenphg;
-        this.MaTruongPhong = trgphg;
-    }
+	public PhongBanDTO(int maphg, String tenphg, int trgphg, String sdtphongban) {
+		this.MaPhong = maphg;
+		this.TenPhong = tenphg;
+		this.MaTruongPhong = trgphg;
+	}
 
 	public String getTenPhong() {
 		return TenPhong;

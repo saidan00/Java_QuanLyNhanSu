@@ -9,55 +9,69 @@ public class NhanVienDTO {
 	private String GioiTinh;
 	private String SDT;
 	private String DiaChi;
-	
+
 	// GETTERs
 	public int getMaNV() {
 		return MaNV;
 	}
+
 	public String getHoNV() {
 		return HoNV;
 	}
+
 	public String getTenNV() {
 		return TenNV;
 	}
+
 	public String getSoCMND() {
 		return SoCMND;
 	}
+
 	public String getNgaySinh() {
 		return NgaySinh;
 	}
+
 	public String getGioiTinh() {
 		return GioiTinh;
 	}
+
 	public String getSDT() {
 		return SDT;
 	}
-	
-	//SETTERs
+
+	// SETTERs
 	public void setMaNV(int maNV) {
 		MaNV = maNV;
 	}
+
 	public void setHoNV(String hoNV) {
 		HoNV = hoNV;
 	}
+
 	public void setTenNV(String tenNV) {
 		TenNV = tenNV;
 	}
+
 	public void setSoCMND(String soCMND) {
 		SoCMND = soCMND;
 	}
+
 	public void setNgaySinh(String ngaySinh) {
 		NgaySinh = ngaySinh;
 	}
+
 	public void setGioiTinh(String gioiTinh) {
 		GioiTinh = gioiTinh;
 	}
+
 	public void setSDT(String sDT) {
 		SDT = sDT;
 	}
+
 	public String getDiaChi() {
 		return DiaChi;
 	}
+
 	public void setDiaChi(String diaChi) {
 		DiaChi = diaChi;
 	}

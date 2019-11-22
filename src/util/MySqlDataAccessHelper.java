@@ -93,7 +93,7 @@ public class MySqlDataAccessHelper {
 
 		return res;
 	}
-	
+
 	// Create prepared statement
 	public void prepare(String sql) {
 		try {
@@ -104,32 +104,32 @@ public class MySqlDataAccessHelper {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// Bind value
 	public void bind(int index, Object o) {
 		try {
 			if (o == null) {
 				this.preStmt.setNull(index, java.sql.Types.VARCHAR);
 			} else {
-				switch(o.getClass().getCanonicalName()) {
-					case "java.lang.Integer":
-						this.preStmt.setInt(index, (Integer)o);
-						break;
-					case "java.lang.String":
-						this.preStmt.setNString(index, (String)o);
-						break;
-					case "java.lang.Double":
-						this.preStmt.setDouble(index, (Double)o);
-						break;
-					default:
-						break;
+				switch (o.getClass().getCanonicalName()) {
+				case "java.lang.Integer":
+					this.preStmt.setInt(index, (Integer) o);
+					break;
+				case "java.lang.String":
+					this.preStmt.setNString(index, (String) o);
+					break;
+				case "java.lang.Double":
+					this.preStmt.setDouble(index, (Double) o);
+					break;
+				default:
+					break;
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// Execute
 	public ResultSet executeQueryPre() {
 		try {
@@ -139,7 +139,7 @@ public class MySqlDataAccessHelper {
 		}
 		return this.result;
 	}
-	
+
 	public int executeUpdatePre() {
 		int res = Integer.MIN_VALUE;
 		try {
@@ -152,19 +152,19 @@ public class MySqlDataAccessHelper {
 
 		return res;
 	}
-	
+
 	public void Close() {
 		try {
 			if (this.result != null) {
 				this.result.close();
 				this.result = null;
 			}
-	
+
 			if (this.stmt != null) {
 				this.stmt.close();
 				this.stmt = null;
 			}
-	
+
 			if (this.connect != null) {
 				this.connect.close();
 				this.connect = null;

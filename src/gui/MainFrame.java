@@ -17,14 +17,14 @@ public class MainFrame extends JFrame {
 	JPanel navContainer;
 	ArrayList<JButton> navLinks;
 	MyProps myProps = new MyProps();
-	
+
 	public MainFrame() {
 		init();
 	}
-	
+
 	public void init() {
 		this.setLayout(null);
-		
+
 		this.setSize(MyProps.DEFAULT_WIDTH, MyProps.DEFAULT_HEIGHT);
 		this.setUndecorated(true);
 		this.setResizable(false);
@@ -37,41 +37,41 @@ public class MainFrame extends JFrame {
 		initContent();
 		nav.addSwitchPanel(content);
 	}
-	
+
 	public void centeredFrame() {
 		// centered frame
 		Toolkit kit = Toolkit.getDefaultToolkit();
 		Dimension screenSize = kit.getScreenSize();
 		int screenWidth = screenSize.width;
 		int screenHeight = screenSize.height;
-		
+
 		int xLocation = (screenWidth - MyProps.DEFAULT_WIDTH) / 2;
 		int yLocation = ((screenHeight - MyProps.DEFAULT_HEIGHT) / 2 - 25);
-		this.setLocation(xLocation,yLocation);
+		this.setLocation(xLocation, yLocation);
 	}
-	
+
 	public void initHeader() {
 		header = new HeaderPanel();
 		this.add(header);
-		
+
 		header.minimizeAction(this);
 	}
-	
+
 	public void initNav() {
 		nav = new NavPanel();
 		this.add(nav);
 	}
-	
+
 	public void initContent() {
 		content = new ContentPanel();
-		
+
 		initNhanVienGUI();
-		
+
 		this.add(content);
 	}
-	
+
 	public void initNhanVienGUI() {
 		NhanVienGUI nvGUI = new NhanVienGUI();
-		content.initMainContent((NhanVienGUI)nvGUI);
+		content.initMainContent((NhanVienGUI) nvGUI);
 	}
 }
