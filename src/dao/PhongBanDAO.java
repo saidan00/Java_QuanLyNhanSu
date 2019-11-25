@@ -98,4 +98,33 @@ public class PhongBanDAO {
 
 		conn.Close();
 	}
+
+	public PhongBanDTO PhongBanGet(int maPb) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+		String sql = "SELECT * FROM phongban WHERE mapb = ?";
+
+		conn.prepare(sql);
+
+		conn.bind(1, maPb);
+
+		ArrayList<PhongBanDTO> arr = new ArrayList<PhongBanDTO>();
+
+		try {
+			ResultSet rs = conn.executeQueryPre();
+			while (rs.next()) {
+				PhongBanDTO PhongBan = new PhongBanDTO();
+
+				PhongBan.setMaPhong(rs.getInt("maphong"));
+				PhongBan.setTenPhong(rs.getString("tenphong"));
+				PhongBan.setMaTruongPhong(rs.getInt("matruongphong"));
+				arr.add(PhongBan);
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+
+		conn.Close();
+
+		return arr.get(0);
+	}
 }

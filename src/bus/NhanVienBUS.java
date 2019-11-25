@@ -50,4 +50,8 @@ public class NhanVienBUS {
 	public void NhanVienDelete(int maNv) {
 		nvDAO.NhanVienDelete(maNv);
 	}
+	
+	public NhanVienDTO NhanVienGet(int maNv) {
+		return nvDAO.NhanVienGet(maNv);
+	}
 }
