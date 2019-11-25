@@ -21,6 +21,7 @@ public class NavPanel extends JPanel {
 	private final String HOME = "Home";
 	private final String NHAN_VIEN = "Nhân viên";
 	private final String PHONG_BAN = "Phòng ban";
+	private final String CHAM_CONG = "Chấm công";
 	private final String THONG_KE = "Thống kê";
 
 	public NavPanel() {
@@ -39,6 +40,7 @@ public class NavPanel extends JPanel {
 		lbl.add(HOME);
 		lbl.add(NHAN_VIEN);
 		lbl.add(PHONG_BAN);
+		lbl.add(CHAM_CONG);
 		lbl.add(THONG_KE);
 
 		JButton btnTemp;
@@ -97,6 +99,10 @@ public class NavPanel extends JPanel {
 				case PHONG_BAN:
 					PhongBanGUI pbGUI = new PhongBanGUI();
 					switchPanel(contentPanel, pbGUI);
+					break;
+				case CHAM_CONG:
+					ChamCongGUI ccGUI = new ChamCongGUI();
+					switchPanel(contentPanel, ccGUI);
 					break;
 				default:
 					break;
