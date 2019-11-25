@@ -199,7 +199,7 @@ public class PhongBanGUI extends JPanel {
 		myProps.BtnFlat(btnPbThem);
 		btnPbThem.setBackground(Color.decode("#4caf50"));
 		btnPbThem.setForeground(Color.WHITE);
-		btnPbThem.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnPbThem.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 
 		btnPbSua = new JButton("Sửa");
 		cons = myProps.MyGridBagConstraints(3, 1, 2, 1, true, true);
@@ -207,7 +207,7 @@ public class PhongBanGUI extends JPanel {
 		myProps.BtnFlat(btnPbSua);
 		btnPbSua.setBackground(Color.decode("#e0e0e0"));
 		btnPbSua.setForeground(Color.BLACK);
-		btnPbSua.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnPbSua.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 		btnPbSua.setText("Sửa");
 
 		btnPbXoa = new JButton("Xóa");
@@ -216,7 +216,7 @@ public class PhongBanGUI extends JPanel {
 		myProps.BtnFlat(btnPbXoa);
 		btnPbXoa.setBackground(Color.decode("#e53935"));
 		btnPbXoa.setForeground(Color.WHITE);
-		btnPbXoa.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnPbXoa.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 
 		cons = myProps.MyGridBagConstraints(1, 7, 4, 1, true, true);
 		pnlPB.add(pnlBtn, cons);
@@ -358,7 +358,7 @@ public class PhongBanGUI extends JPanel {
 		myProps.BtnFlat(btnNvThem);
 		btnNvThem.setBackground(Color.decode("#4caf50"));
 		btnNvThem.setForeground(Color.WHITE);
-		btnNvThem.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnNvThem.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 
 		btnNvTp = new JButton("Gán trưởng phòng");
 		cons = myProps.MyGridBagConstraints(3, 1, 2, 1, true, true);
@@ -366,7 +366,7 @@ public class PhongBanGUI extends JPanel {
 		myProps.BtnFlat(btnNvTp);
 		btnNvTp.setBackground(Color.decode("#e0e0e0"));
 		btnNvTp.setForeground(Color.BLACK);
-		btnNvTp.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnNvTp.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 
 		btnNvXoa = new JButton("Xóa khỏi phòng");
 		cons = myProps.MyGridBagConstraints(5, 1, 2, 1, true, true);
@@ -374,7 +374,7 @@ public class PhongBanGUI extends JPanel {
 		myProps.BtnFlat(btnNvXoa);
 		btnNvXoa.setBackground(Color.decode("#e53935"));
 		btnNvXoa.setForeground(Color.WHITE);
-		btnNvXoa.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnNvXoa.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 
 		cons = myProps.MyGridBagConstraints(1, 7, 4, 1, true, true);
 		pnlNV.add(pnlBtn, cons);
@@ -541,7 +541,7 @@ public class PhongBanGUI extends JPanel {
 		myProps.BtnFlat(btnChon);
 		btnChon.setBackground(Color.decode("#e0e0e0"));
 		btnChon.setForeground(Color.BLACK);
-		btnChon.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnChon.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 
 		btnChon.addActionListener(new ActionListener() {
 			@Override

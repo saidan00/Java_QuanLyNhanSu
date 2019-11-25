@@ -24,9 +24,9 @@ import util.RoundedCornerBorder;
 public class MyProps {
 	public static final int DEFAULT_WIDTH = 1280;
 	public static final int DEFAULT_HEIGHT = 720;
-	public final Font DEFAULT_FONT = new Font("Verdana", Font.PLAIN, 20);
-	public final Font DEFAULT_FONT_MEDIUM = new Font("Verdana", Font.PLAIN, 16);
-	public final Font DEFAULT_FONT_SMALL = new Font("Verdana", Font.PLAIN, 12);
+	public final Font DEFAULT_FONT = new Font("Arial Nova", Font.PLAIN, 20);
+	public final Font DEFAULT_FONT_MEDIUM = new Font("Arial Nova", Font.PLAIN, 16);
+	public final Font DEFAULT_FONT_SMALL = new Font("Arial Nova", Font.PLAIN, 12);
 	public final String Color_Teal = "#00796b";
 	public final String Color_Teal_Dark = "#004c40";
 	public final String Color_Teal_Light = "#48a999";

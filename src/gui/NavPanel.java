@@ -63,7 +63,7 @@ public class NavPanel extends JPanel {
 		btn.setText(lbl);
 		btn.setBackground(Color.decode(myProps.Color_Teal));
 		btn.setForeground(Color.WHITE);
-		btn.setFont(new Font("Verdana", Font.BOLD, 20));
+		btn.setFont(new Font("Arial Nova", Font.BOLD, 20));
 
 		int marginTop = MyProps.DEFAULT_HEIGHT - HEIGHT + 10 + index * 75;
 		Rectangle rec = new Rectangle(0, marginTop, WIDTH, 75);

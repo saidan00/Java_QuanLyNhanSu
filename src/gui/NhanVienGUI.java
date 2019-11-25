@@ -387,7 +387,7 @@ public class NhanVienGUI extends JPanel {
 		myProps.BtnFlat(btnThem);
 		btnThem.setBackground(Color.decode("#4caf50"));
 		btnThem.setForeground(Color.WHITE);
-		btnThem.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnThem.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 		btnThem.setText("Thêm");
 		btnThem.setSize(20, 10);
 
@@ -395,21 +395,21 @@ public class NhanVienGUI extends JPanel {
 		myProps.BtnFlat(btnXoa);
 		btnXoa.setBackground(Color.decode("#e53935"));
 		btnXoa.setForeground(Color.WHITE);
-		btnXoa.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnXoa.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 		btnXoa.setText("Xóa");
 
 		btnSua = new JButton();
 		myProps.BtnFlat(btnSua);
 		btnSua.setBackground(Color.decode("#e0e0e0"));
 		btnSua.setForeground(Color.BLACK);
-		btnSua.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnSua.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 		btnSua.setText("Sửa");
 
 		btnTK = new JButton(TK_Ten);
 		myProps.BtnFlat(btnTK);
 		btnTK.setBackground(Color.decode("#e0e0e0"));
 		btnTK.setForeground(Color.RED);
-		btnTK.setFont(new Font("Verdana", Font.PLAIN, 12));
+		btnTK.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 
 		pnlButton.add(btnThem);
 		pnlButton.add(btnSua);
