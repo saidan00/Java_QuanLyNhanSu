@@ -3,11 +3,10 @@ package dto;
 public class ChamCongDTO {
 	private int MaChamCong;
 	private int MaNV;
-	private int Thang;
+	private String Thang;
 	private float SoNgayLam;
 	private int SoNgayNghi;
 	private int SoNgayChuNhat;
-	private int SoNgayLe;
 
 	public ChamCongDTO() {
 	}
@@ -19,7 +18,6 @@ public class ChamCongDTO {
 		this.SoNgayLam = chamcong.SoNgayLam;
 		this.SoNgayNghi = chamcong.SoNgayNghi;
 		this.SoNgayChuNhat = chamcong.SoNgayChuNhat;
-		this.SoNgayLe = chamcong.SoNgayLe;
 	}
 
 	public int getMaChamCong() {
@@ -38,11 +36,11 @@ public class ChamCongDTO {
 		this.MaNV = MaNV;
 	}
 
-	public int getThang() {
+	public String getThang() {
 		return Thang;
 	}
 
-	public void setThang(int Thang) {
+	public void setThang(String Thang) {
 		this.Thang = Thang;
 	}
 
@@ -69,13 +67,4 @@ public class ChamCongDTO {
 	public void setSoNgayChuNhat(int SoNgayChuNhat) {
 		this.SoNgayChuNhat = SoNgayChuNhat;
 	}
-
-	public int getSoNgayLe() {
-		return SoNgayLe;
-	}
-
-	public void setSoNgayLe(int SoNgayLe) {
-		this.SoNgayLe = SoNgayLe;
-	}
-
 }

@@ -16,8 +16,8 @@ import java.util.ArrayList;
 public class BangChamCongBUS {
 	private BangChamCongDAO bccDAO = new BangChamCongDAO();
 
-	public ArrayList<BangChamCongDTO> BangChamCongAll() {
-		return bccDAO.BangChamCongAll(null);
+	public ArrayList<BangChamCongDTO> BangChamCongAll(String maChamCong) {
+		return bccDAO.BangChamCongAll(maChamCong);
 	}
 
 	public void BangChamCongAdd(BangChamCongDTO bcc) {
@@ -30,5 +30,9 @@ public class BangChamCongBUS {
 
 	public void BangChamCongDelete(int machamcong) {
 		bccDAO.BangChamCongDelete(machamcong);
+	}
+
+	public BangChamCongDTO BangChamCongGet(int machamcong, int ngay) {
+		return bccDAO.BangChamCongGet(machamcong, ngay);
 	}
 }

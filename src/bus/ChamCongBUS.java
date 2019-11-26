@@ -23,4 +23,8 @@ public class ChamCongBUS {
 	public void ChamCongDelete(int machamcong) {
 		chamcongDAO.ChamCongDelete(machamcong);
 	}
+	
+	public ChamCongDTO ChamCongGet(int maNv, String thang) {
+		return chamcongDAO.ChamCongGet(maNv, thang);
+	}
 }

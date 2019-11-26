@@ -133,6 +133,8 @@ public class MySqlDataAccessHelper {
 	// Execute
 	public ResultSet executeQueryPre() {
 		try {
+			// for debug
+//			System.out.println(this.preStmt.toString());
 			this.result = this.preStmt.executeQuery();
 		} catch (SQLException e) {
 			displayError(e);
@@ -143,6 +145,8 @@ public class MySqlDataAccessHelper {
 	public int executeUpdatePre() {
 		int res = Integer.MIN_VALUE;
 		try {
+			// for debug
+//			System.out.println(this.preStmt.toString());
 			res = this.preStmt.executeUpdate();
 		} catch (SQLException e) {
 			displayError(e);

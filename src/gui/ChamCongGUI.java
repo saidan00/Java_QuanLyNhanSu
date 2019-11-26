@@ -33,14 +33,20 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import bus.BangChamCongBUS;
+import bus.ChamCongBUS;
 import bus.NhanVienBUS;
 import bus.PhongBanBUS;
+import dto.BangChamCongDTO;
+import dto.ChamCongDTO;
 import dto.NhanVienDTO;
 import dto.PhongBanDTO;
 
 public class ChamCongGUI extends JPanel {
 	NhanVienBUS nvBUS = new NhanVienBUS();
 	PhongBanBUS pbBUS = new PhongBanBUS();
+	ChamCongBUS ccBUS = new ChamCongBUS();
+	BangChamCongBUS bccBUS = new BangChamCongBUS();
 
 	MyProps myProps = new MyProps();
 	JTable tblChamCong;
@@ -406,6 +412,15 @@ public class ChamCongGUI extends JPanel {
 			ArrayList<Object> lstRow = new ArrayList<Object>();
 			lstRow.add(nv.getMaNV());
 			lstRow.add(nv.getHoNV() + " " + nv.getTenNV());
+			
+			int machamcong = ccBUS.ChamCongGet(nv.getMaNV(), currentNam + "-" + currentThang + "-1").getMaChamCong();
+			BangChamCongDTO bangChamCongDTO = new BangChamCongDTO();
+			
+			// trạng thái
+			for (int j = 1; j <= days; j++) {
+				bangChamCongDTO = bccBUS.BangChamCongGet(machamcong, j);
+				lstRow.add(bangChamCongDTO.getTrangThai());
+			}
 
 			Object[] row = lstRow.toArray();
 
@@ -449,9 +464,29 @@ public class ChamCongGUI extends JPanel {
 					// set giá trị trên table
 					String option = e.getActionCommand();
 					tblChamCong.setValueAt(option, currentRow, currentCol);
+					int maNv = (int) tblChamCong.getValueAt(currentRow, 0);
+					
+					String thangString = currentNam + "-" + currentThang + "-1";
 					
 					// lưu database
+					// chấm công
+					ChamCongDTO chamcong = new ChamCongDTO();
+					chamcong.setMaNV(maNv);
+					chamcong.setThang(thangString);
 					
+//					System.out.println(maNv + " " + thangString);
+					
+					ccBUS.ChamCongAdd(chamcong);
+					
+					int machamcong = ccBUS.ChamCongGet(maNv, thangString).getMaChamCong();
+					
+					// bảng chấm công
+					BangChamCongDTO bccDto = new BangChamCongDTO();
+					bccDto.setMaChamCong(machamcong);
+					bccDto.setNgayTrongThang(currentCol + 1);
+					bccDto.setTrangThai(option);
+					
+					bccBUS.BangChamCongAdd(bccDto);
 				}
 			}
 		};

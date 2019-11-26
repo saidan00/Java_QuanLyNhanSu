@@ -13,6 +13,7 @@ public class ChamCongDAO {
 		ArrayList<ChamCongDTO> arr = new ArrayList<ChamCongDTO>();
 
 		String sql = "SELECT * FROM chamcong";
+		
 		try {
 			ResultSet rs = conn.executeQuery(sql);
 			while (rs.next()) {
@@ -20,11 +21,10 @@ public class ChamCongDAO {
 
 				chamcong.setMaChamCong(rs.getInt("machamcong"));
 				chamcong.setMaNV(rs.getInt("manv"));
-				chamcong.setThang(rs.getInt("thang"));
+				chamcong.setThang(rs.getString("thang"));
 				chamcong.setSoNgayLam(rs.getFloat("songaylam"));
 				chamcong.setSoNgayNghi(rs.getInt("songaynghi"));
 				chamcong.setSoNgayChuNhat(rs.getInt("songaychunhat"));
-				chamcong.setSoNgayLe(rs.getInt("songayle"));
 
 				arr.add(chamcong);
 			}
@@ -34,22 +34,59 @@ public class ChamCongDAO {
 		conn.Close();
 		return arr;
 	}
+	
+	public ChamCongDTO ChamCongGet(int maNv, String thang) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+
+		ArrayList<ChamCongDTO> arr = new ArrayList<ChamCongDTO>();
+
+		String sql = "SELECT * FROM chamcong WHERE manv = ? AND thang = ?";
+		
+		conn.prepare(sql);
+		
+		conn.bind(1, maNv);
+		conn.bind(2, thang);
+		
+		try {
+			ResultSet rs = conn.executeQueryPre();
+			while (rs.next()) {
+				ChamCongDTO chamcong = new ChamCongDTO();
+
+				chamcong.setMaChamCong(rs.getInt("machamcong"));
+				chamcong.setMaNV(rs.getInt("manv"));
+				chamcong.setThang(rs.getString("thang"));
+				chamcong.setSoNgayLam(rs.getFloat("songaylam"));
+				chamcong.setSoNgayNghi(rs.getInt("songaynghi"));
+				chamcong.setSoNgayChuNhat(rs.getInt("songaychunhat"));
+
+				arr.add(chamcong);
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+		conn.Close();
+		
+		if (arr.size() == 0) {
+			ChamCongDTO chamcong = new ChamCongDTO();
+
+			chamcong.setMaChamCong(0);
+
+			arr.add(chamcong);
+		}
+		
+		return arr.get(0);
+	}
 
 	public void ChamCongAdd(ChamCongDTO chamcong) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 
-		String sql = "INSERT INTO chamcong (manv, thang, songaylam, songaynghi, songaychunhat, songayle) "
-				+ "VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO chamcong(manv, thang) VALUES(?, ?) ON DUPLICATE KEY UPDATE machamcong = machamcong";
 
 		// prepare
 		conn.prepare(sql);
 
 		conn.bind(1, chamcong.getMaNV());
 		conn.bind(2, chamcong.getThang());
-		conn.bind(3, chamcong.getSoNgayLam());
-		conn.bind(4, chamcong.getSoNgayNghi());
-		conn.bind(5, chamcong.getSoNgayChuNhat());
-		conn.bind(6, chamcong.getSoNgayLe());
 
 		conn.executeUpdatePre();
 
@@ -59,7 +96,7 @@ public class ChamCongDAO {
 	public void ChamCongEdit(ChamCongDTO chamcong) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 
-		String sql = "UPDATE chamcong SET manv = ?, thang = ?, songaylam = ?, songaynghi = ?, songaychunhat = ?, songayle = ? WHERE machamcong = ?";
+		String sql = "UPDATE chamcong SET manv = ?, thang = ?, songaylam = ?, songaynghi = ?, songaychunhat = ? WHERE machamcong = ?";
 
 		// prepare
 		conn.prepare(sql);
@@ -69,7 +106,6 @@ public class ChamCongDAO {
 		conn.bind(3, chamcong.getSoNgayLam());
 		conn.bind(4, chamcong.getSoNgayNghi());
 		conn.bind(5, chamcong.getSoNgayChuNhat());
-		conn.bind(6, chamcong.getSoNgayLe());
 
 		conn.bind(7, chamcong.getMaChamCong());
 
