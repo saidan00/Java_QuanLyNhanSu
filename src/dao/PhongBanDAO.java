@@ -101,7 +101,7 @@ public class PhongBanDAO {
 
 	public PhongBanDTO PhongBanGet(int maPb) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-		String sql = "SELECT * FROM phongban WHERE mapb = ?";
+		String sql = "SELECT * FROM phongban WHERE maphong = ?";
 
 		conn.prepare(sql);
 

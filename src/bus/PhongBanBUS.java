@@ -8,32 +8,36 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class PhongBanBUS {
-	private PhongBanDAO PhongBanDAO = new PhongBanDAO();
+	private PhongBanDAO phongBanDAO = new PhongBanDAO();
 	private NhanVienDAO nvDAO = new NhanVienDAO();
 
 	public ArrayList<PhongBanDTO> PhongBanAll() {
-		return PhongBanDAO.PhongBanAll();
+		return phongBanDAO.PhongBanAll();
 	}
 
 	public void PhongBanAdd(PhongBanDTO pb) {
-		PhongBanDAO.PhongBanAdd(pb);
+		phongBanDAO.PhongBanAdd(pb);
 	}
 
 	public void PhongBanEdit(PhongBanDTO pb) {
-		PhongBanDAO.PhongBanEdit(pb);
+		phongBanDAO.PhongBanEdit(pb);
 	}
 
 	public void PhongBanDelete(int maPhongBan) {
 		if (nvDAO.NhanVienTheoPhongBan(maPhongBan).size() != 0) {
 			JOptionPane.showMessageDialog(null, "Không thể xóa phòng có nhân viên");
 		} else {
-			PhongBanDAO.PhongBanDelete(maPhongBan);
+			phongBanDAO.PhongBanDelete(maPhongBan);
 
 			JOptionPane.showMessageDialog(null, "Xóa thành công");
 		}
 	}
 
 	public void CapNhatTruongPhong(int maPhongBan, int maTruongPhong) {
-		PhongBanDAO.CapNhatTruongPhong(maPhongBan, maTruongPhong);
+		phongBanDAO.CapNhatTruongPhong(maPhongBan, maTruongPhong);
+	}
+	
+	public PhongBanDTO PhongBanGet(int maPb) {
+		return phongBanDAO.PhongBanGet(maPb);
 	}
 }

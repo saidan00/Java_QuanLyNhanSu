@@ -9,16 +9,25 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -46,11 +55,17 @@ public class ChamCongGUI extends JPanel {
 
 	JButton btnChon;
 	JButton btnChonNV;
-	
+
 	JComboBox<Integer> boxThang;
 	JComboBox<Integer> boxNam;
 
+	JRadioButton lamRad, nghiRad, offRad, nuaNgayRad;
+	
+	int currentRow = 0;
+	int currentCol = 0;
+
 	int maPb, thang = 1, nam = 2017;
+	int currentThang = 1, currentNam = 2017;
 
 	final String PHONG_BAN = "Phòng ban";
 	final String THANG = "Tháng";
@@ -66,9 +81,15 @@ public class ChamCongGUI extends JPanel {
 	private void initComponents() {
 		initPanelForm();
 		initForm();
+		
+		initRadioButton();
+		radChoose();
+
 		initTableChamCong();
+
 		btnChonNvClicked();
 		btnChonClicked();
+		tableOnClick();
 	}
 
 	private void initPanelForm() {
@@ -139,6 +160,38 @@ public class ChamCongGUI extends JPanel {
 		pnlForm.add(btnChon);
 	}
 
+	private void initRadioButton() {
+		// Create the radio buttons.
+		lamRad = new JRadioButton("Làm");
+		lamRad.setMnemonic(KeyEvent.VK_B);
+		lamRad.setActionCommand("x");
+		lamRad.setSelected(true);
+
+		nghiRad = new JRadioButton("Nghỉ");
+		nghiRad.setMnemonic(KeyEvent.VK_C);
+		nghiRad.setActionCommand("n");
+
+		nuaNgayRad = new JRadioButton("Nửa ngày");
+		nuaNgayRad.setMnemonic(KeyEvent.VK_D);
+		nuaNgayRad.setActionCommand("1/2");
+
+		offRad = new JRadioButton("null");
+		offRad.setMnemonic(KeyEvent.VK_R);
+		offRad.setActionCommand("null");
+
+		// Group the radio buttons.
+		ButtonGroup group = new ButtonGroup();
+		group.add(lamRad);
+		group.add(nghiRad);
+		group.add(offRad);
+		group.add(nuaNgayRad);
+
+		pnlForm.add(lamRad);
+		pnlForm.add(nghiRad);
+		pnlForm.add(offRad);
+		pnlForm.add(nuaNgayRad);
+	}
+
 	private void initTableChamCong() {
 		tblChamCong = new JTable() {
 			public boolean isCellEditable(int rowIndex, int colIndex) {
@@ -153,10 +206,10 @@ public class ChamCongGUI extends JPanel {
 		tblChamCong.getTableHeader().setReorderingAllowed(false);
 
 		// không cho phép resize column
-		tblChamCong.getTableHeader().setResizingAllowed(false);
+//		tblChamCong.getTableHeader().setResizingAllowed(false);
 
 		// sắp xếp khi click header
-		tblChamCong.setAutoCreateRowSorter(true);
+//		tblChamCong.setAutoCreateRowSorter(true);
 
 		tblChamCong.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
@@ -169,7 +222,7 @@ public class ChamCongGUI extends JPanel {
 		cons.weighty = 1.0;
 		this.add(scroll, cons);
 	}
-	
+
 	private void btnChonNvClicked() {
 		btnChonNV.addActionListener(new ActionListener() {
 			@Override
@@ -280,7 +333,9 @@ public class ChamCongGUI extends JPanel {
 					JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng ban");
 				} else {
 					maPb = (int) tblNvTemp.getValueAt(row, 0);
-					PhongBanDTO pb = new PhongBanDTO();
+					PhongBanDTO pb = pbBUS.PhongBanGet(maPb);
+
+					txtTenPB.setText(pb.getTenPhong());
 
 					pbFrame.dispatchEvent(new WindowEvent(pbFrame, WindowEvent.WINDOW_CLOSING));
 				}
@@ -312,12 +367,23 @@ public class ChamCongGUI extends JPanel {
 			days = 30;
 			break;
 		}
+		
+		currentThang = thang;
+		currentNam = nam;
 
 		// table header
 		Vector<String> header = new Vector<String>();
-		header.add(PHONG_BAN);
+		header.add("Mã NV");
+		header.add("Nhân viên");
 		for (int i = 1; i <= days; i++) {
-			header.add(String.valueOf(i));
+			LocalDate localDate = LocalDate.of(currentNam, Month.of(currentThang), i);
+
+			// Find the day from the local date
+			String dayOfWeek = DayOfWeek.from(localDate).toString();
+			dayOfWeek = dayOfWeek.toLowerCase().substring(0, 3);
+			dayOfWeek = dayOfWeek.substring(0, 1).toUpperCase() + dayOfWeek.substring(1);
+			
+			header.add(String.valueOf(i + " - " + dayOfWeek));
 		}
 
 		DefaultTableModel dtm = new DefaultTableModel(header, 0) {
@@ -332,6 +398,20 @@ public class ChamCongGUI extends JPanel {
 			}
 		};
 
+		NhanVienDTO nv = new NhanVienDTO();
+
+		for (int i = 0; i < lstNV.size(); i++) {
+			nv = lstNV.get(i);
+
+			ArrayList<Object> lstRow = new ArrayList<Object>();
+			lstRow.add(nv.getMaNV());
+			lstRow.add(nv.getHoNV() + " " + nv.getTenNV());
+
+			Object[] row = lstRow.toArray();
+
+			dtm.addRow(row);
+		}
+
 		tblChamCong.setModel(dtm);
 	}
 
@@ -341,9 +421,46 @@ public class ChamCongGUI extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				thang = (int) boxThang.getSelectedItem();
 				nam = (int) boxNam.getSelectedItem();
-				
+
 				setModelTableChamCong();
 			}
 		});
+	}
+
+	private void tableOnClick() {
+		MouseListener tableMouseListener = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				currentRow = tblChamCong.rowAtPoint(e.getPoint());// get mouse-selected row
+				currentCol = tblChamCong.columnAtPoint(e.getPoint());// get mouse-selected col
+			}
+		};
+		
+		tblChamCong.addMouseListener(tableMouseListener);
+	}
+	
+	private void radChoose() {
+		ActionListener radClick = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (currentCol == 0 || currentCol == 1) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày");
+				} else {
+					// set giá trị trên table
+					String option = e.getActionCommand();
+					tblChamCong.setValueAt(option, currentRow, currentCol);
+					
+					// lưu database
+					
+				}
+			}
+		};
+
+		// Register a listener for the radio buttons.
+		lamRad.addActionListener(radClick);
+		nghiRad.addActionListener(radClick);
+		offRad.addActionListener(radClick);
+		nuaNgayRad.addActionListener(radClick);
+		nuaNgayRad.addActionListener(radClick);
 	}
 }
