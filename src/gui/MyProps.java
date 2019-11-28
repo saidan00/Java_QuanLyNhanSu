@@ -27,6 +27,7 @@ public class MyProps {
 	public final Font DEFAULT_FONT = new Font("Arial Nova", Font.PLAIN, 20);
 	public final Font DEFAULT_FONT_MEDIUM = new Font("Arial Nova", Font.PLAIN, 16);
 	public final Font DEFAULT_FONT_SMALL = new Font("Arial Nova", Font.PLAIN, 12);
+	public final Font DEFAULT_FONT_SMALL_BOLD = new Font("Arial Nova", Font.BOLD, 12);
 	public final String Color_Teal = "#00796b";
 	public final String Color_Teal_Dark = "#004c40";
 	public final String Color_Teal_Light = "#48a999";

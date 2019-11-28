@@ -19,8 +19,8 @@ public class PhongBanBUS {
 		phongBanDAO.PhongBanAdd(pb);
 	}
 
-	public void PhongBanEdit(PhongBanDTO pb) {
-		phongBanDAO.PhongBanEdit(pb);
+	public void PhongBanEdit(int maPb, String tenPb) {
+		phongBanDAO.DoiTenPhong(maPb, tenPb);
 	}
 
 	public void PhongBanDelete(int maPhongBan) {

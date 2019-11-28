@@ -84,10 +84,24 @@ public class PhongBanDAO {
 
 		conn.Close();
 	}
+	
+	public void DoiTenPhong(int maPb, String tenPb) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+		String sql = "UPDATE phongban SET tenphong = ? WHERE maphong = ?";
+
+		conn.prepare(sql);
+
+		conn.bind(1, tenPb);
+		conn.bind(2, maPb);
+
+		conn.executeUpdatePre();
+
+		conn.Close();
+	}
 
 	public void CapNhatTruongPhong(int maPb, int maTruongPhong) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-		String sql = "UPDATE phongban SET matruongphong = ? WHERE maphg = ?";
+		String sql = "UPDATE phongban SET matruongphong = ? WHERE maphong = ?";
 
 		conn.prepare(sql);
 

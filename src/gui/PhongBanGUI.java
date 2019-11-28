@@ -52,7 +52,6 @@ public class PhongBanGUI extends JPanel {
 	JLabel lblNvMaNV, lblNvHoNV, lblNvTenNV, lblNvChucVu;
 
 	JTextField txtPbMaPhong, txtPbTenPhong;
-
 	JButton btnPbThem, btnPbSua, btnPbXoa;
 	JButton btnNvThem, btnNvTp, btnNvXoa;
 
@@ -81,6 +80,7 @@ public class PhongBanGUI extends JPanel {
 		initButtonPhongBan();
 		btnPbThemClicked();
 		btnPbXoaClicked();
+		btnPbSuaClicked();
 
 		initPanelNhanVien();
 		initTableNhanVien();
@@ -341,6 +341,31 @@ public class PhongBanGUI extends JPanel {
 					int maPb = Integer.valueOf(txtPbMaPhong.getText());
 
 					pbBUS.PhongBanDelete(maPb);
+
+					setModelTablePB();
+				}
+			}
+		});
+	}
+	
+	private void btnPbSuaClicked() {
+		btnPbSua.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (txtPbMaPhong.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng ban");
+				} else {
+					int maPb = Integer.valueOf(txtPbMaPhong.getText());
+					String tenPb = String.valueOf(txtPbTenPhong.getText());
+
+					if (tenPb.isBlank()) {
+						JOptionPane.showMessageDialog(null, "Vui lòng nhập tên phòng");
+						txtPbTenPhong.requestFocus();
+					} else {
+						pbBUS.PhongBanEdit(maPb, tenPb);
+
+						JOptionPane.showMessageDialog(null, "Sửa thành công");
+					}
 
 					setModelTablePB();
 				}

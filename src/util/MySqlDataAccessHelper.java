@@ -146,7 +146,7 @@ public class MySqlDataAccessHelper {
 		int res = Integer.MIN_VALUE;
 		try {
 			// for debug
-//			System.out.println(this.preStmt.toString());
+			System.out.println(this.preStmt.toString());
 			res = this.preStmt.executeUpdate();
 		} catch (SQLException e) {
 			displayError(e);
