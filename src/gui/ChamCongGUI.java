@@ -66,6 +66,7 @@ public class ChamCongGUI extends JPanel {
 	JComboBox<Integer> boxNam;
 
 	JRadioButton lamRad, nghiRad, offRad, nuaNgayRad;
+	ButtonGroup group;
 
 	int currentRow = 0;
 	int currentCol = 0;
@@ -167,29 +168,31 @@ public class ChamCongGUI extends JPanel {
 
 	private void initRadioButton() {
 		// Create the radio buttons.
-		lamRad = new JRadioButton("Làm");
+		lamRad = new JRadioButton("Làm (x)");
 		lamRad.setMnemonic(KeyEvent.VK_B);
 		lamRad.setActionCommand("x");
 		lamRad.setSelected(true);
 
-		nghiRad = new JRadioButton("Nghỉ");
+		nghiRad = new JRadioButton("Nghỉ (n)");
 		nghiRad.setMnemonic(KeyEvent.VK_C);
 		nghiRad.setActionCommand("n");
 
-		nuaNgayRad = new JRadioButton("Nửa ngày");
+		nuaNgayRad = new JRadioButton("Nửa ngày (1/2)");
 		nuaNgayRad.setMnemonic(KeyEvent.VK_D);
 		nuaNgayRad.setActionCommand("1/2");
 
-		offRad = new JRadioButton("null");
+		offRad = new JRadioButton("Nghỉ có lương (null)");
 		offRad.setMnemonic(KeyEvent.VK_R);
 		offRad.setActionCommand("null");
 
 		// Group the radio buttons.
-		ButtonGroup group = new ButtonGroup();
+		group = new ButtonGroup();
 		group.add(lamRad);
 		group.add(nghiRad);
 		group.add(offRad);
 		group.add(nuaNgayRad);
+		
+		group.clearSelection();
 
 		pnlForm.add(lamRad);
 		pnlForm.add(nghiRad);
@@ -433,8 +436,13 @@ public class ChamCongGUI extends JPanel {
 		btnChon.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				currentCol = 0;
+				currentRow = 0;
+				
 				thang = (int) boxThang.getSelectedItem();
 				nam = (int) boxNam.getSelectedItem();
+				
+				group.clearSelection();
 
 				setModelTableChamCong();
 			}
@@ -447,6 +455,7 @@ public class ChamCongGUI extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				currentRow = tblChamCong.rowAtPoint(e.getPoint());// get mouse-selected row
 				currentCol = tblChamCong.columnAtPoint(e.getPoint());// get mouse-selected col
+				group.clearSelection();
 			}
 		};
 

@@ -104,6 +104,10 @@ public class NavPanel extends JPanel {
 					ChamCongGUI ccGUI = new ChamCongGUI();
 					switchPanel(contentPanel, ccGUI);
 					break;
+				case THONG_KE:
+					ThongKeGUI tkGUI = new ThongKeGUI();
+					switchPanel(contentPanel, tkGUI);
+					break;
 				default:
 					break;
 				}
