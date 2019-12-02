@@ -430,6 +430,9 @@ public class ChamCongGUI extends JPanel {
 		}
 
 		tblChamCong.setModel(dtm);
+		
+//		myProps.ExportExcelTable(dtm);
+		myProps.exportDataToExcel(dtm);
 	}
 
 	private void btnChonClicked() {
@@ -470,6 +473,7 @@ public class ChamCongGUI extends JPanel {
 					JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày");
 				} else {
 					// set giá trị trên table
+					// lấy giá trị combo box
 					String option = e.getActionCommand();
 					tblChamCong.setValueAt(option, currentRow, currentCol);
 					int maNv = (int) tblChamCong.getValueAt(currentRow, 0);
