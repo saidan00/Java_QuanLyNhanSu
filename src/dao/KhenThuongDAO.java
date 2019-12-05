@@ -20,6 +20,7 @@ public class KhenThuongDAO {
 				khen.setHinhThuc(rs.getString("hinhthuc"));
 				khen.setLyDo(rs.getString("lydo"));
 				khen.setTienThuong(rs.getInt("tienthuong"));
+				khen.setMaNV(rs.getInt("manv"));
 
 				arr.add(khen);
 			}
@@ -32,13 +33,14 @@ public class KhenThuongDAO {
 
 	public void KhenThuongAdd(KhenThuongDTO kt) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-		String sql = "INSERT INTO khenthuong(ngaykhenthuong, hinhthuc, lydo, tienthuong)" + "VALUE(?, ?, ?, ?)";
+		String sql = "INSERT INTO khenthuong(ngaykhenthuong, hinhthuc, lydo, tienthuong, manv)" + "VALUE(?, ?, ?, ?, ?)";
 		conn.prepare(sql);
 
 		conn.bind(1, kt.getNgayKhenThuong());
 		conn.bind(2, kt.getHinhThuc());
 		conn.bind(3, kt.getLyDo());
 		conn.bind(4, kt.getTienThuong());
+		conn.bind(5, kt.getMaNV());
 
 		conn.executeUpdatePre();
 
