@@ -11,8 +11,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -54,6 +56,8 @@ public class NhanVienGUI extends JPanel {
 	JTextField txtGioiTinh;
 	JTextField txtSDT;
 	JTextField txtDiaChi;
+	// combo box
+	JComboBox<String> boxGioiTinh;
 	// button
 	JButton btnThem;
 	JButton btnXoa;
@@ -160,9 +164,15 @@ public class NhanVienGUI extends JPanel {
 		cons = myProps.MyGridBagConstraints(9, 2, 1, 1, true, true);
 		pnlForm.add(lblGioiTinh, cons);
 
-		txtGioiTinh = myProps.RoundedTextField(5);
+//		txtGioiTinh = myProps.RoundedTextField(5);
+//		cons = myProps.MyGridBagConstraints(10, 2, 1, 1, true, true);
+//		pnlForm.add(txtGioiTinh, cons);
+
+		String[] arrGioiTinh = { "Nam", "Nữ" };
+		boxGioiTinh = new JComboBox<String>(arrGioiTinh);
+		boxGioiTinh.setFont(myProps.DEFAULT_FONT_SMALL);
 		cons = myProps.MyGridBagConstraints(10, 2, 1, 1, true, true);
-		pnlForm.add(txtGioiTinh, cons);
+		pnlForm.add(boxGioiTinh, cons);
 
 		// số CMND
 		lblSoCMND = new JLabel(SO_CMND);
@@ -295,7 +305,8 @@ public class NhanVienGUI extends JPanel {
 				txtMaNV.setText(tblNV.getValueAt(row, 0).toString());
 				txtHoNV.setText(tblNV.getValueAt(row, 1).toString());
 				txtTenNV.setText(tblNV.getValueAt(row, 2).toString());
-				txtGioiTinh.setText(tblNV.getValueAt(row, 5).toString());
+//				txtGioiTinh.setText(tblNV.getValueAt(row, 5).toString());
+				boxGioiTinh.setSelectedItem(tblNV.getValueAt(row, 5).toString());
 				txtSoCMND.setText(tblNV.getValueAt(row, 3).toString());
 				txtNgaySinh.setText(tblNV.getValueAt(row, 4).toString());
 				txtSDT.setText(tblNV.getValueAt(row, 6).toString());
@@ -310,21 +321,81 @@ public class NhanVienGUI extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				NhanVienDTO nv = new NhanVienDTO();
 
-				nv.setHoNV(String.valueOf(txtHoNV.getText()));
-				nv.setTenNV(String.valueOf(txtTenNV.getText()));
-				nv.setGioiTinh(String.valueOf(txtGioiTinh.getText()));
-				nv.setSoCMND(String.valueOf(txtSoCMND.getText()));
-				nv.setNgaySinh(String.valueOf(txtNgaySinh.getText()));
-				nv.setSDT(String.valueOf(txtSDT.getText()));
-				nv.setDiaChi(String.valueOf(txtDiaChi.getText()));
+				String hoNv = String.valueOf(txtHoNV.getText());
+				String tennv = String.valueOf(txtTenNV.getText());
+				String gt = String.valueOf(boxGioiTinh.getSelectedItem());
+				String cmnd = String.valueOf(txtSoCMND.getText());
+				String ngaysinh = String.valueOf(txtNgaySinh.getText());
+				String sdt = String.valueOf(txtSDT.getText());
+				String diachi = String.valueOf(txtDiaChi.getText());
 
-				nvBUS.NhanVienAdd(nv);
+				boolean hopLe = KiemTraForm(hoNv, tennv, cmnd, ngaysinh, sdt, diachi);
 
-				JOptionPane.showMessageDialog(null, "Thêm thành công");
+				if (hopLe == true) {
+					nv.setHoNV(hoNv);
+					nv.setTenNV(tennv);
+					nv.setGioiTinh(gt);
+					nv.setSoCMND(cmnd);
+					nv.setNgaySinh(ngaysinh);
+					nv.setSDT(sdt);
+					nv.setDiaChi(diachi);
+					nvBUS.NhanVienAdd(nv);
 
-				setModelTable();
+					JOptionPane.showMessageDialog(null, "Thêm thành công");
+
+					setModelTable();
+				}
 			}
 		});
+	}
+	
+	private boolean KiemTraForm(String hoNv, String tennv, String cmnd, String ngaysinh, String sdt, String diachi) {
+		boolean hopLe = true;
+		
+		if (hoNv.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Vui lòng nhập họ NV");
+			hopLe = false;
+			txtHoNV.requestFocus();
+		} else if (tennv.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Vui lòng nhập tên NV");
+			hopLe = false;
+			txtTenNV.requestFocus();
+		} else if (cmnd.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Vui lòng nhập CMND");
+			hopLe = false;
+			txtSoCMND.requestFocus();
+
+		} else if (!KiemTraCMND(cmnd)) {
+			JOptionPane.showMessageDialog(null, "CMND không hợp lệ (hợp lệ: 9 hoặc 12 số)");
+			hopLe = false;
+			txtSoCMND.requestFocus();
+		} else if (ngaysinh.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Vui lòng nhập ngày sinh");
+			hopLe = false;
+			txtNgaySinh.requestFocus();
+		} else if (sdt.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Vui lòng nhập SĐT");
+			hopLe = false;
+			txtSDT.requestFocus();
+		} else if (!KiemTraSDT(sdt)) {
+			JOptionPane.showMessageDialog(null, "SĐT không hợp lệ");
+			hopLe = false;
+			txtSDT.requestFocus();
+		} else if (diachi.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Vui lòng nhập địa chỉ");
+			hopLe = false;
+			txtDiaChi.requestFocus();
+		}
+		
+		return hopLe;
+	}
+
+	public boolean KiemTraSDT(String SDT) {
+		return Pattern.matches("[0]{1}\\d{9}+", SDT);
+	}
+
+	public boolean KiemTraCMND(String cmnd) {
+		return Pattern.matches("{0}\\d{9}+", cmnd);
 	}
 
 	private void btnXoaClicked() {
@@ -350,22 +421,26 @@ public class NhanVienGUI extends JPanel {
 		btnSua.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NhanVienDTO nv = new NhanVienDTO();
+				if (txtMaNV.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên");
+				} else {
+					NhanVienDTO nv = new NhanVienDTO();
 
-				nv.setMaNV(Integer.valueOf(txtMaNV.getText()));
-				nv.setHoNV(String.valueOf(txtHoNV.getText()));
-				nv.setTenNV(String.valueOf(txtTenNV.getText()));
-				nv.setGioiTinh(String.valueOf(txtGioiTinh.getText()));
-				nv.setSoCMND(String.valueOf(txtSoCMND.getText()));
-				nv.setNgaySinh(String.valueOf(txtNgaySinh.getText()));
-				nv.setSDT(String.valueOf(txtSDT.getText()));
-				nv.setDiaChi(String.valueOf(txtDiaChi.getText()));
+					nv.setMaNV(Integer.valueOf(txtMaNV.getText()));
+					nv.setHoNV(String.valueOf(txtHoNV.getText()));
+					nv.setTenNV(String.valueOf(txtTenNV.getText()));
+					nv.setGioiTinh(boxGioiTinh.getSelectedItem().toString());
+					nv.setSoCMND(String.valueOf(txtSoCMND.getText()));
+					nv.setNgaySinh(String.valueOf(txtNgaySinh.getText()));
+					nv.setSDT(String.valueOf(txtSDT.getText()));
+					nv.setDiaChi(String.valueOf(txtDiaChi.getText()));
 
-				nvBUS.NhanVienEdit(nv);
+					nvBUS.NhanVienEdit(nv);
 
-				JOptionPane.showMessageDialog(null, "Sửa thành công");
+					JOptionPane.showMessageDialog(null, "Sửa thành công");
 
-				setModelTable();
+					setModelTable();
+				}
 			}
 		});
 	}

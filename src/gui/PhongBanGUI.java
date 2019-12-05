@@ -229,7 +229,15 @@ public class PhongBanGUI extends JPanel {
 		TitledBorder border = new TitledBorder(lblNV);
 		border.setTitleJustification(TitledBorder.LEFT);
 		border.setTitlePosition(TitledBorder.TOP);
-
+		
+		JTextField tempTxt = myProps.RoundedTextField(5);
+		tempTxt.setVisible(false);
+		JPanel tempPanel = new JPanel();
+		tempPanel.setLayout(new GridLayout(1, 1));
+		tempPanel.add(tempTxt);
+		GridBagConstraints cons = myProps.MyGridBagConstraints(1, 0, 1, 1, true, true);
+		pnlNV.add(tempPanel, cons);
+		
 		pnlNV.setBorder(border);
 
 		this.add(pnlNV);
@@ -255,7 +263,7 @@ public class PhongBanGUI extends JPanel {
 		// sắp xếp khi click header
 		tblNV.setAutoCreateRowSorter(true);
 
-		GridBagConstraints cons = myProps.MyGridBagConstraints(1, 2, 4, 5, true, true);
+		GridBagConstraints cons = myProps.MyGridBagConstraints(1, 1, 4, 5, true, true);
 
 		// scroll bar
 		JScrollPane scroll = new JScrollPane(tblNV);

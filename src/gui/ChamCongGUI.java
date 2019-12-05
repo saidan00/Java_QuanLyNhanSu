@@ -50,6 +50,7 @@ public class ChamCongGUI extends JPanel {
 
 	MyProps myProps = new MyProps();
 	JTable tblChamCong;
+	DefaultTableModel dtm;
 
 	JPanel pnlForm;
 
@@ -61,6 +62,7 @@ public class ChamCongGUI extends JPanel {
 
 	JButton btnChon;
 	JButton btnChonNV;
+	JButton btnExcel;
 
 	JComboBox<Integer> boxThang;
 	JComboBox<Integer> boxNam;
@@ -95,6 +97,7 @@ public class ChamCongGUI extends JPanel {
 
 		btnChonNvClicked();
 		btnChonClicked();
+		btnExcelClicked();
 		tableOnClick();
 	}
 
@@ -109,7 +112,7 @@ public class ChamCongGUI extends JPanel {
 		lblPB = new JLabel(PHONG_BAN);
 		lblPB.setFont(myProps.DEFAULT_FONT_SMALL_BOLD);
 
-		txtTenPB = new JTextField(15);
+		txtTenPB = new JTextField(7);
 		txtTenPB.setEditable(false);
 		txtTenPB.setFont(myProps.DEFAULT_FONT_SMALL);
 
@@ -152,6 +155,12 @@ public class ChamCongGUI extends JPanel {
 		myProps.BtnFlat(btnChonNV);
 		btnChonNV.setBackground(Color.decode("#e0e0e0"));
 		btnChonNV.setForeground(Color.BLACK);
+		
+		// button excel
+		btnExcel = new JButton("Xuất Excel");
+		myProps.BtnFlat(btnExcel);
+		btnExcel.setBackground(Color.decode("#e0e0e0"));
+		btnExcel.setForeground(Color.BLACK);
 
 		pnlForm.add(lblPB);
 		pnlForm.add(txtTenPB);
@@ -164,6 +173,7 @@ public class ChamCongGUI extends JPanel {
 		pnlForm.add(boxNam);
 
 		pnlForm.add(btnChon);
+		pnlForm.add(btnExcel);
 	}
 
 	private void initRadioButton() {
@@ -394,7 +404,7 @@ public class ChamCongGUI extends JPanel {
 			header.add(String.valueOf(i + " - " + dayOfWeek));
 		}
 
-		DefaultTableModel dtm = new DefaultTableModel(header, 0) {
+		dtm = new DefaultTableModel(header, 0) {
 			@Override
 			public Class<?> getColumnClass(int column) {
 				switch (column) {
@@ -432,7 +442,7 @@ public class ChamCongGUI extends JPanel {
 		tblChamCong.setModel(dtm);
 		
 //		myProps.ExportExcelTable(dtm);
-		myProps.exportDataToExcel(dtm);
+//		myProps.exportDataToExcel(dtm);
 	}
 
 	private void btnChonClicked() {
@@ -448,6 +458,16 @@ public class ChamCongGUI extends JPanel {
 				group.clearSelection();
 
 				setModelTableChamCong();
+			}
+		});
+	}
+	
+	private void btnExcelClicked() {
+		btnExcel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				myProps.exportDataToExcel(dtm);
 			}
 		});
 	}
