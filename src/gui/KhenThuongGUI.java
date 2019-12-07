@@ -158,7 +158,7 @@ public class KhenThuongGUI extends JPanel {
 //		tblKT.getTableHeader().setResizingAllowed(false);
 
 		// sắp xếp khi click header
-//		tblChamCong.setAutoCreateRowSorter(true);
+		tblKT.setAutoCreateRowSorter(true);
 
 //		tblKT.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
@@ -180,7 +180,7 @@ public class KhenThuongGUI extends JPanel {
 		// table header
 		Vector<String> header = new Vector<String>();
 		header.add("Mã khen thưởng");
-		header.add("Mã NV");
+//		header.add("Mã NV");
 		header.add("Nhân viên");
 		header.add("Ngày");
 		header.add("Hình thức");
@@ -192,6 +192,7 @@ public class KhenThuongGUI extends JPanel {
 			public Class<?> getColumnClass(int column) {
 				switch (column) {
 				case 0:
+				case 5:
 					return Integer.class;
 				default:
 					return String.class;
@@ -207,7 +208,7 @@ public class KhenThuongGUI extends JPanel {
 
 			ArrayList<Object> lstRow = new ArrayList<Object>();
 			lstRow.add(kt.getMaKhenThuong());
-			lstRow.add(kt.getMaNV());
+//			lstRow.add(kt.getMaNV());
 			lstRow.add(nv.getHoNV() + " " + nv.getTenNV());
 			lstRow.add(kt.getNgayKhenThuong());
 			lstRow.add(kt.getHinhThuc());
@@ -262,6 +263,8 @@ public class KhenThuongGUI extends JPanel {
 				kt.setTienThuong(Integer.valueOf(txtTienThuong.getText()));
 				
 				ktBUS.KhenThuongAdd(kt);
+				
+				JOptionPane.showMessageDialog(null, "Thêm thành công");
 				setModelTable();
 			}
 		});
@@ -271,10 +274,12 @@ public class KhenThuongGUI extends JPanel {
 		btnXoa.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (maNv == 0) {
+				if (maKt == 0) {
 					JOptionPane.showMessageDialog(null, "Vui lòng chọn mục cần xóa");
 				} else {
-					
+					ktBUS.KhenThuongDelete(maKt);
+					JOptionPane.showMessageDialog(null, "Xóa thành công");
+					setModelTable();
 				}
 			}
 		});
@@ -284,10 +289,20 @@ public class KhenThuongGUI extends JPanel {
 		btnSua.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (maNv == 0) {
-					JOptionPane.showMessageDialog(null, "Vui lòng chọn mục cần xóa");
+				if (maKt == 0) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn mục cần sửa");
 				} else {
+					KhenThuongDTO kt = ktBUS.KhenThuongGet(maKt);
 					
+					kt.setMaNV(maNv);
+					kt.setHinhThuc(boxHinhThuc.getSelectedItem().toString());
+					kt.setLyDo(txtLyDo.getText().toString());
+					kt.setTienThuong(Integer.valueOf(txtTienThuong.getText()));
+					
+					ktBUS.KhenThuongEdit(kt);
+					
+					JOptionPane.showMessageDialog(null, "Sửa thành công");
+					setModelTable();
 				}
 			}
 		});
@@ -425,12 +440,14 @@ public class KhenThuongGUI extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				int row = tblKT.getSelectedRow();
 				maKt = (int) tblKT.getValueAt(row, 0);
-				maKt = (int) tblKT.getValueAt(row, 1);
+				
+				KhenThuongDTO kt = ktBUS.KhenThuongGet(maKt);
+				maNv = kt.getMaNV();
 
-				txtTenNV.setText(tblKT.getValueAt(row, 2).toString());
-				boxHinhThuc.setSelectedItem(tblKT.getValueAt(row, 4));
-				txtLyDo.setText(tblKT.getValueAt(row, 5).toString());
-				txtTienThuong.setText(tblKT.getValueAt(row, 6).toString());
+				txtTenNV.setText(tblKT.getValueAt(row, 1).toString());
+				boxHinhThuc.setSelectedItem(tblKT.getValueAt(row, 3));
+				txtLyDo.setText(tblKT.getValueAt(row, 4).toString());
+				txtTienThuong.setText(tblKT.getValueAt(row, 5).toString());
 			}
 		});
 	}

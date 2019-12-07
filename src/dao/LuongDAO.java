@@ -20,10 +20,10 @@ public class LuongDAO {
 				// khoi tao
 				LuongDTO luong = new LuongDTO();
 				// gan gt
-				luong.setMaLuong(rs.getInt("MaLuong"));
-				luong.setHeSoLuong(rs.getFloat("HeSoLuong"));
-				luong.setLuongCB(rs.getInt("LuongCB"));
-				luong.setHeSoPhuCap(rs.getFloat("HeSoPhuCap"));
+				luong.setMaLuong(rs.getInt("maluong"));
+//				luong.setHeSoLuong(rs.getFloat("HeSoLuong"));
+				luong.setLuongCB(rs.getInt("luongcoban"));
+//				luong.setHeSoPhuCap(rs.getFloat("HeSoPhuCap"));
 				// them vao arraylist
 				arr.add(luong);
 			}
@@ -37,13 +37,13 @@ public class LuongDAO {
 	// them
 	public void LuongAdd(LuongDTO luongadd) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-		String sql = "INSERT INTO luong (hesoluong, luongcb, hesophucap)" + "VALUES(?, ?, ?)";
+		String sql = "INSERT INTO luong(luongcoban) VALUES(?)";
 		// prepare statement
 		conn.prepare(sql);
 		// bind values
-		conn.bind(1, luongadd.getHeSoLuong());
-		conn.bind(2, luongadd.getLuongCB());
-		conn.bind(3, luongadd.getHeSoPhuCap());
+//		conn.bind(1, luongadd.getHeSoLuong());
+		conn.bind(1, luongadd.getLuongCB());
+//		conn.bind(3, luongadd.getHeSoPhuCap());
 
 		conn.executeUpdatePre();
 
@@ -53,15 +53,15 @@ public class LuongDAO {
 	// sua
 	public void LuongEdit(LuongDTO luongadd) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-		String sql = "UPDATE luong SET hesoluong = ?, luongcb = ?, hesophucap = ? WHERE maluong = ?";
+		String sql = "UPDATE luong SET luongcoban = ? WHERE maluong = ?";
 		// prepare statement
 		conn.prepare(sql);
 
 		// bind values
-		conn.bind(1, luongadd.getHeSoLuong());
-		conn.bind(2, luongadd.getLuongCB());
-		conn.bind(3, luongadd.getHeSoPhuCap());
-		conn.bind(4, luongadd.getMaLuong());
+//		conn.bind(1, luongadd.getHeSoLuong());
+		conn.bind(1, luongadd.getLuongCB());
+//		conn.bind(3, luongadd.getHeSoPhuCap());
+		conn.bind(2, luongadd.getMaLuong());
 
 		conn.executeUpdatePre();
 

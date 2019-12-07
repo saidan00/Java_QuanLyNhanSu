@@ -1,162 +1,279 @@
 package gui;
 
-import bus.LuongBUS;
-import dto.LuongDTO;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Vector;
+
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+
+import bus.LuongBUS;
+import bus.NhanVienBUS;
+import dto.LuongDTO;
+import dto.NhanVienDTO;
 
 public class LuongGUI extends JPanel {
 	LuongBUS luongBUS = new LuongBUS();
-	MyProps myprops = new MyProps();
+	NhanVienBUS nvBUS = new NhanVienBUS();
+	MyProps myProps = new MyProps();
 
-	JPanel pnlTabel;
-	JTable tbLuong;
+	JPanel pnlLuong;
+	JPanel pnlNV;
 
-	JPanel pnlForm, pnlButton;
-	// label
-	JLabel lblMaluong, lblHSluong, lblLuongcb, lblHSpc;
-	// textfield
-	JTextField txtMaluong, txtHSluong, txtLuongcb, txtHSpc;
-	// button
-	JButton btThem, btSua, btXoa;
-	// tabel header title
+	JTable tblLuong;
+	JTable tblNV;
+
+	final String lblLuong = "LƯƠNG";
+	final String lblNV = "NHÂN VIÊN";
+
+	JLabel lblLgMaLuong, lblLgLuongCB;
+	JLabel lblNvMaNV, lblNvHoNV, lblNvTenNV, lblNvChucVu;
+
+	JTextField txtLgMaLuong, txtLgLuongCB;
+	JButton btnLgThem, btnLgSua, btnLgXoa;
+	JButton btnNvDoiLuong;
+
 	final String MA_LUONG = "Mã Lương";
-	final String HESO_LUONG = "Hệ Số Lương";
-	final String LUONG_COBAN = "Lương Cơ Bản";
-	final String HESO_PHUCAP = "Hệ Số Phụ Cấp";
+	final String LUONG_CB = "Lương cơ bản";
 
-	// ham khoi tao
+	final String MA_NV = "Mã NV";
+	final String HO_NV = "Họ NV";
+	final String TEN_NV = "Tên NV";
+	final String CHUC_VU = "Chức Vụ";
+
 	public LuongGUI() {
-		initCompenents();
+		initComponents();
 	}
 
-	// tao cac compenents
-	public void initCompenents() {
-		this.setLayout(null);
-		this.setBackground(Color.red);
+	// khởi tạo các component
+	private void initComponents() {
+		this.setLayout(new GridLayout(1, 2));
+//		this.setBackground(Color.PINK);
 
-		initPnlForm();
-		initForm();
-		initPnlTabel();
-		initTbluong();
+		initPanelLuong();
+		initFormLuong();
+		initTableLuong();
 
-		tblLuongMouseListener();
+		// button phong ban
+		initButtonLuong();
+		btnLgThemClicked();
+		btnLgXoaClicked();
+		btnLgSuaClicked();
 
-		initButton();
-		btThemClicked();
-		btSuaClicked();
-		btXoaClicked();
+		initPanelNhanVien();
+		initTableNhanVien();
+		initButtonNhanVien();
 
+		// button nhan vien
+		btnNvDoiLuongClicked();
+
+		tblLgMouseListener();
 	}
 
-	// tao panel chua form
-	public void initPnlForm() {
-		pnlForm = new JPanel();
-		pnlForm.setBounds(0, 0, ContentPanel.WIDTH, ContentPanel.HEIGHT * 60 / 100);
-		pnlForm.setLayout(new GridBagLayout());
-		this.add(pnlForm);
+	private void initPanelLuong() {
+		pnlLuong = new JPanel();
+		pnlLuong.setLayout(new GridBagLayout());
+
+		TitledBorder border = new TitledBorder(lblLuong);
+		border.setTitleJustification(TitledBorder.LEFT);
+		border.setTitlePosition(TitledBorder.TOP);
+
+		pnlLuong.setBorder(border);
+
+		this.add(pnlLuong);
 	}
 
-	// tao form
-	public void initForm() {
+	private void initFormLuong() {
 		GridBagConstraints cons = new GridBagConstraints();
+		// mã nhân viên
+		lblLgMaLuong = new JLabel(MA_LUONG);
+		lblLgMaLuong.setFont(myProps.DEFAULT_FONT_SMALL);
+		cons = myProps.MyGridBagConstraints(1, 1, 1, 1, true, true);
+		pnlLuong.add(lblLgMaLuong, cons);
 
-		// maluong
-		lblMaluong = new JLabel(MA_LUONG);
-		lblMaluong.setFont(myprops.DEFAULT_FONT_SMALL);
-		cons = myprops.MyGridBagConstraints(3, 1, 1, 1, true, true);
-		pnlForm.add(lblMaluong, cons);
+		txtLgMaLuong = myProps.RoundedTextField(5);
+		txtLgMaLuong.setEditable(false); // không cho sửa
+		cons = myProps.MyGridBagConstraints(2, 1, 1, 1, true, true);
+		pnlLuong.add(txtLgMaLuong, cons);
 
-		txtMaluong = myprops.RoundedTextField(2);
-		txtMaluong.setEditable(false);
-		cons = myprops.MyGridBagConstraints(4, 1, 2, 1, true, true);
-		pnlForm.add(txtMaluong, cons);
+		// họ nhân viên
+		lblLgLuongCB = new JLabel(LUONG_CB);
+		lblLgLuongCB.setFont(myProps.DEFAULT_FONT_SMALL);
+		cons = myProps.MyGridBagConstraints(3, 1, 1, 1, true, true);
+		pnlLuong.add(lblLgLuongCB, cons);
 
-		// he so luong
-		lblHSluong = new JLabel(HESO_LUONG);
-		lblHSluong.setFont(myprops.DEFAULT_FONT_SMALL);
-		cons = myprops.MyGridBagConstraints(4, 2, 1, 1, true, true);
-		pnlForm.add(lblHSluong, cons);
-
-		txtHSluong = myprops.RoundedTextField(3);
-		txtHSluong.setEditable(false);
-		cons = myprops.MyGridBagConstraints(5, 2, 2, 1, true, true);
-		pnlForm.add(txtHSluong, cons);
-
-		// luong co ban
-		lblLuongcb = new JLabel(LUONG_COBAN);
-		lblLuongcb.setFont(myprops.DEFAULT_FONT_SMALL);
-		cons = myprops.MyGridBagConstraints(5, 3, 1, 1, true, true);
-		pnlForm.add(lblLuongcb, cons);
-
-		txtLuongcb = myprops.RoundedTextField(5);
-		txtLuongcb.setEditable(false);
-		cons = myprops.MyGridBagConstraints(6, 3, 2, 1, true, true);
-		pnlForm.add(txtLuongcb, cons);
-
-		// he so phu cap
-		lblHSpc = new JLabel(HESO_PHUCAP);
-		lblHSpc.setFont(myprops.DEFAULT_FONT_SMALL);
-		cons = myprops.MyGridBagConstraints(6, 4, 1, 1, true, true);
-		pnlForm.add(lblHSpc, cons);
-
-		txtHSpc = myprops.RoundedTextField(7);
-		txtHSpc.setEditable(false);
-		cons = myprops.MyGridBagConstraints(7, 4, 2, 1, true, true);
-		pnlForm.add(txtHSpc, cons);
+		txtLgLuongCB = myProps.RoundedTextField(5);
+		cons = myProps.MyGridBagConstraints(4, 1, 1, 1, true, true);
+		pnlLuong.add(txtLgLuongCB, cons);
 	}
 
-	// tao table luong
-	public void initTbluong() {
-		tbLuong = new JTable();
-		// doc du lieu
-		setModelTable();
+	private void initTableLuong() {
+		tblLuong = new JTable() {
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+				return false; // Disallow the editing of any cell
+			}
+		};
 
-		// k cho di chuyen vi tri column
-		tbLuong.getTableHeader().setReorderingAllowed(false);
+		// không cho phép di chuyển vị trí columns
+		tblLuong.getTableHeader().setReorderingAllowed(false);
 
-		// k cho resize column
-		tbLuong.getTableHeader().setResizingAllowed(false);
+		// không cho phép resize column
+		tblLuong.getTableHeader().setResizingAllowed(false);
 
-		// sap xep khi click header
-		tbLuong.setAutoCreateRowSorter(true);
+		// sắp xếp khi click header
+		tblLuong.setAutoCreateRowSorter(true);
 
-		// thanh cuon
-		JScrollPane scroll = new JScrollPane(tbLuong);
-		pnlTabel.add(scroll);
+		setModelTableLg();
+
+		GridBagConstraints cons = myProps.MyGridBagConstraints(1, 2, 4, 5, true, true);
+
+		// scroll bar
+		JScrollPane scroll = new JScrollPane(tblLuong);
+
+		pnlLuong.add(scroll, cons);
 	}
 
-	// tao panel chua table
-	public void initPnlTabel() {
-		pnlTabel = new JPanel();
-		pnlTabel.setBounds(0, pnlForm.getHeight(), ContentPanel.WIDTH, ContentPanel.HEIGHT - pnlForm.getHeight());
-		this.add(pnlTabel);
-	}
-
-	public void setModelTable() {
+	private void setModelTableLg() {
+		// table header
 		Vector<String> header = new Vector<String>();
 		header.add(MA_LUONG);
-		header.add(HESO_LUONG);
-		header.add(LUONG_COBAN);
-		header.add(HESO_PHUCAP);
+		header.add(LUONG_CB);
 
 		DefaultTableModel dtm = new DefaultTableModel(header, 0) {
+			@Override
+			public Class<?> getColumnClass(int column) {
+				switch (column) {
+				case 0:
+					return Integer.class;
+				default:
+					return Integer.class;
+				}
+			}
+		};
+
+		ArrayList<LuongDTO> lstLg = new ArrayList<LuongDTO>();
+		lstLg = luongBUS.LuongAll();
+
+		LuongDTO lg = new LuongDTO();
+
+		for (int i = 0; i < lstLg.size(); i++) {
+			lg = lstLg.get(i);
+			Object[] row = { lg.getMaLuong(), lg.getLuongCB() };
+			dtm.addRow(row);
+		}
+
+		tblLuong.setModel(dtm);
+	}
+
+	private void initButtonLuong() {
+		JPanel pnlBtn = new JPanel();
+		pnlBtn.setLayout(new GridBagLayout());
+
+		btnLgThem = new JButton("Thêm");
+		GridBagConstraints cons = myProps.MyGridBagConstraints(1, 1, 2, 1, true, true);
+		pnlBtn.add(btnLgThem, cons);
+		myProps.BtnFlat(btnLgThem);
+		btnLgThem.setBackground(Color.decode("#4caf50"));
+		btnLgThem.setForeground(Color.WHITE);
+		btnLgThem.setFont(new Font("Arial Nova", Font.PLAIN, 12));
+
+		btnLgSua = new JButton("Sửa");
+		cons = myProps.MyGridBagConstraints(3, 1, 2, 1, true, true);
+		pnlBtn.add(btnLgSua, cons);
+		myProps.BtnFlat(btnLgSua);
+		btnLgSua.setBackground(Color.decode("#e0e0e0"));
+		btnLgSua.setForeground(Color.BLACK);
+		btnLgSua.setFont(new Font("Arial Nova", Font.PLAIN, 12));
+		btnLgSua.setText("Sửa");
+
+		btnLgXoa = new JButton("Xóa");
+		cons = myProps.MyGridBagConstraints(5, 1, 2, 1, true, true);
+		pnlBtn.add(btnLgXoa, cons);
+		myProps.BtnFlat(btnLgXoa);
+		btnLgXoa.setBackground(Color.decode("#e53935"));
+		btnLgXoa.setForeground(Color.WHITE);
+		btnLgXoa.setFont(new Font("Arial Nova", Font.PLAIN, 12));
+
+		cons = myProps.MyGridBagConstraints(1, 7, 4, 1, true, true);
+		pnlLuong.add(pnlBtn, cons);
+	}
+
+	private void initPanelNhanVien() {
+		pnlNV = new JPanel();
+		pnlNV.setLayout(new GridBagLayout());
+
+		TitledBorder border = new TitledBorder(lblNV);
+		border.setTitleJustification(TitledBorder.LEFT);
+		border.setTitlePosition(TitledBorder.TOP);
+		
+		JTextField tempTxt = myProps.RoundedTextField(5);
+		tempTxt.setVisible(false);
+		JPanel tempPanel = new JPanel();
+		tempPanel.setLayout(new GridLayout(1, 1));
+		tempPanel.add(tempTxt);
+		GridBagConstraints cons = myProps.MyGridBagConstraints(1, 0, 1, 1, true, true);
+		pnlNV.add(tempPanel, cons);
+		
+		pnlNV.setBorder(border);
+
+		this.add(pnlNV);
+	}
+
+	private void initTableNhanVien() {
+		tblNV = new JTable() {
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+				return false; // Disallow the editing of any cell
+			}
+		};
+
+		// đọc dữ liệu
+		ArrayList<NhanVienDTO> lstNV = new ArrayList<NhanVienDTO>();
+		setModelTableNV(lstNV);
+
+		// không cho phép di chuyển vị trí columns
+		tblNV.getTableHeader().setReorderingAllowed(false);
+
+		// không cho phép resize column
+		tblNV.getTableHeader().setResizingAllowed(false);
+
+		// sắp xếp khi click header
+		tblNV.setAutoCreateRowSorter(true);
+
+		GridBagConstraints cons = myProps.MyGridBagConstraints(1, 1, 4, 5, true, true);
+
+		// scroll bar
+		JScrollPane scroll = new JScrollPane(tblNV);
+
+		pnlNV.add(scroll, cons);
+	}
+
+	private void setModelTableNV(ArrayList<NhanVienDTO> lstNV) {
+		// table header
+		Vector<String> header = new Vector<String>();
+		header.add(MA_NV);
+		header.add(TEN_NV);
+
+		DefaultTableModel dtm = new DefaultTableModel(header, 0) {
+			@Override
 			public Class<?> getColumnClass(int column) {
 				switch (column) {
 				case 0:
@@ -167,119 +284,262 @@ public class LuongGUI extends JPanel {
 			}
 		};
 
-		ArrayList<LuongDTO> lst = new ArrayList<LuongDTO>();
-		lst = luongBUS.LuongAll();
+		NhanVienDTO nv = new NhanVienDTO();
 
-		LuongDTO l = new LuongDTO();
-		for (int i = 0; i < lst.size(); i++) {
-			l = lst.get(i);
-			Object[] row = { l.getMaLuong(), l.getHeSoLuong(), l.getLuongCB(), l.getHeSoPhuCap() };
+		for (int i = 0; i < lstNV.size(); i++) {
+			nv = lstNV.get(i);
+			Object[] row = { nv.getMaNV(), nv.getHoNV() + " " + nv.getTenNV() };
 			dtm.addRow(row);
 		}
-		tbLuong.setModel(dtm);
+
+		tblNV.setModel(dtm);
 	}
 
-	private void tblLuongMouseListener() {
-		tbLuong.addMouseListener(new MouseAdapter() {
+	private void tblLgMouseListener() {
+		tblLuong.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				int row = tbLuong.getSelectedRow();
+				int row = tblLuong.getSelectedRow();
+				int maLg = (int) tblLuong.getValueAt(row, 0);
 
-				txtMaluong.setText(tbLuong.getValueAt(row, 0).toString());
-				txtHSluong.setText(tbLuong.getValueAt(row, 1).toString());
-				txtLuongcb.setText(tbLuong.getValueAt(row, 2).toString());
-				txtHSpc.setText(tbLuong.getValueAt(row, 3).toString());
+				txtLgMaLuong.setText(tblLuong.getValueAt(row, 0).toString());
+				txtLgLuongCB.setText(tblLuong.getValueAt(row, 1).toString());
+
+				ArrayList<NhanVienDTO> lstNV = nvBUS.NhanVienTheoLuong(maLg);
+				setModelTableNV(lstNV);
 			}
 		});
 	}
 
-	private void btThemClicked() {
-		btThem.addActionListener(new ActionListener() {
+	private void btnLgThemClicked() {
+		btnLgThem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LuongDTO luongdto = new LuongDTO();
+				String luongCb = String.valueOf(txtLgLuongCB.getText());
 
-				luongdto.setHeSoLuong(Float.valueOf(txtHSluong.getText()));
-				luongdto.setLuongCB(Integer.valueOf(txtLuongcb.getText()));
-				luongdto.setHeSoPhuCap(Float.valueOf(txtHSpc.getText()));
+				if (luongCb.isBlank()) {
+					JOptionPane.showMessageDialog(null, "Vui lòng nhập lương cơ bản");
+					txtLgLuongCB.requestFocus();
+				} else {
+					try {
+						LuongDTO lg = new LuongDTO();
+						lg.setLuongCB(Integer.valueOf(luongCb));
+						
+						luongBUS.LuongAdd(lg);
 
-				luongBUS.LuongAdd(luongdto);
-
-				JOptionPane.showMessageDialog(null, "Thêm thành công");
-
-				setModelTable();
+						JOptionPane.showMessageDialog(null, "Thêm thành công");
+						setModelTableLg();
+					} catch (NumberFormatException ex) {
+						JOptionPane.showMessageDialog(null, "Vui lòng nhập số");
+						txtLgLuongCB.requestFocus();
+					}
+				}
 			}
 		});
 	}
 
-	private void btSuaClicked() {
-		btSua.addActionListener(new ActionListener() {
+	private void btnLgXoaClicked() {
+		btnLgXoa.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LuongDTO luongdto = new LuongDTO();
+				if (txtLgMaLuong.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn mục cần xóa");
+				} else {
+					int maLg = Integer.valueOf(txtLgMaLuong.getText());
 
-				luongdto.setMaLuong(Integer.valueOf(txtMaluong.getText()));
-				luongdto.setHeSoLuong(Float.valueOf(txtHSluong.getText()));
-				luongdto.setLuongCB(Integer.valueOf(txtLuongcb.getText()));
-				luongdto.setHeSoPhuCap(Float.valueOf(txtHSpc.getText()));
+					luongBUS.LuongDelete(maLg);
 
-				luongBUS.LuongExit(luongdto);
-
-				JOptionPane.showMessageDialog(null, "Sửa thành công");
-
-				setModelTable();
+					setModelTableLg();
+				}
 			}
 		});
 	}
-
-	private void btXoaClicked() {
-		btXoa.addActionListener(new ActionListener() {
+	
+	private void btnLgSuaClicked() {
+		btnLgSua.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int maluong = Integer.valueOf(txtMaluong.getText());
+				String luongCb = String.valueOf(txtLgLuongCB.getText());
 
-				luongBUS.LuongDelete(maluong);
+				if (luongCb.isBlank()) {
+					JOptionPane.showMessageDialog(null, "Vui lòng nhập lương cơ bản");
+					txtLgLuongCB.requestFocus();
+				} else {
+					try {
+						LuongDTO lg = new LuongDTO();
+						lg.setMaLuong(Integer.valueOf(txtLgMaLuong.getText()));
+						lg.setLuongCB(Integer.valueOf(luongCb));
+						
+						luongBUS.LuongEdit(lg);
 
-				JOptionPane.showMessageDialog(null, "Xóa thành công");
-				setModelTable();
+						JOptionPane.showMessageDialog(null, "Sửa thành công");
+						setModelTableLg();
+					} catch (NumberFormatException ex) {
+						JOptionPane.showMessageDialog(null, "Vui lòng nhập số");
+						setModelTableLg();
+					}
+				}
 			}
 		});
 	}
 
-	private void initButton() {
-		GridBagConstraints cons = new GridBagConstraints();
-		pnlButton = new JPanel();
+	private void initButtonNhanVien() {
+		JPanel pnlBtn = new JPanel();
+		pnlBtn.setLayout(new GridBagLayout());
 
-		// them
-		btThem = new JButton();
-		myprops.BtnFlat(btThem);
-		btThem.setBackground(Color.decode("#43ecdb"));
-		btThem.setForeground(Color.red);
-		btThem.setFont(new Font("Verdana", Font.PLAIN, 12));
-		btThem.setText("Thêm");
-		btThem.setSize(20, 10);
+		btnNvDoiLuong = new JButton("Đổi mức lương");
+		GridBagConstraints cons = myProps.MyGridBagConstraints(1, 1, 2, 1, true, true);
+		pnlBtn.add(btnNvDoiLuong, cons);
+		myProps.BtnFlat(btnNvDoiLuong);
+		btnNvDoiLuong.setBackground(Color.decode("#e53935"));
+		btnNvDoiLuong.setForeground(Color.WHITE);
+		btnNvDoiLuong.setFont(new Font("Arial Nova", Font.PLAIN, 12));
 
-		// xoa
-		btXoa = new JButton();
-		myprops.BtnFlat(btXoa);
-		btXoa.setBackground(Color.decode("#43d1ec"));
-		btXoa.setForeground(Color.red);
-		btXoa.setFont(new Font("Verdana", Font.PLAIN, 12));
-		btXoa.setText("Xóa");
-
-		// sua
-		btSua = new JButton();
-		myprops.BtnFlat(btSua);
-		btSua.setBackground(Color.decode("5fc5e1"));
-		btSua.setForeground(Color.red);
-		btSua.setFont(new Font("Verdana", Font.PLAIN, 12));
-		btSua.setText("Sửa");
-
-		pnlButton.add(btThem);
-		pnlButton.add(btSua);
-		pnlButton.add(btXoa);
-
-		cons = myprops.MyGridBagConstraints(4, 1, 1, 1, true, true);
-		pnlForm.add(pnlButton, cons);
+		cons = myProps.MyGridBagConstraints(1, 7, 4, 1, true, true);
+		pnlNV.add(pnlBtn, cons);
 	}
 
+	// đổi lương
+	private void btnNvDoiLuongClicked() {
+		btnNvDoiLuong.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = tblNV.getSelectedRow();
+
+				if (row == -1) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên");
+				} else {
+					int maLg = Integer.valueOf(txtLgMaLuong.getText());
+
+					int maNv = (int) tblNV.getValueAt(row, 0);
+
+					NhanVienDTO nvDto = nvBUS.NhanVienGet(maNv);
+					nvDto.setMaLuong(maLg);
+
+					ArrayList<NhanVienDTO> lstNV = nvBUS.NhanVienTheoLuong(maLg);
+					setModelTableNV(lstNV);
+					
+					FrameDoiLuong(maNv);
+				}
+			}
+		});
+	}
+
+	private void FrameDoiLuong(int maNv) {
+//		int maLg = Integer.valueOf(txtLgMaLuong.getText());
+		JFrame lgFrame = new JFrame("Chọn lương");
+
+		lgFrame.setSize(MyProps.DEFAULT_WIDTH / 2, MyProps.DEFAULT_HEIGHT / 2);
+		lgFrame.setResizable(false);
+		lgFrame.setVisible(true);
+
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		Dimension screenSize = kit.getScreenSize();
+		int screenWidth = screenSize.width;
+		int screenHeight = screenSize.height;
+
+		int xLocation = (screenWidth - MyProps.DEFAULT_WIDTH / 2) / 2;
+		int yLocation = ((screenHeight - MyProps.DEFAULT_HEIGHT / 2) / 2 - 25);
+		lgFrame.setLocation(xLocation, yLocation);
+
+		lgFrame.setLayout(new GridLayout(1, 1));
+		lgFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		JPanel pnlTblLgTemp = new JPanel();
+		pnlTblLgTemp.setLayout(new GridBagLayout());
+
+		lgFrame.add(pnlTblLgTemp);
+
+		JTable tblLgTemp = new JTable() {
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+				return false; // Disallow the editing of any cell
+			}
+
+			@Override
+			public Dimension getPreferredScrollableViewportSize() {
+				return new Dimension(100, 100);
+			}
+		};
+
+		// không cho phép di chuyển vị trí columns
+		tblLgTemp.getTableHeader().setReorderingAllowed(false);
+
+		// không cho phép resize column
+		tblLgTemp.getTableHeader().setResizingAllowed(false);
+
+		// sắp xếp khi click header
+		tblLgTemp.setAutoCreateRowSorter(true);
+
+		// đọc dữ liệu
+		ArrayList<LuongDTO> lstLg = luongBUS.LuongAll();
+
+		// table header
+		Vector<String> header = new Vector<String>();
+		header.add(MA_LUONG);
+		header.add(LUONG_CB);
+
+		DefaultTableModel dtm = new DefaultTableModel(header, 0) {
+			@Override
+			public Class<?> getColumnClass(int column) {
+				switch (column) {
+				case 0:
+					return Integer.class;
+				default:
+					return Integer.class;
+				}
+			}
+		};
+
+		LuongDTO lg = new LuongDTO();
+
+		for (int i = 0; i < lstLg.size(); i++) {
+			lg = lstLg.get(i);
+			Object[] row = { lg.getMaLuong(), lg.getLuongCB() };
+			dtm.addRow(row);
+		}
+
+		tblLgTemp.setModel(dtm);
+
+		// scroll bar
+		JScrollPane scroll = new JScrollPane(tblLgTemp);
+
+		GridBagConstraints cons = myProps.MyGridBagConstraints(1, 1, 1, 1, true, true);
+		cons.weightx = 1.0;
+		cons.weighty = 1.0;
+
+		pnlTblLgTemp.add(scroll, cons);
+
+		JButton btnChon = new JButton("Chọn");
+		cons = myProps.MyGridBagConstraints(1, 2, 1, 1, false, true);
+		pnlTblLgTemp.add(btnChon, cons);
+		myProps.BtnFlat(btnChon);
+		btnChon.setBackground(Color.decode("#e0e0e0"));
+		btnChon.setForeground(Color.BLACK);
+		btnChon.setFont(new Font("Arial Nova", Font.PLAIN, 12));
+
+		btnChon.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = tblLgTemp.getSelectedRow();
+
+				if (row == -1) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn lương");
+				} else {
+					int maLg = (int) tblLgTemp.getValueAt(row, 0);
+
+					NhanVienDTO nvDto = nvBUS.NhanVienGet(maNv);
+					
+					nvDto.setMaLuong(maLg);
+					
+					nvBUS.NhanVienEdit(nvDto);
+
+					JOptionPane.showMessageDialog(null, "Đổi thành công");
+
+					ArrayList<NhanVienDTO> lstNV = nvBUS.NhanVienTheoLuong(Integer.valueOf(txtLgMaLuong.getText()));
+					setModelTableNV(lstNV);
+
+					lgFrame.dispatchEvent(new WindowEvent(lgFrame, WindowEvent.WINDOW_CLOSING));
+				}
+			}
+		});
+	}
 }

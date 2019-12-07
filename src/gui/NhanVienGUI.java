@@ -339,9 +339,10 @@ public class NhanVienGUI extends JPanel {
 					nv.setNgaySinh(ngaysinh);
 					nv.setSDT(sdt);
 					nv.setDiaChi(diachi);
-					nvBUS.NhanVienAdd(nv);
-
-					JOptionPane.showMessageDialog(null, "Thêm thành công");
+					
+					if (nvBUS.NhanVienAdd(nv)) {
+						JOptionPane.showMessageDialog(null, "Thêm thành công");
+					}
 
 					setModelTable();
 				}

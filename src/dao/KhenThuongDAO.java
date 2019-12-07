@@ -1,6 +1,7 @@
 package dao;
 
 import dto.KhenThuongDTO;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -30,6 +31,34 @@ public class KhenThuongDAO {
 		conn.Close();
 		return arr;
 	}
+	
+	public KhenThuongDTO KhenThuongGet(int maKt) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+		ArrayList<KhenThuongDTO> arr = new ArrayList<KhenThuongDTO>();
+		String sql = "select * from khenthuong where makhenthuong = " + maKt;
+		try {
+			ResultSet rs = conn.executeQuery(sql);
+			while (rs.next()) {
+				KhenThuongDTO khen = new KhenThuongDTO();
+				khen.setMaKhenThuong(rs.getInt("makhenthuong"));
+				khen.setNgayKhenThuong(rs.getString("ngaykhenthuong"));
+				khen.setHinhThuc(rs.getString("hinhthuc"));
+				khen.setLyDo(rs.getString("lydo"));
+				khen.setTienThuong(rs.getInt("tienthuong"));
+				khen.setMaNV(rs.getInt("manv"));
+
+				arr.add(khen);
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+		conn.Close();
+		
+		if (arr.size() == 0) {
+			return null;
+		}
+		return arr.get(0);
+	}
 
 	public void KhenThuongAdd(KhenThuongDTO kt) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
@@ -49,7 +78,7 @@ public class KhenThuongDAO {
 
 	public void KhenThuongEdit(KhenThuongDTO kt) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-		String sql = "UPDATE khenthuong SET ngaykhenthuong = ?, hinhthuc = ?, lydo = ?, tienthuong = ? WHERE makhenthuong = ?";
+		String sql = "UPDATE khenthuong SET ngaykhenthuong = ?, hinhthuc = ?, lydo = ?, tienthuong = ?, manv = ? WHERE makhenthuong = ?";
 
 		conn.prepare(sql);
 
@@ -57,7 +86,9 @@ public class KhenThuongDAO {
 		conn.bind(2, kt.getHinhThuc());
 		conn.bind(3, kt.getLyDo());
 		conn.bind(4, kt.getTienThuong());
-		conn.bind(5, kt.getMaKhenThuong());
+		conn.bind(5, kt.getMaNV());
+		
+		conn.bind(6, kt.getMaKhenThuong());
 
 		conn.executeUpdatePre();
 

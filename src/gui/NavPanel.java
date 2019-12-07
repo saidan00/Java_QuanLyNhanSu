@@ -22,6 +22,7 @@ public class NavPanel extends JPanel {
 	private final String NHAN_VIEN = "Nhân viên";
 	private final String PHONG_BAN = "Phòng ban";
 	private final String CHAM_CONG = "Chấm công";
+	private final String LUONG = "Lương";
 	private final String KHEN_THUONG = "Khen thưởng";
 	private final String THONG_KE = "Thống kê";
 
@@ -42,6 +43,7 @@ public class NavPanel extends JPanel {
 		lbl.add(NHAN_VIEN);
 		lbl.add(PHONG_BAN);
 		lbl.add(CHAM_CONG);
+		lbl.add(LUONG);
 		lbl.add(KHEN_THUONG);
 		lbl.add(THONG_KE);
 
@@ -106,6 +108,10 @@ public class NavPanel extends JPanel {
 					ChamCongGUI ccGUI = new ChamCongGUI();
 					switchPanel(contentPanel, ccGUI);
 					break;
+				case LUONG:
+					LuongGUI luongGUI = new LuongGUI();
+					switchPanel(contentPanel, luongGUI);
+					break;	
 				case KHEN_THUONG:
 					KhenThuongGUI ktGUI = new KhenThuongGUI();
 					switchPanel(contentPanel, ktGUI);

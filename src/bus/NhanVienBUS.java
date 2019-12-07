@@ -2,6 +2,8 @@ package bus;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import dao.HopDongLaoDongDAO;
 import dao.NhanVienDAO;
 import dto.HopDongLaoDongDTO;
@@ -20,7 +22,12 @@ public class NhanVienBUS {
 		return nvDAO.NhanVienTheoPhongBan(maPb);
 	}
 
-	public void NhanVienAdd(NhanVienDTO nv) {
+	public boolean NhanVienAdd(NhanVienDTO nv) {
+		if (nvDAO.NhanVienGetCMND(nv.getSoCMND()) != null) {
+			JOptionPane.showMessageDialog(null, "Số CMND trùng");
+			return false;
+		}
+		
 		nvDAO.NhanVienAdd(nv);
 
 		nv = nvDAO.NhanVienMoiNhat();
@@ -41,6 +48,8 @@ public class NhanVienBUS {
 		hd.setMaPhong(null);
 
 		hdDAO.HopDongLaoDongAdd(hd);
+		
+		return true;
 	}
 
 	public void NhanVienEdit(NhanVienDTO nv) {
@@ -53,5 +62,9 @@ public class NhanVienBUS {
 	
 	public NhanVienDTO NhanVienGet(int maNv) {
 		return nvDAO.NhanVienGet(maNv);
+	}
+	
+	public ArrayList<NhanVienDTO> NhanVienTheoLuong(int maLg) {
+		return nvDAO.NhanVienTheoLuong(maLg);
 	}
 }

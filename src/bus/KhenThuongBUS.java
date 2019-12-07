@@ -10,6 +10,10 @@ public class KhenThuongBUS {
 	public ArrayList<KhenThuongDTO> KhenThuongAll() {
 		return khen.KhenThuongAll();
 	}
+	
+	public KhenThuongDTO KhenThuongGet(int maKt) {
+		return khen.KhenThuongGet(maKt);
+	}
 
 	public void KhenThuongAdd(KhenThuongDTO kt) {
 		khen.KhenThuongAdd(kt);
