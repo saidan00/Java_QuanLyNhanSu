@@ -154,4 +154,38 @@ public class BangChamCongDAO {
 
 		return arr.get(0);
 	}
+	
+	public ArrayList<BangChamCongDTO> BangChamCongGet(int machamcong) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+
+		ArrayList<BangChamCongDTO> arr = new ArrayList<BangChamCongDTO>();
+
+		String query = "SELECT * FROM bangchamcong WHERE machamcong = ?";
+
+		conn.prepare(query);
+
+		conn.bind(1, machamcong);
+
+		try {
+			ResultSet rs = conn.executeQueryPre();
+			while (rs.next()) {
+				// khởi tạo
+				BangChamCongDTO aBangChamCong = new BangChamCongDTO();
+
+				// gán giá trị
+				aBangChamCong.setMaChamCong(rs.getInt("machamcong"));
+				aBangChamCong.setNgayTrongThang(rs.getInt("ngaytrongthang"));
+				aBangChamCong.setTrangThai(rs.getString("trangthai"));
+
+				// thêm vào array list
+				arr.add(aBangChamCong);
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+
+		conn.Close();
+
+		return arr;
+	}
 }

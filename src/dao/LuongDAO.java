@@ -33,6 +33,33 @@ public class LuongDAO {
 		conn.Close();
 		return arr;
 	}
+	
+	public int LuongGet(int maNv) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+		
+		ArrayList<LuongDTO> arr = new ArrayList<LuongDTO>();
+		String sql = "Select * from luong lg join nhanvien nv on nv.maluong = lg.maluong where nv.manv = " + maNv;
+		
+		try {
+			ResultSet rs = conn.executeQuery(sql);
+			while (rs.next()) {
+				// khoi tao
+				LuongDTO luong = new LuongDTO();
+				// gan gt
+				luong.setMaLuong(rs.getInt("maluong"));
+//				luong.setHeSoLuong(rs.getFloat("HeSoLuong"));
+				luong.setLuongCB(rs.getInt("luongcoban"));
+//				luong.setHeSoPhuCap(rs.getFloat("HeSoPhuCap"));
+				// them vao arraylist
+				arr.add(luong);
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+		
+		conn.Close();
+		return arr.get(0).getLuongCB();
+	}
 
 	// them
 	public void LuongAdd(LuongDTO luongadd) {

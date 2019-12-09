@@ -107,4 +107,37 @@ public class KhenThuongDAO {
 
 		conn.Close();
 	}
+	
+	public ArrayList<KhenThuongDTO> KhenThuongGet(int maNv, int thang, int nam) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+		ArrayList<KhenThuongDTO> arr = new ArrayList<KhenThuongDTO>();
+		
+		String sql = "SELECT * FROM khenthuong WHERE manv = ? AND MONTH(ngaykhenthuong) = ? AND YEAR(ngaykhenthuong) = ?";
+		
+		conn.prepare(sql);
+		
+		conn.bind(1, maNv);
+		conn.bind(2, thang);
+		conn.bind(3, nam);
+		
+		try {
+			ResultSet rs = conn.executeQueryPre();
+			while (rs.next()) {
+				KhenThuongDTO khen = new KhenThuongDTO();
+				khen.setMaKhenThuong(rs.getInt("makhenthuong"));
+				khen.setNgayKhenThuong(rs.getString("ngaykhenthuong"));
+				khen.setHinhThuc(rs.getString("hinhthuc"));
+				khen.setLyDo(rs.getString("lydo"));
+				khen.setTienThuong(rs.getInt("tienthuong"));
+				khen.setMaNV(rs.getInt("manv"));
+
+				arr.add(khen);
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+		conn.Close();
+		
+		return arr;
+	}
 }

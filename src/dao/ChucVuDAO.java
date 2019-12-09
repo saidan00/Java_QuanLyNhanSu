@@ -28,6 +28,28 @@ public class ChucVuDAO {
 		conn.Close();
 		return arr;
 	}
+	
+	public ChucVuDTO ChucVuGet(int maCv) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+		ArrayList<ChucVuDTO> arr = new ArrayList<ChucVuDTO>();
+		String sql = "select * from chucvu where macv = " + maCv;
+		try {
+			ResultSet rs = conn.executeQuery(sql);
+			while (rs.next()) {
+				ChucVuDTO chucvu = new ChucVuDTO();
+				chucvu.setMaCV(rs.getInt("macv"));
+				chucvu.setTenCV(rs.getString("tencv"));
+				chucvu.setPhuCap(rs.getInt("phucap"));
+				chucvu.setGhiChu(rs.getString("ghichu"));
+
+				arr.add(chucvu);
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+		conn.Close();
+		return arr.get(0);
+	}
 
 	public void ChucVuAdd(ChucVuDTO cv) {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();

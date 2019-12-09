@@ -7,4 +7,14 @@ public class MainLauncher {
 		MainFrame aMainFrame = new MainFrame();
 		aMainFrame.setVisible(true);
 	}
+	
+//	public static void main(String args[]) {
+//
+//		java.awt.EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				new LoginGUI().setVisible(true);
+//
+//			}
+//		});
+//	}
 }
