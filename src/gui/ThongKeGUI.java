@@ -31,8 +31,12 @@ import javax.swing.table.DefaultTableModel;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import bus.BangChamCongBUS;
@@ -114,7 +118,7 @@ public class ThongKeGUI extends JPanel {
 		ArrayList<String> lstOption = new ArrayList<String>();
 		lstOption.add("1. Lương NV theo tháng");
 		lstOption.add("2. Quá trình công tác");
-		lstOption.add("3. Hello 3");
+//		lstOption.add("3. Hello 3");
 
 		String[] arrayOption = lstOption.toArray(new String[0]);
 
@@ -224,7 +228,7 @@ public class ThongKeGUI extends JPanel {
 		};
 
 //		tblNV = new JTable();
-//		tblNV.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		tblTK.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
 		// không cho phép di chuyển vị trí columns
 		tblTK.getTableHeader().setReorderingAllowed(false);
@@ -235,7 +239,7 @@ public class ThongKeGUI extends JPanel {
 		// sắp xếp khi click header
 //		tblChamCong.setAutoCreateRowSorter(true);
 
-		tblTK.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+//		tblTK.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 		// scroll bar
 		JScrollPane scroll = new JScrollPane(tblTK, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -253,6 +257,9 @@ public class ThongKeGUI extends JPanel {
 		DefaultTableModel dtm = lgBUS.LuongGet(maNv, Integer.valueOf(boxThang1.getSelectedItem().toString()),
 				Integer.valueOf(boxNam1.getSelectedItem().toString()));
 		if (dtm != null) {
+			tblTK.setModel(dtm);
+		} else {
+			dtm = new DefaultTableModel();
 			tblTK.setModel(dtm);
 		}
 	}
@@ -496,11 +503,112 @@ public class ThongKeGUI extends JPanel {
 	}
 
 	private void writeToPdf() {
+		if (tblTK.getModel().getRowCount() == 0) {
+			JOptionPane.showMessageDialog(null, "Không có dữ liệu");
+			return;
+		}
+		
+		switch (option) {
+			case "1":
+				writeToPdfOption1();
+				break;
+			case "2":
+				writeToPdfOption2();
+				break;
+		}
+	}
+
+	private void writeToPdfOption1() {
 		Date date = new Date();
 		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
-		String fileName = "hello";
+		String fileName = txtNV.getText().replaceAll("\\s+", "");
+//		String fileName = "hello";
+		
+		if (fileName.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên");
+			return;
+		}
 
-		String filePath = "src\\pdf\\" + fileName + "_" + timeStamp + ".pdf";
+		String filePath = "src\\pdf\\Luong_" + fileName + "_" + timeStamp + ".pdf";
+
+		Document document = new Document();
+
+		try {
+			PdfWriter.getInstance(document, new FileOutputStream(filePath));
+		} catch (FileNotFoundException | DocumentException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		document.open();
+		com.itextpdf.text.Font font_medium;
+		com.itextpdf.text.Font font_small;
+		try {
+			font_medium = new com.itextpdf.text.Font(
+					BaseFont.createFont("src\\font\\UVNMayChuP.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
+			font_small = new com.itextpdf.text.Font(
+					BaseFont.createFont("src\\font\\UVNMayChuP.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
+			font_medium.setSize(16);
+			font_small.setSize(13);
+			
+			int lgCb = Integer.parseInt(tblTK.getValueAt(0, 0).toString());
+			int khenThg = Integer.parseInt(tblTK.getValueAt(0, 1).toString());
+			double phucap = Double.parseDouble(tblTK.getValueAt(0, 2).toString());
+			double ngaynghi = Double.parseDouble(tblTK.getValueAt(0, 3).toString());
+			int truluong = Integer.parseInt(tblTK.getValueAt(0, 4).toString());
+			double tonglg = Double.parseDouble(tblTK.getValueAt(0, 5).toString());
+
+			Paragraph header = new Paragraph("HR Manager: Lương " + txtNV.getText() + "\n", font_medium);
+			Paragraph printDate = new Paragraph("Ngày in: " + date + "\n", font_small);
+			Paragraph line = new Paragraph("--------------------\n", font_small);
+			
+
+			Paragraph luongCB = new Paragraph("Lương cơ bản: " + lgCb + "\n", font_small);
+			Paragraph khenThuong = new Paragraph("Khen thưởng: " + khenThg + "\n", font_small);
+			Paragraph phuCap = new Paragraph("Phụ cấp: " + phucap + "\n", font_small);
+			Paragraph ngayNghi = new Paragraph("Ngày nghỉ: " + ngaynghi + "\n", font_small);
+			Paragraph truLg = new Paragraph("Trừ lương: " + truluong + "\n", font_small);
+			Paragraph tong = new Paragraph("Tổng: " + tonglg + "\n", font_small);
+
+			try {
+				header.setAlignment(Element.ALIGN_CENTER);
+				printDate.setAlignment(Element.ALIGN_CENTER);
+				line.setAlignment(Element.ALIGN_CENTER);
+				document.add(header);
+				document.add(printDate);
+				document.add(line);
+				document.add(luongCB);
+				document.add(khenThuong);
+				document.add(phuCap);
+				document.add(ngayNghi);
+				document.add(truLg);
+				document.add(tong);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+				return;
+			}
+		} catch (DocumentException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		document.close();
+		filePath = filePath.replace("\\", "/");
+		JOptionPane.showMessageDialog(null, "File đã được in tại " + filePath);
+	}
+	
+	private void writeToPdfOption2() {
+		Date date = new Date();
+		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
+		String fileName = txtNV.getText().replaceAll("\\s+", "");
+//		String fileName = "hello";
+		
+		if (fileName.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên");
+			return;
+		}
+
+		String filePath = "src\\pdf\\CongTac_" + fileName + "_" + timeStamp + ".pdf";
 
 		Document document = new Document();
 
@@ -522,26 +630,30 @@ public class ThongKeGUI extends JPanel {
 			font_medium.setSize(16);
 			font_small.setSize(13);
 
-			Paragraph Paragraph = new Paragraph("HR Manager\n", font_medium);
-
-			Paragraph Paragraph2 = new Paragraph("Ngày in: " + date + "\n", font_small);
-
-			Paragraph luongCB = new Paragraph("Lương cơ bản: " + 1 + "\n", font_small);
-			Paragraph khenThuong = new Paragraph("Khen thưởng: " + 1 + "\n", font_small);
-			Paragraph phuCap = new Paragraph("Phụ cấp: " + 1 + "\n", font_small);
-			Paragraph ngayNghi = new Paragraph("Ngày nghỉ: " + 1 + "\n", font_small);
-			Paragraph truLg = new Paragraph("Trừ lương: " + 1 + "\n", font_small);
-			Paragraph tong = new Paragraph("Tổng: " + 1 + "\n", font_small);
+			Paragraph header = new Paragraph("HR Manager: Quá trình công tác " + txtNV.getText() + "\n", font_medium);
+			Paragraph printDate = new Paragraph("Ngày in: " + date + "\n", font_small);
+			Paragraph line = new Paragraph("--------------------\n", font_small);
+			
+			PdfPTable pdfTable = new PdfPTable(tblTK.getColumnCount());
+            //adding table headers
+            for (int i = 0; i < tblTK.getColumnCount(); i++) {
+                pdfTable.addCell(new PdfPCell(new Phrase(tblTK.getColumnName(i), font_small)));
+            }
+            //extracting data from the JTable and inserting it to PdfPTable
+            for (int rows = 0; rows < tblTK.getRowCount(); rows++) {
+                for (int cols = 0; cols < tblTK.getColumnCount(); cols++) {
+                    pdfTable.addCell(new PdfPCell(new Phrase(tblTK.getModel().getValueAt(rows, cols).toString(), font_small)));
+                }
+            }
 
 			try {
-				document.add(Paragraph);
-				document.add(Paragraph2);
-				document.add(luongCB);
-				document.add(khenThuong);
-				document.add(phuCap);
-				document.add(ngayNghi);
-				document.add(truLg);
-				document.add(tong);
+				header.setAlignment(Element.ALIGN_CENTER);
+				printDate.setAlignment(Element.ALIGN_CENTER);
+				line.setAlignment(Element.ALIGN_CENTER);
+				document.add(header);
+				document.add(printDate);
+				document.add(line);
+				document.add(pdfTable);
 			} catch (DocumentException e) {
 				e.printStackTrace();
 				return;
