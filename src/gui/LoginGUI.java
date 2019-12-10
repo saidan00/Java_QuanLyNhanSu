@@ -122,7 +122,7 @@ public class LoginGUI extends javax.swing.JFrame {
 		});
 
 		lbl_User.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
-		lbl_User.setIcon(new javax.swing.ImageIcon("C:\\Users\\ASUS\\Documents\\JAVA\\anh\\anh\\user.png")); // NOI18N
+		lbl_User.setIcon(new javax.swing.ImageIcon("src\\img\\user.png")); // NOI18N
 		lbl_User.setText("Username");
 
 		btnReset.setBackground(new java.awt.Color(204, 255, 255));
@@ -135,10 +135,10 @@ public class LoginGUI extends javax.swing.JFrame {
 		});
 
 		lbl_Pass.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
-		lbl_Pass.setIcon(new javax.swing.ImageIcon("C:\\Users\\ASUS\\Documents\\JAVA\\anh\\anh\\passwd.png")); // NOI18N
+		lbl_Pass.setIcon(new javax.swing.ImageIcon("src\\img\\passwd.png")); // NOI18N
 		lbl_Pass.setText("Password");
 
-		lbl_icon.setIcon(new javax.swing.ImageIcon("C:\\Users\\ASUS\\Documents\\JAVA\\io.jpg")); // NOI18N
+		lbl_icon.setIcon(new javax.swing.ImageIcon("src\\img\\io.jpg")); // NOI18N
 
 		javax.swing.GroupLayout pnl_LoginLayout = new javax.swing.GroupLayout(pnl_Login);
 		pnl_Login.setLayout(pnl_LoginLayout);
