@@ -138,6 +138,10 @@ public class PhongBanDAO {
 		}
 
 		conn.Close();
+		
+		if (arr.size() == 0) {
+			return null;
+		}
 
 		return arr.get(0);
 	}

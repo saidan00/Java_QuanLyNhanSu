@@ -27,5 +27,6 @@
 	<classpathentry kind="lib" path="C:/Users/Admin/eclipse-workspace/Java_QuanLyNhanSu/libs/poi-ooxml-schemas-4.1.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Admin/eclipse-workspace/Java_QuanLyNhanSu/libs/poi-scratchpad-4.1.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Admin/eclipse-workspace/Java_QuanLyNhanSu/libs/xmlbeans-3.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Admin/eclipse-workspace/Java_QuanLyNhanSu/libs/itextpdf-5.5.13.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

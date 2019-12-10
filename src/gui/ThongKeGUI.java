@@ -10,7 +10,12 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -24,8 +29,15 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import bus.BangChamCongBUS;
 import bus.ChamCongBUS;
+import bus.HopDongLaoDongBUS;
 import bus.LuongBUS;
 import bus.NhanVienBUS;
 import bus.PhongBanBUS;
@@ -35,8 +47,9 @@ public class ThongKeGUI extends JPanel {
 	NhanVienBUS nvBUS = new NhanVienBUS();
 	PhongBanBUS pbBUS = new PhongBanBUS();
 	ChamCongBUS ccBUS = new ChamCongBUS();
-	LuongBUS lgBus = new LuongBUS();
+	LuongBUS lgBUS = new LuongBUS();
 	BangChamCongBUS bccBUS = new BangChamCongBUS();
+	HopDongLaoDongBUS hdBUS = new HopDongLaoDongBUS();
 
 	MyProps myProps = new MyProps();
 
@@ -56,7 +69,7 @@ public class ThongKeGUI extends JPanel {
 	JComboBox<Integer> boxThang2;
 	JComboBox<Integer> boxNam2;
 
-	JButton btnExcel;
+	JButton btnPrint;
 	JButton btnChon;
 	JButton btnChonNV;
 
@@ -84,6 +97,7 @@ public class ThongKeGUI extends JPanel {
 		btnThongKeClicked();
 		boxOptionListener();
 		btnChonNvClicked();
+		btnPrintClicked();
 	}
 
 	private void initPnlForm() {
@@ -192,14 +206,14 @@ public class ThongKeGUI extends JPanel {
 		btnChon.setForeground(Color.WHITE);
 		btnChon.setFont(myProps.DEFAULT_FONT_SMALL);
 
-		btnExcel = new JButton("Xuất excel");
-		myProps.BtnFlat(btnExcel);
-		btnExcel.setBackground(Color.decode("#e0e0e0"));
-		btnExcel.setForeground(Color.BLACK);
-		btnExcel.setFont(myProps.DEFAULT_FONT_SMALL);
+		btnPrint = new JButton("In");
+		myProps.BtnFlat(btnPrint);
+		btnPrint.setBackground(Color.decode("#e0e0e0"));
+		btnPrint.setForeground(Color.BLACK);
+		btnPrint.setFont(myProps.DEFAULT_FONT_SMALL);
 
 		pnlForm.add(btnChon);
-		pnlForm.add(btnExcel);
+		pnlForm.add(btnPrint);
 	}
 
 	private void initTableThongKe() {
@@ -236,11 +250,21 @@ public class ThongKeGUI extends JPanel {
 	private void setModelTableOption1() {
 		// table header
 
-		DefaultTableModel dtm = lgBus.LuongGet(maNv, Integer.valueOf(boxThang1.getSelectedItem().toString()),
+		DefaultTableModel dtm = lgBUS.LuongGet(maNv, Integer.valueOf(boxThang1.getSelectedItem().toString()),
 				Integer.valueOf(boxNam1.getSelectedItem().toString()));
 		if (dtm != null) {
 			tblTK.setModel(dtm);
 		}
+	}
+
+	private void setModelTableOption2() {
+		// table header
+		int thang1 = Integer.valueOf(boxThang1.getSelectedItem().toString());
+		int thang2 = Integer.valueOf(boxThang2.getSelectedItem().toString());
+		int nam1 = Integer.valueOf(boxNam1.getSelectedItem().toString());
+		int nam2 = Integer.valueOf(boxNam2.getSelectedItem().toString());
+		DefaultTableModel dtm = hdBUS.QuaTrinhCongTac(maNv, thang1, nam1, thang2, nam2);
+		tblTK.setModel(dtm);
 	}
 
 	private void btnThongKeClicked() {
@@ -252,9 +276,7 @@ public class ThongKeGUI extends JPanel {
 					setModelTableOption1();
 					break;
 				case "2":
-					option1Hide();
-
-					option2Show();
+					setModelTableOption2();
 					break;
 				case "3":
 					break;
@@ -461,5 +483,76 @@ public class ThongKeGUI extends JPanel {
 		boxThang2.setVisible(false);
 		boxThang1.setVisible(false);
 		boxNam1.setVisible(false);
+	}
+
+	private void btnPrintClicked() {
+		btnPrint.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				writeToPdf();
+			}
+		});
+	}
+
+	private void writeToPdf() {
+		Date date = new Date();
+		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
+		String fileName = "hello";
+
+		String filePath = "src\\pdf\\" + fileName + "_" + timeStamp + ".pdf";
+
+		Document document = new Document();
+
+		try {
+			PdfWriter.getInstance(document, new FileOutputStream(filePath));
+		} catch (FileNotFoundException | DocumentException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		document.open();
+		com.itextpdf.text.Font font_medium;
+		com.itextpdf.text.Font font_small;
+		try {
+			font_medium = new com.itextpdf.text.Font(
+					BaseFont.createFont("src\\font\\UVNMayChuP.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
+			font_small = new com.itextpdf.text.Font(
+					BaseFont.createFont("src\\font\\UVNMayChuP.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
+			font_medium.setSize(16);
+			font_small.setSize(13);
+
+			Paragraph Paragraph = new Paragraph("HR Manager\n", font_medium);
+
+			Paragraph Paragraph2 = new Paragraph("Ngày in: " + date + "\n", font_small);
+
+			Paragraph luongCB = new Paragraph("Lương cơ bản: " + 1 + "\n", font_small);
+			Paragraph khenThuong = new Paragraph("Khen thưởng: " + 1 + "\n", font_small);
+			Paragraph phuCap = new Paragraph("Phụ cấp: " + 1 + "\n", font_small);
+			Paragraph ngayNghi = new Paragraph("Ngày nghỉ: " + 1 + "\n", font_small);
+			Paragraph truLg = new Paragraph("Trừ lương: " + 1 + "\n", font_small);
+			Paragraph tong = new Paragraph("Tổng: " + 1 + "\n", font_small);
+
+			try {
+				document.add(Paragraph);
+				document.add(Paragraph2);
+				document.add(luongCB);
+				document.add(khenThuong);
+				document.add(phuCap);
+				document.add(ngayNghi);
+				document.add(truLg);
+				document.add(tong);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+				return;
+			}
+		} catch (DocumentException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		document.close();
+		filePath = filePath.replace("\\", "/");
+		JOptionPane.showMessageDialog(null, "File đã được in tại " + filePath);
 	}
 }

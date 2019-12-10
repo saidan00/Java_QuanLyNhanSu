@@ -39,7 +39,7 @@ public class ChucVuDAO {
 				ChucVuDTO chucvu = new ChucVuDTO();
 				chucvu.setMaCV(rs.getInt("macv"));
 				chucvu.setTenCV(rs.getString("tencv"));
-				chucvu.setPhuCap(rs.getInt("phucap"));
+				chucvu.setPhuCap(rs.getDouble("phucap"));
 				chucvu.setGhiChu(rs.getString("ghichu"));
 
 				arr.add(chucvu);

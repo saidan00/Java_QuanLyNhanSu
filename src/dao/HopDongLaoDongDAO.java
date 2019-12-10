@@ -46,7 +46,6 @@ public class HopDongLaoDongDAO {
 		conn.Close();
 
 		return arr;
-
 	}
 
 	/// Thêm hợp dồng lao động
@@ -305,5 +304,49 @@ public class HopDongLaoDongDAO {
 		conn.executeUpdatePre();
 
 		conn.Close();
+	}
+	
+	public ArrayList<HopDongLaoDongDTO> hoDongLaoDongGet(int maNv, String thang1, String thang2) {
+		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+
+		ArrayList<HopDongLaoDongDTO> arr = new ArrayList<HopDongLaoDongDTO>();
+
+		String query = "SELECT * FROM hopdonglaodong WHERE manv = ? AND (tungay BETWEEN ? AND ?) AND (denngay BETWEEN ? AND ?) ORDER BY denngay";
+		
+		conn.prepare(query);
+		
+		conn.bind(1, maNv);
+		conn.bind(2, thang1);
+		conn.bind(3, thang2);
+		conn.bind(4, thang1);
+		conn.bind(5, thang2);
+
+		try {
+			ResultSet rs = conn.executeQueryPre();
+			while (rs.next()) {
+				// khởi tạo
+				HopDongLaoDongDTO hd = new HopDongLaoDongDTO();
+
+				// gán giá trị
+				hd.setMaHD(rs.getInt("mahd"));
+				hd.setMaNV(rs.getInt("manv"));
+				hd.setTuNgay(rs.getString("tungay"));
+				hd.setDenNgay(rs.getString("denngay"));
+				hd.setDiaDiemLamViec(rs.getString("diadiemlamviec"));
+				hd.setThoiGianLamViec(rs.getInt("thoigianlamviec"));
+				hd.setHeSoLuong(rs.getDouble("hesoluong"));
+				hd.setMaCV(rs.getInt("macv"));
+				hd.setMaPhong(rs.getInt("maphong"));
+
+				// thêm vào array list
+				arr.add(hd);
+			}
+		} catch (SQLException ex) {
+			conn.displayError(ex);
+		}
+
+		conn.Close();
+
+		return arr;
 	}
 }

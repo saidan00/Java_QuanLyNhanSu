@@ -33,6 +33,10 @@ public class LuongBUS {
 	}
 
 	public DefaultTableModel LuongGet(int maNv, int thang, int nam) {
+		if (maNv == 0) {
+			JOptionPane.showMessageDialog(null, "Vui lòng chọn NV");
+			return null;
+		}
 		Vector<String> header = new Vector<String>();
 		header.add("Lương CB");
 		header.add("Khen thưởng");
