@@ -1,12 +1,11 @@
 package gui;
 
 import java.awt.Color;
-import java.sql.ResultSet;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import util.MySqlDataAccessHelper;
+import bus.TaiKhoanBUS;
 
 public class LoginGUI extends javax.swing.JFrame {
 
@@ -247,15 +246,19 @@ public class LoginGUI extends javax.swing.JFrame {
 			lblPass_empty.setForeground(Color.RED);
 		} else {
 			try {
-				MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
-				String sql = "select * from taikhoan where tendangnhap = ? and matkhau = ?";
-				conn.prepare(sql);
-
-				conn.bind(1, txtUser.getText());
-				conn.bind(2, txtPass.getText().trim());
-
-				ResultSet rs = conn.executeQueryPre();
-				if (rs.next()) {
+//				MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
+//				String sql = "select * from taikhoan where tendangnhap = ? and matkhau = ?";
+//				conn.prepare(sql);
+//
+//				conn.bind(1, txtUser.getText());
+//				conn.bind(2, txtPass.getText().trim());
+//
+//				ResultSet rs = conn.executeQueryPre();
+				
+				TaiKhoanBUS tkBUS = new TaiKhoanBUS();
+				boolean hopLe = tkBUS.Login(txtUser.getText().trim(), txtPass.getText().trim());
+				
+				if (hopLe) {
 					JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
 					MainFrame n = new MainFrame();
 					n.setVisible(true);
@@ -265,7 +268,6 @@ public class LoginGUI extends javax.swing.JFrame {
 					txtUser.setText("");
 					txtPass.setText("");
 				}
-				conn.Close();
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, e);
 			}

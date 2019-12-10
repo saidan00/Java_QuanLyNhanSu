@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -374,6 +375,10 @@ public class NhanVienGUI extends JPanel {
 			JOptionPane.showMessageDialog(null, "Vui lòng nhập ngày sinh");
 			hopLe = false;
 			txtNgaySinh.requestFocus();
+		} else if (!KiemTraTuoi(ngaysinh)) {
+			JOptionPane.showMessageDialog(null, "Tuổi phải >= 18");
+			hopLe = false;
+			txtNgaySinh.requestFocus();
 		} else if (sdt.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Vui lòng nhập SĐT");
 			hopLe = false;
@@ -389,6 +394,16 @@ public class NhanVienGUI extends JPanel {
 		}
 		
 		return hopLe;
+	}
+	
+	public boolean KiemTraTuoi(String ngaySinh) {
+		String[] p = ngaySinh.split("-", 2);
+        String p1 = p[0];
+        int yearOfBirth = Integer.parseInt(p1);
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int age = currentYear - yearOfBirth;
+        
+        return (age >= 18);
 	}
 
 	public boolean KiemTraSDT(String SDT) {

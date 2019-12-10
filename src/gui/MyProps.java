@@ -46,6 +46,7 @@ public class MyProps {
 	public final String Color_Teal = "#00796b";
 	public final String Color_Teal_Dark = "#004c40";
 	public final String Color_Teal_Light = "#48a999";
+	public static String CURRENT_USER = "";
 
 	public void DEFAULT_BUTTON(JButton btn, String background, String foreground, Rectangle rec) {
 

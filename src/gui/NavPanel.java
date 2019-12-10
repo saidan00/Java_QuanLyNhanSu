@@ -18,7 +18,7 @@ public class NavPanel extends JPanel {
 	public static final int WIDTH = MyProps.DEFAULT_WIDTH * 20 / 100;
 	public static final int HEIGHT = MyProps.DEFAULT_HEIGHT - HeaderPanel.HEIGHT;
 
-	private final String HOME = "Home";
+//	private final String HOME = "Home";
 	private final String NHAN_VIEN = "Nhân viên";
 	private final String PHONG_BAN = "Phòng ban";
 	private final String CHAM_CONG = "Chấm công";
@@ -39,7 +39,6 @@ public class NavPanel extends JPanel {
 		navLink = new ArrayList<JButton>();
 
 		ArrayList<String> lbl = new ArrayList<String>();
-		lbl.add(HOME);
 		lbl.add(NHAN_VIEN);
 		lbl.add(PHONG_BAN);
 		lbl.add(CHAM_CONG);

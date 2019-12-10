@@ -16,7 +16,7 @@ public class HeaderPanel extends JPanel {
 	JButton btnExit;
 	JButton btnMinimize;
 	JLabel lblTitle;
-	final String TITLE = "HR Manager";
+	String TITLE = MyProps.CURRENT_USER.isEmpty() ? "HR Manager" : "HR Manager: " + MyProps.CURRENT_USER;
 	MyProps myProps = new MyProps();
 
 	// default size
