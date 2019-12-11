@@ -47,6 +47,7 @@ public class NhanVienGUI extends JPanel {
 	JLabel lblGioiTinh;
 	JLabel lblSDT;
 	JLabel lblDiaChi;
+	JLabel lblAvatar;
 	// text field
 	JTextField txtTK_Ten;
 	JTextField txtMaNV;
@@ -85,6 +86,8 @@ public class NhanVienGUI extends JPanel {
 	private void initComponents() {
 		this.setLayout(null);
 		this.setBackground(Color.PINK);
+		
+		initPnlImg();
 
 		initPnlForm();
 		initForm();
@@ -103,20 +106,33 @@ public class NhanVienGUI extends JPanel {
 	// khởi tạo Panel chứa form
 	private void initPnlForm() {
 		pnlForm = new JPanel();
-		pnlForm.setBounds(0, 0, ContentPanel.WIDTH, ContentPanel.HEIGHT * 60 / 100);
+		pnlForm.setBounds(pnlImg.getWidth(), 0, ContentPanel.WIDTH - pnlImg.getWidth(), ContentPanel.HEIGHT * 60 / 100);
 		pnlForm.setLayout(new GridBagLayout());
 
 		this.add(pnlForm);
+	}
+	
+	private void initPnlImg() {
+		pnlImg = new JPanel();
+		pnlImg.setBounds(0, 0, ContentPanel.WIDTH * 30 / 100, ContentPanel.HEIGHT * 60 / 100);
+		pnlImg.setLayout(new GridBagLayout());
+		
+		lblAvatar = new JLabel();
+//		lblAvatar.setIcon(new javax.swing.ImageIcon("src\\img\\io.jpg"));
+
+//		pnlImg.setBackground(Color.PINK);
+		pnlImg.add(lblAvatar);
+		
+		this.add(pnlImg);
 	}
 
 	// khởi tạo form
 	private void initForm() {
 		GridBagConstraints cons = new GridBagConstraints();
 
-		pnlImg = new JPanel();
-		pnlImg.setBackground(Color.PINK);
-		cons = myProps.MyGridBagConstraints(1, 2, 3, 4, true, true);
-		pnlForm.add(pnlImg, cons);
+		cons = myProps.MyGridBagConstraints(1, 1, 3, 7, true, true);
+//		pnlForm.add(pnlImg, cons);
+//		pnlForm.add(pnlImg);
 
 		// tìm kiếm
 		lblTK_Ten = new JLabel(TK_Ten);
@@ -312,6 +328,12 @@ public class NhanVienGUI extends JPanel {
 				txtNgaySinh.setText(tblNV.getValueAt(row, 4).toString());
 				txtSDT.setText(tblNV.getValueAt(row, 6).toString());
 				txtDiaChi.setText(tblNV.getValueAt(row, 7).toString());
+				
+				if (tblNV.getValueAt(row, 5).toString().equals("Nam")) {
+					lblAvatar.setIcon(new javax.swing.ImageIcon("src\\img\\avatar_male.png"));
+				} else {
+					lblAvatar.setIcon(new javax.swing.ImageIcon("src\\img\\avatar_female.png"));
+				}
 			}
 		});
 	}

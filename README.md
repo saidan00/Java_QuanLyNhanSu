@@ -13,7 +13,7 @@ Các bạn tải về thực hiện các thao tác như sau
 
 3. Cấu hình database
 - Đường dẫn src/util/MySqlDataAccessHelper.java
-- Các bạn chỉnh sửa Host, UserNae, Password cho phù hợp với máy của mình
+- Các bạn chỉnh sửa Host, UserName, Password cho phù hợp với máy của mình
 
 4. Đăng nhập ứng dụng
 - Huy có tạo sẵn 4 tài khoản: huy, thu, dieu, thuy với mật khẩu là 123
