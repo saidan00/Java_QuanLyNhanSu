@@ -52,8 +52,14 @@ public class NhanVienBUS {
 		return true;
 	}
 
-	public void NhanVienEdit(NhanVienDTO nv) {
+	public boolean NhanVienEdit(NhanVienDTO nv) {
+		if (nvDAO.NhanVienGetCMND(nv.getSoCMND()) != null) {
+			JOptionPane.showMessageDialog(null, "Số CMND trùng");
+			return false;
+		}
+		
 		nvDAO.NhanVienEdit(nv);
+		return true;
 	}
 
 	public void NhanVienDelete(int maNv) {

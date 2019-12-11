@@ -13,7 +13,7 @@ public class LuongDAO {
 	public ArrayList<LuongDTO> LuongAll() {
 		MySqlDataAccessHelper conn = new MySqlDataAccessHelper();
 		ArrayList<LuongDTO> arr = new ArrayList<LuongDTO>();
-		String sql = "Select * from luong";
+		String sql = "Select * from luong order by maluong";
 		try {
 			ResultSet rs = conn.executeQuery(sql);
 			while (rs.next()) {

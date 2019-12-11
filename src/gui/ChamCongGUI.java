@@ -143,6 +143,9 @@ public class ChamCongGUI extends JPanel {
 
 		boxNam = new JComboBox<Integer>(arrayNam);
 		boxNam.setFont(myProps.DEFAULT_FONT_SMALL);
+		
+		boxThang.setSelectedItem(12);
+		boxNam.setSelectedItem(2019);
 
 		// button chọn
 		btnChon = new JButton("Chọn");

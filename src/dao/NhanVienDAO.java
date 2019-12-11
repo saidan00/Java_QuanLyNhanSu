@@ -15,7 +15,7 @@ public class NhanVienDAO {
 		ArrayList<NhanVienDTO> arr = new ArrayList<NhanVienDTO>();
 
 		String query = "SELECT * FROM nhanvien WHERE isdeleted = false AND (tennv LIKE '%" + tk + "%' OR honv LIKE '%"
-				+ tk + "%' OR sdt LIKE '%" + tk + "%')";
+				+ tk + "%' OR sdt LIKE '%" + tk + "%') ORDER BY manv";
 
 		try {
 			ResultSet rs = conn.executeQuery(query);
@@ -32,6 +32,7 @@ public class NhanVienDAO {
 				aNhanVien.setGioiTinh(rs.getString("gioitinh"));
 				aNhanVien.setSDT(rs.getString("sdt"));
 				aNhanVien.setDiaChi(rs.getString("diachi"));
+				aNhanVien.setMaLuong(rs.getInt("maluong"));
 
 				// thêm vào array list
 				arr.add(aNhanVien);
@@ -51,12 +52,12 @@ public class NhanVienDAO {
 		ArrayList<NhanVienDTO> arr = new ArrayList<NhanVienDTO>();
 
 		if (maPb == null) {
-			String sql = "SELECT * FROM nhanvien nv JOIN hopdonglaodong hd ON nv.manv = hd.manv WHERE maphong IS NULL AND denngay = ? AND isdeleted = false";
+			String sql = "SELECT * FROM nhanvien nv JOIN hopdonglaodong hd ON nv.manv = hd.manv WHERE maphong IS NULL AND denngay = ? AND isdeleted = false ORDER BY nv.manv";
 
 			conn.prepare(sql);
 			conn.bind(1, "2099-12-31");
 		} else {
-			String sql = "SELECT * FROM nhanvien nv JOIN hopdonglaodong hd ON nv.manv = hd.manv WHERE maphong = ? AND denngay = ? AND isdeleted = false";
+			String sql = "SELECT * FROM nhanvien nv JOIN hopdonglaodong hd ON nv.manv = hd.manv WHERE maphong = ? AND denngay = ? AND isdeleted = false ORDER BY nv.manv";
 
 			conn.prepare(sql);
 			conn.bind(1, maPb);
@@ -78,6 +79,7 @@ public class NhanVienDAO {
 				aNhanVien.setGioiTinh(rs.getString("gioitinh"));
 				aNhanVien.setSDT(rs.getString("sdt"));
 				aNhanVien.setDiaChi(rs.getString("diachi"));
+				aNhanVien.setMaLuong(rs.getInt("maluong"));
 
 				// thêm vào array list
 				arr.add(aNhanVien);
@@ -96,7 +98,7 @@ public class NhanVienDAO {
 
 		ArrayList<NhanVienDTO> arr = new ArrayList<NhanVienDTO>();
 
-		String sql = "SELECT * FROM nhanvien nv WHERE maluong = ? AND isdeleted = false";
+		String sql = "SELECT * FROM nhanvien nv WHERE maluong = ? AND isdeleted = false ORDER BY manv";
 
 		conn.prepare(sql);
 		conn.bind(1, maLg);
@@ -116,6 +118,7 @@ public class NhanVienDAO {
 				aNhanVien.setGioiTinh(rs.getString("gioitinh"));
 				aNhanVien.setSDT(rs.getString("sdt"));
 				aNhanVien.setDiaChi(rs.getString("diachi"));
+				aNhanVien.setMaLuong(rs.getInt("maluong"));
 
 				// thêm vào array list
 				arr.add(aNhanVien);
@@ -152,6 +155,7 @@ public class NhanVienDAO {
 				aNhanVien.setGioiTinh(rs.getString("gioitinh"));
 				aNhanVien.setSDT(rs.getString("sdt"));
 				aNhanVien.setDiaChi(rs.getString("diachi"));
+				aNhanVien.setMaLuong(rs.getInt("maluong"));
 
 				// thêm vào array list
 				arr.add(aNhanVien);
@@ -190,6 +194,7 @@ public class NhanVienDAO {
 				aNhanVien.setGioiTinh(rs.getString("gioitinh"));
 				aNhanVien.setSDT(rs.getString("sdt"));
 				aNhanVien.setDiaChi(rs.getString("diachi"));
+				aNhanVien.setMaLuong(rs.getInt("maluong"));
 
 				// thêm vào array list
 				arr.add(aNhanVien);
@@ -294,6 +299,7 @@ public class NhanVienDAO {
 				aNhanVien.setGioiTinh(rs.getString("gioitinh"));
 				aNhanVien.setSDT(rs.getString("sdt"));
 				aNhanVien.setDiaChi(rs.getString("diachi"));
+				aNhanVien.setMaLuong(rs.getInt("maluong"));
 
 				// thêm vào array list
 				arr.add(aNhanVien);

@@ -154,7 +154,7 @@ public class MyProps {
 
 	public void exportDataToExcel(DefaultTableModel model) {
 		if (model == null) {
-			JOptionPane.showMessageDialog(null, "Vui lòng chọn bảng chấm công");
+			JOptionPane.showMessageDialog(null, "Không có dữ liệu");
 			return;
 		}
 //		String excelImagePath = "";
@@ -167,13 +167,13 @@ public class MyProps {
 		try {
 			// Choosing Saving Location
 			// Set default location to C:\Users\Admin\Desktop or your preferred location
-			JFileChooser excelFileChooser = new JFileChooser("C:\\Users\\Admin\\Desktop");
+			JFileChooser excelFileChooser = new JFileChooser(System.getProperty("user.home") + "\\Desktop");
 			
 			// Dialog box title
 			excelFileChooser.setDialogTitle("Save As ..");
 			
 			// Filter only xls, xlsx, xlsm files
-			FileNameExtensionFilter fnef = new FileNameExtensionFilter("Files", "xls", "xlsx", "xlsm");
+			FileNameExtensionFilter fnef = new FileNameExtensionFilter(".xls, .xlsx, .xlsm", "xls", "xlsx", "xlsm");
 			
 			// Setting extension for selected file names
 			excelFileChooser.setFileFilter(fnef);

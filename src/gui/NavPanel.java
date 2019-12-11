@@ -41,8 +41,8 @@ public class NavPanel extends JPanel {
 		ArrayList<String> lbl = new ArrayList<String>();
 		lbl.add(NHAN_VIEN);
 		lbl.add(PHONG_BAN);
-		lbl.add(CHAM_CONG);
 		lbl.add(LUONG);
+		lbl.add(CHAM_CONG);
 		lbl.add(KHEN_THUONG);
 		lbl.add(THONG_KE);
 

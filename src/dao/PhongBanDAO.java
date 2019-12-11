@@ -15,7 +15,7 @@ public class PhongBanDAO {
 		ArrayList<PhongBanDTO> arr = new ArrayList<PhongBanDTO>();
 
 		String query = "SELECT * FROM phongban ";
-		query += "pb LEFT JOIN nhanvien nv ON pb.matruongphong = nv.manv";
+		query += "pb LEFT JOIN nhanvien nv ON pb.matruongphong = nv.manv order by pb.maphong";
 
 		try {
 			ResultSet rs = conn.executeQuery(query);

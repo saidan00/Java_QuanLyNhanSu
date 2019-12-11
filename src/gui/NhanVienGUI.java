@@ -86,7 +86,7 @@ public class NhanVienGUI extends JPanel {
 	private void initComponents() {
 		this.setLayout(null);
 		this.setBackground(Color.PINK);
-		
+
 		initPnlImg();
 
 		initPnlForm();
@@ -111,18 +111,18 @@ public class NhanVienGUI extends JPanel {
 
 		this.add(pnlForm);
 	}
-	
+
 	private void initPnlImg() {
 		pnlImg = new JPanel();
 		pnlImg.setBounds(0, 0, ContentPanel.WIDTH * 30 / 100, ContentPanel.HEIGHT * 60 / 100);
 		pnlImg.setLayout(new GridBagLayout());
-		
+
 		lblAvatar = new JLabel();
-//		lblAvatar.setIcon(new javax.swing.ImageIcon("src\\img\\io.jpg"));
+		lblAvatar.setIcon(new javax.swing.ImageIcon("src\\img\\blank.png"));
 
 //		pnlImg.setBackground(Color.PINK);
 		pnlImg.add(lblAvatar);
-		
+
 		this.add(pnlImg);
 	}
 
@@ -328,7 +328,7 @@ public class NhanVienGUI extends JPanel {
 				txtNgaySinh.setText(tblNV.getValueAt(row, 4).toString());
 				txtSDT.setText(tblNV.getValueAt(row, 6).toString());
 				txtDiaChi.setText(tblNV.getValueAt(row, 7).toString());
-				
+
 				if (tblNV.getValueAt(row, 5).toString().equals("Nam")) {
 					lblAvatar.setIcon(new javax.swing.ImageIcon("src\\img\\avatar_male.png"));
 				} else {
@@ -362,7 +362,7 @@ public class NhanVienGUI extends JPanel {
 					nv.setNgaySinh(ngaysinh);
 					nv.setSDT(sdt);
 					nv.setDiaChi(diachi);
-					
+
 					if (nvBUS.NhanVienAdd(nv)) {
 						JOptionPane.showMessageDialog(null, "Thêm thành công");
 					}
@@ -372,10 +372,10 @@ public class NhanVienGUI extends JPanel {
 			}
 		});
 	}
-	
+
 	private boolean KiemTraForm(String hoNv, String tennv, String cmnd, String ngaysinh, String sdt, String diachi) {
 		boolean hopLe = true;
-		
+
 		if (hoNv.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Vui lòng nhập họ NV");
 			hopLe = false;
@@ -388,13 +388,16 @@ public class NhanVienGUI extends JPanel {
 			JOptionPane.showMessageDialog(null, "Vui lòng nhập CMND");
 			hopLe = false;
 			txtSoCMND.requestFocus();
-
 		} else if (!KiemTraCMND(cmnd)) {
 			JOptionPane.showMessageDialog(null, "CMND không hợp lệ (hợp lệ: 9 hoặc 12 số)");
 			hopLe = false;
 			txtSoCMND.requestFocus();
 		} else if (ngaysinh.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Vui lòng nhập ngày sinh");
+			hopLe = false;
+			txtNgaySinh.requestFocus();
+		} else if (!KiemTraNgay(ngaysinh)) {
+			JOptionPane.showMessageDialog(null, "Nhập ngày theo định dạng yyyy-mm-dd");
 			hopLe = false;
 			txtNgaySinh.requestFocus();
 		} else if (!KiemTraTuoi(ngaysinh)) {
@@ -414,26 +417,33 @@ public class NhanVienGUI extends JPanel {
 			hopLe = false;
 			txtDiaChi.requestFocus();
 		}
-		
+
 		return hopLe;
 	}
-	
+
 	public boolean KiemTraTuoi(String ngaySinh) {
 		String[] p = ngaySinh.split("-", 2);
-        String p1 = p[0];
-        int yearOfBirth = Integer.parseInt(p1);
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        int age = currentYear - yearOfBirth;
-        
-        return (age >= 18);
+		String p1 = p[0];
+		int yearOfBirth = Integer.parseInt(p1);
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		int age = currentYear - yearOfBirth;
+
+		return (age >= 18);
+	}
+
+	public boolean KiemTraNgay(String ns) {
+		return Pattern.matches("^((2000|2400|2800|(19|2[0-9](0[48]|[2468][048]|[13579][26])))-02-29)$"
+				+ "|^(((19|2[0-9])[0-9]{2})-02-(0[1-9]|1[0-9]|2[0-8]))$"
+				+ "|^(((19|2[0-9])[0-9]{2})-(0[13578]|10|12)-(0[1-9]|[12][0-9]|3[01]))$"
+				+ "|^(((19|2[0-9])[0-9]{2})-(0[469]|11)-(0[1-9]|[12][0-9]|30))$", ns);
 	}
 
 	public boolean KiemTraSDT(String SDT) {
-		return Pattern.matches("[0]{1}\\d{9}+", SDT);
+		return Pattern.matches("[0]{1}\\d{9}", SDT);
 	}
 
 	public boolean KiemTraCMND(String cmnd) {
-		return Pattern.matches("{0}\\d{9}+", cmnd);
+		return Pattern.matches("{0}\\d{9}", cmnd);
 	}
 
 	private void btnXoaClicked() {
@@ -459,23 +469,30 @@ public class NhanVienGUI extends JPanel {
 		btnSua.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (txtMaNV.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên");
-				} else {
-					NhanVienDTO nv = new NhanVienDTO();
+				NhanVienDTO nv = nvBUS.NhanVienGet(Integer.parseInt(txtMaNV.getText()));
 
-					nv.setMaNV(Integer.valueOf(txtMaNV.getText()));
-					nv.setHoNV(String.valueOf(txtHoNV.getText()));
-					nv.setTenNV(String.valueOf(txtTenNV.getText()));
-					nv.setGioiTinh(boxGioiTinh.getSelectedItem().toString());
-					nv.setSoCMND(String.valueOf(txtSoCMND.getText()));
-					nv.setNgaySinh(String.valueOf(txtNgaySinh.getText()));
-					nv.setSDT(String.valueOf(txtSDT.getText()));
-					nv.setDiaChi(String.valueOf(txtDiaChi.getText()));
+				String hoNv = String.valueOf(txtHoNV.getText());
+				String tennv = String.valueOf(txtTenNV.getText());
+				String gt = String.valueOf(boxGioiTinh.getSelectedItem());
+				String cmnd = String.valueOf(txtSoCMND.getText());
+				String ngaysinh = String.valueOf(txtNgaySinh.getText());
+				String sdt = String.valueOf(txtSDT.getText());
+				String diachi = String.valueOf(txtDiaChi.getText());
 
-					nvBUS.NhanVienEdit(nv);
+				boolean hopLe = KiemTraForm(hoNv, tennv, cmnd, ngaysinh, sdt, diachi);
 
-					JOptionPane.showMessageDialog(null, "Sửa thành công");
+				if (hopLe == true) {
+					nv.setHoNV(hoNv);
+					nv.setTenNV(tennv);
+					nv.setGioiTinh(gt);
+					nv.setSoCMND(cmnd);
+					nv.setNgaySinh(ngaysinh);
+					nv.setSDT(sdt);
+					nv.setDiaChi(diachi);
+
+					if (nvBUS.NhanVienEdit(nv)) {
+						JOptionPane.showMessageDialog(null, "Sửa thành công");
+					}
 
 					setModelTable();
 				}
